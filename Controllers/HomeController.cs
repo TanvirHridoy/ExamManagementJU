@@ -22,7 +22,7 @@ namespace CertificationMS.Controllers
         {
             return View();
         }
-
+        // aniruddho
         public IActionResult Privacy()
         {
             return View();
