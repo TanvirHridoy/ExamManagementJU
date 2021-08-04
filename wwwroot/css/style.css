@@ -134,10 +134,12 @@ h1, h2, h3, h4, h5, h6 {
 #topbar .contact-info a:hover {
   text-decoration: underline;
 }
-
+.bagg{
+   background-color:red;
+}
 #topbar .contact-info i {
-  padding-right: 4px;
-  margin-left: 15px;
+    padding-right: 4px;
+    margin-left: 15px;
 }
 
 #topbar .contact-info i:first-child {
@@ -801,22 +803,25 @@ section {
   height: 50px;
   display: block;
   background: none;
+  
 }
 
-.skills .progress .skill {
-  padding: 10px 0;
-  margin: 0 0 6px 0;
-  text-transform: uppercase;
-  display: block;
-  font-weight: 600;
-  font-family: "Poppins", sans-serif;
-  color: #222222;
-}
+    .skills .progress .skill {
+        padding: 10px 0;
+        margin: 0 0 6px 0;
+        text-transform: uppercase;
+        display: block;
+        font-weight: 600;
+        font-family: "Poppins", sans-serif;
+        color: #222222;
+       
+    }
 
-.skills .progress .skill .val {
-  float: right;
-  font-style: normal;
-}
+        .skills .progress .skill .val {
+            float: right;
+            font-style: normal;
+            
+        }
 
 .skills .progress-bar-wrap {
   background: #e2eefd;
