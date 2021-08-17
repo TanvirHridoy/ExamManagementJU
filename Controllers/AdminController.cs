@@ -17,6 +17,22 @@ namespace CertificationMS.Controllers
         {
             _Db = Db;
         }
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
+        public async Task<IActionResult> Department(string message)
+        {
+            DepartmentViewModel model = new DepartmentViewModel();
+            var deplist = await _Db.Department.ToListAsync();
+            model.deptlist = deplist;
+            model.message = message;
+            return View(model);
+
+        }
+
 
 
         public IActionResult create()
@@ -39,11 +55,11 @@ namespace CertificationMS.Controllers
                     await _Db.SaveChangesAsync();
 
                 }
-                return RedirectToAction("Index", new { message = "Successfully Added" + obj.deptname });
+                return RedirectToAction("Department", new { message = "Successfully Added " + obj.deptname });
             }
             catch (Exception Ex)
             {
-                return RedirectToAction("Index", new { message = "Failed to add" + obj.deptname
+                return RedirectToAction("Department", new { message = "Failed to add " + obj.deptname
                 
               
            

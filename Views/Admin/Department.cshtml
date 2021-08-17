@@ -1,0 +1,49 @@
+﻿@model CertificationMS.Models.DepartmentViewModel
+
+@{
+    ViewData["Title"] = "Department";
+}
+@if (Model.message != String.Empty)
+{
+    <h2>@Model.message</h2>
+}
+<h1 class="text-center">Department</h1>
+<hr />
+
+<table class="table col-8 offset-md-2">
+    <thead>
+        <tr>
+            <th>
+                Department Name
+            </th>
+            <th>
+                Department Short Name
+            </th>
+
+            <th>Action</th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.deptlist)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.deptname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.deptsname)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+
+                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a asp-action="create" class="offset-md-5">Create New</a>
+</p>

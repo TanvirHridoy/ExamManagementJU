@@ -2,34 +2,43 @@
 
 @{
     ViewData["Title"] = "create";
+    Layout = "/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
-
-<h4>department</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddPerson">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="deptname" class="control-label"></label>
-                <input asp-for="deptname" class="form-control" />
-                <span asp-validation-for="deptname" class="text-danger"></span>
+<div class="card text-center col-md-6 offset-md-3 mt-5" >
+    <div class="card-header">
+        <h3>Department</h3> 
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-10 offset-md-1" >
+                <form asp-action="AddPerson">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="deptname" class="control-label"></label>
+                        <input asp-for="deptname" class="form-control" />
+                        <span asp-validation-for="deptname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="deptsname" class="control-label"></label>
+                        <input asp-for="deptsname" class="form-control" />
+                        <span asp-validation-for="deptsname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" asp-controller="Admin" asp-action="AddPerson" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="deptsname" class="control-label"></label>
-                <input asp-for="deptsname" class="form-control" />
-                <span asp-validation-for="deptsname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" asp-controller="Admin" asp-action="AddPerson" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        <div>
+            <a asp-controller="Admin" asp-action="Department">Back to List</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+
 
