@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CertificationMS</title>
+    <title>@ViewData["Title"] - CertificationMS - MARUF</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/style.css" rel="stylesheet" />
@@ -82,6 +82,32 @@
 
             <!-- Template Main JS File -->
             <script src="~/js/main.js"></script>
+
+
+
+
+            <script>
+              
+                $("#inlineRadio1").on("click", function () {
+                    if ($("#inlineRadio1").is(":checked")) {
+                        $(".invigible").removeClass("d-none");
+                      
+                    }
+                })
+                $("#inlineRadio2").on("click", function () {
+                    if ($("#inlineRadio2").is(":checked")) {
+                        $(".invigible").addClass("d-none");
+                        
+                    } 
+                })
+                
+                //if ($("#inlineRadio1").prop("checked")) {
+                //    alert();
+                //    $(invigible).removeClass("d-none");
+                //}
+
+
+            </script>
         </main>
     </div>
 </body>
