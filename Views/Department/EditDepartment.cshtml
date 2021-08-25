@@ -1,4 +1,4 @@
-﻿@model CertificationMS.Models.department
+﻿@model CertificationMS.ContextModels.Department
 
 @{
     ViewData["Title"] = "EditDepartment";
@@ -12,20 +12,20 @@
     <div class="col-md-4">
         <form asp-action="EditDepartment">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="deptname" class="control-label"></label>
-                <input asp-for="deptname" class="form-control" />
-                <span asp-validation-for="deptname" class="text-danger"></span>
+                <label asp-for="DeptName" class="control-label"></label>
+                <input asp-for="DeptName" class="form-control" />
+                <span asp-validation-for="DeptName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="deptsname" class="control-label"></label>
-                <input asp-for="deptsname" class="form-control" />
-                <span asp-validation-for="deptsname" class="text-danger"></span>
+                <label asp-for="DeptSname" class="control-label"></label>
+                <input asp-for="DeptSname" class="form-control" />
+                <span asp-validation-for="DeptSname" class="text-danger"></span>
             </div>
-           @*hi*@
+            @*hi*@
             <div class="form-group">
-                <input asp-for="id" hidden="hidden" />
+                
                 <input type="submit" asp-controller="Admin" asp-action="UpdateDepartment" value="Update" class="btn btn-primary" />
             </div>
         </form>

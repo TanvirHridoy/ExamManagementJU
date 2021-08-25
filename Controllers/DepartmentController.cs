@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
-    public class AdminController : Controller
+    public class DepartmentController : Controller
     {
 
         private readonly CertificateMSContext _Db;
 
-        public AdminController(CertificateMSContext Db)
+        public DepartmentController(CertificateMSContext Db)
         {
             _Db = Db;
         }

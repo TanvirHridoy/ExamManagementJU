@@ -1,4 +1,4 @@
-﻿@model CertificationMS.Models.department
+﻿@model CertificationMS.ContextModels.Department
 
 @{
     ViewData["Title"] = "create";
@@ -15,14 +15,14 @@
                 <form asp-action="AddPerson">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="deptname" class="control-label"></label>
-                        <input asp-for="deptname" class="form-control" />
-                        <span asp-validation-for="deptname" class="text-danger"></span>
+                        <label asp-for="DeptName" class="control-label"></label>
+                        <input asp-for="DeptName" class="form-control" />
+                        <span asp-validation-for="DeptName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="deptsname" class="control-label"></label>
-                        <input asp-for="deptsname" class="form-control" />
-                        <span asp-validation-for="deptsname" class="text-danger"></span>
+                        <label asp-for="DeptSname" class="control-label"></label>
+                        <input asp-for="DeptSname" class="form-control" />
+                        <span asp-validation-for="DeptSname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" asp-controller="Admin" asp-action="AddPerson" value="Create" class="btn btn-primary" />
