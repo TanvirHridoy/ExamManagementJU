@@ -10,6 +10,7 @@ namespace CertificationMS.ContextModels
         public int Id { get; set; }
         public string StudentName { get; set; }
         public string StudentId { get; set; }
+        public int ProgramId { get; set; }
         public bool ChangeNubCampus { get; set; }
         public int? FromNubCampus { get; set; }
         public int? ToNubCampus { get; set; }
@@ -49,7 +50,8 @@ namespace CertificationMS.ContextModels
         public virtual ApvStatus ApvStatusLibNavigation { get; set; }
         public virtual Convocation Convocation { get; set; }
         public virtual Campus FromNubCampusNavigation { get; set; }
-        public virtual MajorSubject MajorSubjectNavigation { get; set; }
+        public virtual Department MajorSubjectNavigation { get; set; }
+        public virtual Program Program { get; set; }
         public virtual StudentType StudentTypeNavigation { get; set; }
         public virtual Campus ToNubCampusNavigation { get; set; }
     }

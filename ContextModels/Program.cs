@@ -5,16 +5,15 @@ using System.Collections.Generic;
 
 namespace CertificationMS.ContextModels
 {
-    public partial class MajorSubject
+    public partial class Program
     {
-        public MajorSubject()
+        public Program()
         {
             CertApplications = new HashSet<CertApplication>();
         }
 
         public int Id { get; set; }
-        public string SubName { get; set; }
-        public string ProgramId { get; set; }
+        public string ProgramName { get; set; }
 
         public virtual ICollection<CertApplication> CertApplications { get; set; }
     }

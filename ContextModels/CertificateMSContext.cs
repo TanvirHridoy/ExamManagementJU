@@ -22,10 +22,10 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<MajorSubject> MajorSubjects { get; set; }
+        public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
 
-
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -113,6 +113,8 @@ namespace CertificationMS.ContextModels
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.ProgramId).HasColumnName("ProgramID");
+
                 entity.Property(e => e.StudentId)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -167,6 +169,12 @@ namespace CertificationMS.ContextModels
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CertApplications_MajorSubjects");
 
+                entity.HasOne(d => d.Program)
+                    .WithMany(p => p.CertApplications)
+                    .HasForeignKey(d => d.ProgramId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CertApplications_Program");
+
                 entity.HasOne(d => d.StudentTypeNavigation)
                     .WithMany(p => p.CertApplications)
                     .HasForeignKey(d => d.StudentType)
@@ -210,16 +218,13 @@ namespace CertificationMS.ContextModels
                     .HasColumnName("DeptSName");
             });
 
-            modelBuilder.Entity<MajorSubject>(entity =>
+            modelBuilder.Entity<Program>(entity =>
             {
+                entity.ToTable("Program");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.ProgramId)
-                    .HasMaxLength(10)
-                    .HasColumnName("ProgramID")
-                    .IsFixedLength(true);
-
-                entity.Property(e => e.SubName)
+                entity.Property(e => e.ProgramName)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
