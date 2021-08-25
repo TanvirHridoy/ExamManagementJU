@@ -1,3 +1,4 @@
+using CertificationMS.ContextModels;
 using CertificationMS.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,7 @@ namespace CertificationMS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<deptcontext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppCon")));
+            services.AddDbContext<CertificateMSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppCon")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
