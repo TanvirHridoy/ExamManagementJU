@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "create";
-    Layout = "/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <div class="card text-center col-md-6 offset-md-3 mt-5" >
@@ -25,7 +24,7 @@
                         <span asp-validation-for="DeptSname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" asp-controller="Admin" asp-action="AddPerson" value="Create" class="btn btn-primary" />
+                        <input type="submit" asp-action="AddDept" value="Create" class="btn btn-primary" />
                     </div>
                 </form>
             </div>
@@ -33,7 +32,7 @@
     </div>
     <div class="card-footer text-muted">
         <div>
-            <a asp-controller="Admin" asp-action="Department">Back to List</a>
+            <a asp-action="List">Back to List</a>
         </div>
     </div>
 </div>

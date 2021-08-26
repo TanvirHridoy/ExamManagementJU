@@ -22,7 +22,7 @@ namespace CertificationMS.Controllers
         }
 
 
-        public async Task<IActionResult> Department(string message)
+        public async Task<IActionResult> List(string message)
         {
             DepartmentViewModel model = new DepartmentViewModel();
             var deplist = await _Db.Departments.ToListAsync();
@@ -43,11 +43,11 @@ namespace CertificationMS.Controllers
             {
                 _Db.Entry(obj).State = EntityState.Modified;
                 await _Db.SaveChangesAsync();
-                return RedirectToAction("Department", new { message = "suucces " + obj.DeptName });
+                return RedirectToAction("List", new { message = "success " + obj.DeptName });
             }
             catch (Exception)
             {
-                return RedirectToAction("Index", new { message = "Failed to Update" + obj.DeptName });
+                return RedirectToAction("List", new { message = "Failed to Update" + obj.DeptName });
             }
         }
 
@@ -60,11 +60,11 @@ namespace CertificationMS.Controllers
             {
                 _Db.Departments.Remove(department);
                 await _Db.SaveChangesAsync();
-                return RedirectToAction("Department", new { message = "Succsefully Delete " + department.DeptName });
+                return RedirectToAction("List", new { message = "Successfully Delete " + department.DeptName });
             }
             catch (Exception)
             {
-                return RedirectToAction("Department", new { message = " Delete failed " + department.DeptName });
+                return RedirectToAction("List", new { message = " Delete failed " + department.DeptName });
             }
         }
 
@@ -76,7 +76,7 @@ namespace CertificationMS.Controllers
 
 
 
-        public async Task<IActionResult> AddPerson(Department obj)
+        public async Task<IActionResult> AddDept(Department obj)
         {
             try
             {
@@ -86,11 +86,11 @@ namespace CertificationMS.Controllers
                     await _Db.SaveChangesAsync();
 
                 }
-                return RedirectToAction("Department", new { message = "Successfully Added " + obj.DeptName });
+                return RedirectToAction("List", new { message = "Successfully Added " + obj.DeptName });
             }
             catch (Exception)
             {
-                return RedirectToAction("Department", new
+                return RedirectToAction("List", new
                 {
                     message = "Failed to add " + obj.DeptName
 
