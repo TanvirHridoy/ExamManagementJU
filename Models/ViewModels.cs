@@ -13,5 +13,10 @@ namespace CertificationMS.Models
         public IEnumerable<Department> deptlist { get; set; }
         public string message { get; set; }
     }
-   
+    public class ProgramViewModel
+    {
+        public IEnumerable<CertificationMS.ContextModels.Program> list { get; set; }
+        public string message { get; set; }
+    }
+
 }

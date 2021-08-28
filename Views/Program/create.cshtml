@@ -1,0 +1,48 @@
+﻿@model CertificationMS.ContextModels.Program
+
+@{
+    ViewData["Title"] = "create";
+}
+
+<div class="card text-center  mt-5">
+    <div class="card-header">
+        <h3>Department</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                
+
+
+
+
+
+    <form asp-action="AddPerson" class="mb-5">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="ProgramName" for="exampleInputEmail1">Prgram Name Name</label>
+            <input asp-for="ProgramName" class="form-control" id="exampleInputEmail1" placeholder="Enter Program Name" aria-describedby="emailHelp">
+            <span asp-validation-for="ProgramName" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <input type="submit" asp-action="Add" value="Create" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <div class="card-footer text-muted">
+        <div>
+            <a asp-action="List">Back to List</a>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+
+

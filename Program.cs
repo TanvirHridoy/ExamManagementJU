@@ -11,6 +11,8 @@ namespace CertificationMS
 {
     public class Program
     {
+        public object Id { get; internal set; }
+
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

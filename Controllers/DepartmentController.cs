@@ -16,10 +16,7 @@ namespace CertificationMS.Controllers
         {
             _Db = Db;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
+       
 
 
         public async Task<IActionResult> List(string message)
@@ -31,13 +28,13 @@ namespace CertificationMS.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> EditDepartment(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             Department obj = await _Db.Departments.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
         }
 
-        public async Task<IActionResult> UpdateDepartment(Department obj)
+        public async Task<IActionResult> Update(Department obj)
         {
             try
             {
@@ -53,7 +50,7 @@ namespace CertificationMS.Controllers
 
 
 
-        public async Task<IActionResult> DeleteDepartment(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var department = await _Db.Departments.FindAsync(id);
             try
@@ -69,14 +66,11 @@ namespace CertificationMS.Controllers
         }
 
 
-        public IActionResult create()
-        {
-            return View();
-        }
+       
 
 
 
-        public async Task<IActionResult> AddDept(Department obj)
+        public async Task<IActionResult> Add(Department obj)
         {
             try
             {

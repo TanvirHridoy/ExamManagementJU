@@ -6,11 +6,11 @@
 
 <h1>EditDepartment</h1>
 
-<h4>department</h4>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditDepartment">
+        <form >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -26,7 +26,7 @@
             @*hi*@
             <div class="form-group">
                 
-                <input type="submit" asp-controller="Department" asp-action="UpdateDepartment" value="Update" class="btn btn-primary" />
+                <input type="submit" asp-controller="Department" asp-action="Update" value="Update" class="btn btn-primary" />
             </div>
         </form>
     </div>
