@@ -1,7 +1,7 @@
 ﻿@model CertificationMS.Models.ProgramViewModel
 
 @{
-    ViewData["Title"] = "Department";
+    ViewData["Title"] = "Program";
 }
 @if (!String.IsNullOrEmpty(Model.message))
 {
@@ -57,7 +57,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ProgramName)
                                 </td>
-                                <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
+                                <td><a asp-action="Edit"  asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
                                 <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 
                             </tr>

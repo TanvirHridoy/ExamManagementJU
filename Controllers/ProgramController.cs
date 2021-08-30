@@ -72,8 +72,24 @@ namespace CertificationMS.Controllers
 
         }
 
-
-
+        public async Task<IActionResult> Edit(int id)
+        {
+            ContextModels.Program  obj = await _Db.Programs.SingleOrDefaultAsync(e => e.Id == id);
+            return View(obj);
+        }
+        public async Task<IActionResult> Update(ContextModels.Program obj)
+        {
+            try
+            {
+                _Db.Entry(obj).State = EntityState.Modified;
+                await _Db.SaveChangesAsync();
+                return RedirectToAction("List", new { message = "success " + obj.ProgramName });
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("List", new { message = "Failed to Update" + obj.ProgramName });
+            }
+        }
 
 
     }

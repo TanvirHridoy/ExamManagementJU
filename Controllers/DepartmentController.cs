@@ -48,7 +48,10 @@ namespace CertificationMS.Controllers
             }
         }
 
-
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> Delete(int id)
         {
@@ -64,12 +67,6 @@ namespace CertificationMS.Controllers
                 return RedirectToAction("List", new { message = " Delete failed " + department.DeptName });
             }
         }
-
-
-       
-
-
-
         public async Task<IActionResult> Add(Department obj)
         {
             try
