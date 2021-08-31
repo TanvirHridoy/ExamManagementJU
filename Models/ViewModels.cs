@@ -18,5 +18,14 @@ namespace CertificationMS.Models
         public IEnumerable<CertificationMS.ContextModels.Program> list { get; set; }
         public string message { get; set; }
     }
-
+    public class CampusViewModel
+    {
+        public IEnumerable<Campus> list { get; set; }
+        public string message { get; set; }
+    }
+    public class ApvStatusViewModel
+    {
+        public IEnumerable<ApvStatus> list { get; set; }
+        public string message { get; set; }
+    }
 }

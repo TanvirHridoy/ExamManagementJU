@@ -1,7 +1,7 @@
-﻿@model CertificationMS.Models.DepartmentViewModel
+﻿@model CertificationMS.Models.ApvStatusViewModel
 
 @{
-    ViewData["Title"] = "Department";
+    ViewData["Title"] = "ApvStatus";
 }
 @if (!String.IsNullOrEmpty(Model.message))
 {
@@ -44,25 +44,24 @@
                     <thead class="thead-light">
                         <tr>
                             <th>Sl#</th>
-                            <th>Department Name</th>
-                            <th>Department Short Name</th>
+                            <th>Name</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         @{int sl = 0; }
-                        @foreach (var item in Model.deptlist)
+                        @foreach (var item in Model.list)
                         {
                             sl = sl + 1;
                             <tr>
                                 <td>@sl</td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DeptName)
+                                    @Html.DisplayFor(modelItem => item.Name)
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DeptSname)
-                                </td>
+
+
+
                                 <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
                                 <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 
