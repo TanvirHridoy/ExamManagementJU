@@ -1,0 +1,44 @@
+﻿@model CertificationMS.ContextModels.Convocation
+
+@{
+    ViewData["Title"] = "create";
+}
+<h3>Department</h3>
+<form asp-action="Add" class="col-md-8">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" for="exampleInputEmail1">Name</label>
+        <input asp-for="Name" class="form-control" id="exampleInputEmail1" placeholder="Enter Convocation Name" aria-describedby="emailHelp">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Year" for="exampleInputPassword1">Year</label>
+        <input asp-for="Year" class="form-control" placeholder="Enter Year" id="exampleInputPassword1">
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ProgramDate" for="exampleInputPassword1">Program Date</label>
+        <input asp-for="ProgramDate" class="form-control" placeholder="Enter Program Date" id="exampleInputPassword1">
+        <span asp-validation-for="ProgramDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Status" for="exampleInputPassword1">Status</label>
+        <input asp-for="Status" class="form-control" placeholder="Enter StatusS" id="exampleInputPassword1">
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" asp-action="Add" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+<div class="card-footer text-muted">
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
+</div>
+
+
+
+
+
+

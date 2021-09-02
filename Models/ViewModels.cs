@@ -28,4 +28,9 @@ namespace CertificationMS.Models
         public IEnumerable<ApvStatus> list { get; set; }
         public string message { get; set; }
     }
+    public class ConvocationViewModel
+    {
+        public IEnumerable<Convocation> list { get; set; }
+        public string message { get; set; }
+    }
 }

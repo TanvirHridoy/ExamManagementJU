@@ -1,4 +1,4 @@
-﻿@model CertificationMS.ContextModels.Campus
+﻿@model CertificationMS.ContextModels.ApvStatus
 
 @{
     ViewData["Title"] = "create";
@@ -7,20 +7,12 @@
 <form asp-action="Add" class="col-md-8">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="CampusName" for="exampleInputEmail1">Campus Name</label>
-        <input asp-for="CampusName" class="form-control" id="exampleInputEmail1" placeholder="Enter Campus Name" aria-describedby="emailHelp">
-        <span asp-validation-for="CampusName" class="text-danger"></span>
+        <label asp-for="Name" for="exampleInputEmail1">Campus Name</label>
+        <input asp-for="Name" class="form-control" id="exampleInputEmail1" placeholder=" Name" aria-describedby="emailHelp">
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="Address" for="exampleInputPassword1">Address</label>
-        <input asp-for="Address" class="form-control" placeholder="Enter Address" id="exampleInputPassword1">
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="SortOrder" for="exampleInputPassword1">SortOrder</label>
-        <input asp-for="SortOrder" class="form-control" placeholder="Enter SortOrder" id="exampleInputPassword1">
-        <span asp-validation-for="SortOrder" class="text-danger"></span>
-    </div>
+    
+    
 
     <div class="form-group">
         <input type="submit" asp-action="Add" value="Create" class="btn btn-primary" />

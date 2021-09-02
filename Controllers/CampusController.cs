@@ -66,7 +66,7 @@ namespace CertificationMS.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = "Failed to Update" + obj.CampusName});
+                return RedirectToAction("List", new { message = "Failed to Update" + obj.CampusName });
             }
         }
 
@@ -87,7 +87,20 @@ namespace CertificationMS.Controllers
 
         }
 
-
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    Campus obj = await _Db.Campuses.FindAsync(id);
+        //    try
+        //    {
+        //        _Db.Campuses.Remove(obj);
+        //      await  _Db.SaveChangesAsync();
+        //        return RedirectToAction("List", new { message = "Successfully Deleted" + obj.CampusName });
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return RedirectToAction("List", new { message = "Failed Deleted" + obj.CampusName });
+        //    }
+        //}
 
         public IActionResult Index()
         {

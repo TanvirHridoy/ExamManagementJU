@@ -1,7 +1,7 @@
-﻿@model CertificationMS.Models.ApvStatusViewModel
+﻿@model CertificationMS.Models.ConvocationViewModel
 
 @{
-    ViewData["Title"] = "ApvStatus";
+    ViewData["Title"] = "Department";
 }
 @if (!String.IsNullOrEmpty(Model.message))
 {
@@ -34,7 +34,7 @@
     <div class="col-sm-12 col-lg-12 mb-4">
         <div class="card">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Approval Status</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Convocation</h6>
                 <a class="m-0 float-right btn btn-success btn-sm" asp-action="create">
                     Add New <i class="fas fa-plus"></i>
                 </a>
@@ -45,6 +45,9 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Name</th>
+                            <th>Year</th>
+                            <th>Program Date</th>
+                            <th>Status</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -54,18 +57,24 @@
                         @foreach (var item in Model.list)
                         {
                             sl = sl + 1;
-                            <tr>
-                                <td>@sl</td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
+                        <tr>
+                            <td>@sl</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Year)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProgramDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
+                            <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 
-
-
-                                <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
-                                <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
-
-                            </tr>
+                        </tr>
                         }
                     </tbody>
                 </table>

@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Admin\" />
-    <Folder Include="Views\ApprovalStatus - Copy\" />
+    <Folder Include="Views\Convocation - Copy\" />
     <Folder Include="wwwroot\AdminLayout\" />
   </ItemGroup>
 

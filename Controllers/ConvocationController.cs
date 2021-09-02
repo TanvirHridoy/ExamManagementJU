@@ -1,0 +1,99 @@
+﻿using CertificationMS.ContextModels;
+using CertificationMS.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace CertificationMS.Controllers
+{
+    public class ConvocationController : Controller
+    {
+        public readonly CertificateMSContext _Db;
+
+
+        public ConvocationController(CertificateMSContext Db)
+        {
+            _Db = Db;
+        }
+
+
+        public async Task<IActionResult> List(string message)
+        {
+            ConvocationViewModel model = new ConvocationViewModel();
+            var Cnvctlist= await _Db.Convocations.ToListAsync();
+            model.list = Cnvctlist;
+            model.message = message;
+            return View(model);
+
+        }
+
+        public IActionResult create()
+        {
+            return View();
+        }
+        public async Task<IActionResult> Add(Convocation obj)
+        {
+            try
+            {
+                _Db.Convocations.Add(obj);
+               await _Db.SaveChangesAsync();
+                return RedirectToAction("List", new { message = "Succes" + obj.Name });
+
+
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("List", new { message = "Succes" + obj.Name });
+            }
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Convocation obj = await _Db.Convocations.SingleOrDefaultAsync(e=>e.Id==id);
+            return View(obj);
+        }
+        public async Task<IActionResult> Update(Convocation obj)
+        {
+            try
+            {
+                _Db.Entry(obj).State = EntityState.Modified;
+                await _Db.SaveChangesAsync();
+                return RedirectToAction("List", new { message = "Succes" + obj.Name });
+
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("List", new { message = "Failed" + obj.Name });
+            }
+        }
+
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var convocation = await _Db.Convocations.FindAsync(id);
+            try
+            {
+                _Db.Convocations.Remove(convocation);
+                _Db.SaveChangesAsync();
+                return RedirectToAction("List", new { message = "Succes" });
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("List", new { message = "Failed"});
+            }
+
+
+
+        }
+
+
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+}

@@ -1,7 +1,7 @@
-﻿@model CertificationMS.Models.CampusViewModel
+﻿@model CertificationMS.Models.DepartmentViewModel
 
 @{
-    ViewData["Title"] = "Campus";
+    ViewData["Title"] = "Department";
 }
 @if (!String.IsNullOrEmpty(Model.message))
 {
@@ -44,34 +44,29 @@
                     <thead class="thead-light">
                         <tr>
                             <th>Sl#</th>
-                            <th>Campus Name</th>
-                            <th>Address</th>
-                            <th>Short Order</th>
+                            <th>Department Name</th>
+                            <th>Department Short Name</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         @{int sl = 0; }
-                        @foreach (var item in Model.list)
+                        @foreach (var item in Model.deptlist)
                         {
                             sl = sl + 1;
-                        <tr>
-                            <td>@sl</td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CampusName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Address)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SortOrder)
-                            </td>
+                            <tr>
+                                <td>@sl</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeptName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeptSname)
+                                </td>
+                                <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
+                                <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 
-                            <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
-                            <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
-
-                        </tr>
+                            </tr>
                         }
                     </tbody>
                 </table>
