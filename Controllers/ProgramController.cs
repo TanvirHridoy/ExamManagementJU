@@ -66,7 +66,7 @@ namespace CertificationMS.Controllers
             }
             catch
             {
-                return RedirectToAction("List", new { message = " Delete failed " + item.ProgramName });
+                return RedirectToAction("List", new { message = " Failed to Delete " + item.ProgramName });
 
             }
 
@@ -87,7 +87,7 @@ namespace CertificationMS.Controllers
             {
                 _Db.Entry(obj).State = EntityState.Modified;
                 await _Db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "success " + obj.ProgramName });
+                return RedirectToAction("List", new { message = "Successfully Updated " + obj.ProgramName });
             }
             catch (Exception)
             {

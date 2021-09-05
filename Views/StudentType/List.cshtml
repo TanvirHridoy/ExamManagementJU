@@ -1,7 +1,7 @@
-﻿@model CertificationMS.Models.DepartmentViewModel
+﻿@model CertificationMS.Models.StudentTypeViewModel
 
 @{
-    ViewData["Title"] = "Department";
+    ViewData["Title"] = "Student Type";
 }
 @if (!String.IsNullOrEmpty(Model.message))
 {
@@ -34,7 +34,7 @@
     <div class="col-sm-12 col-lg-12 mb-4">
         <div class="card">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Departments</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Student Type</h6>
                 <a class="m-0 float-right btn btn-success btn-sm" asp-action="create">
                     Add New <i class="fas fa-plus"></i>
                 </a>
@@ -52,17 +52,15 @@
                     </thead>
                     <tbody>
                         @{int sl = 0; }
-                        @foreach (var item in Model.deptlist)
+                        @foreach (var item in Model.list)
                         {
                             sl = sl + 1;
                             <tr>
                                 <td>@sl</td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DeptName)
+                                    @Html.DisplayFor(modelItem => item.Type)
                                 </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DeptSname)
-                                </td>
+                                 
                                 <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
                                 <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 

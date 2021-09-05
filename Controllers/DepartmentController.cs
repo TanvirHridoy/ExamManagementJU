@@ -40,7 +40,7 @@ namespace CertificationMS.Controllers
             {
                 _Db.Entry(obj).State = EntityState.Modified;
                 await _Db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "success " + obj.DeptName });
+                return RedirectToAction("List", new { message = "Successfully Added " + obj.DeptName });
             }
             catch (Exception)
             {
@@ -64,7 +64,7 @@ namespace CertificationMS.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = " Delete failed " + department.DeptName });
+                return RedirectToAction("List", new { message = "  Failed Delete " + department.DeptName });
             }
         }
         public async Task<IActionResult> Add(Department obj)

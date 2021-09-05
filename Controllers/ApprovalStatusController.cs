@@ -43,7 +43,7 @@ namespace CertificationMS.Controllers
             {
                 _db.ApvStatuses.Add(obj);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "success " + obj.Name});
+                return RedirectToAction("List", new { message = "Successfully Added " + obj.Name});
 
             }
             catch (Exception)
@@ -65,7 +65,7 @@ namespace CertificationMS.Controllers
             {
                 _db.Entry(obj).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "Suuces" + obj.Name });
+                return RedirectToAction("List", new { message = "Successfully Added" + obj.Name });
             }
             catch (Exception)
             {
@@ -80,11 +80,11 @@ namespace CertificationMS.Controllers
             {
                 _db.ApvStatuses.Remove(apstatus);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "Successfully Delete " });
+                return RedirectToAction("List", new { message = "SuccessfullyDelete " });
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = " Delete failed "  });
+                return RedirectToAction("List", new { message = " Failed to delete "  });
             }
         }
 

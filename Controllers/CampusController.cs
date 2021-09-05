@@ -34,7 +34,7 @@ namespace CertificationMS.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = "Successfully Added" + obj.CampusName });
+                return RedirectToAction("List", new { message = "Falied to Added" + obj.CampusName });
             }
        
             
@@ -62,7 +62,7 @@ namespace CertificationMS.Controllers
             {
                 _Db.Entry(obj).State = EntityState.Modified;
                 await _Db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "success " + obj.CampusName });
+                return RedirectToAction("List", new { message = "Successfully Update " + obj.CampusName });
             }
             catch (Exception)
             {
@@ -77,12 +77,12 @@ namespace CertificationMS.Controllers
             {
                 _Db.Campuses.Remove(campus);
                 await _Db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "Successfully Deleted" + campus.CampusName });
+                return RedirectToAction("List", new { message = "Successfully Deleted " + campus.CampusName });
 
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = " Deleted  Failed" + campus.CampusName });
+                return RedirectToAction("List", new { message = "   Failed  To Delete " + campus.CampusName });
             }
 
         }

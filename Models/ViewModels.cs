@@ -33,4 +33,9 @@ namespace CertificationMS.Models
         public IEnumerable<Convocation> list { get; set; }
         public string message { get; set; }
     }
+    public class StudentTypeViewModel
+    {
+        public IEnumerable<StudentType> list { get; set; }
+        public string message { get; set; }
+    }
 }

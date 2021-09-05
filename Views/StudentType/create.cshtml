@@ -1,18 +1,18 @@
-﻿@model CertificationMS.ContextModels.ApvStatus
+﻿@model CertificationMS.ContextModels.StudentType
 
 @{
     ViewData["Title"] = "create";
 }
-<h3>Approval Status</h3>
+<h3>Student Type</h3>
 <form asp-action="Add" class="col-md-8">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="Name" for="exampleInputEmail1">Campus Name</label>
-        <input asp-for="Name" class="form-control" id="exampleInputEmail1" placeholder=" Name" aria-describedby="emailHelp">
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <label asp-for="Type" for="exampleInputEmail1">Student Type</label>
+        <input asp-for="Type" class="form-control" id="exampleInputEmail1" placeholder="Enter Student Type" aria-describedby="emailHelp">
+        <span asp-validation-for="Type" class="text-danger"></span>
     </div>
-    
-    
+
+
 
     <div class="form-group">
         <input type="submit" asp-action="Add" value="Create" class="btn btn-primary" />

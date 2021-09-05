@@ -40,13 +40,13 @@ namespace CertificationMS.Controllers
             {
                 _Db.Convocations.Add(obj);
                await _Db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "Succes" + obj.Name });
+                return RedirectToAction("List", new { message = "Successfully Added" + obj.Name });
 
 
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = "Succes" + obj.Name });
+                return RedirectToAction("List", new { message = "Failed To Add" + obj.Name });
             }
         }
 
@@ -61,7 +61,7 @@ namespace CertificationMS.Controllers
             {
                 _Db.Entry(obj).State = EntityState.Modified;
                 await _Db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "Succes" + obj.Name });
+                return RedirectToAction("List", new { message = "Successfully Added" + obj.Name });
 
             }
             catch (Exception)
@@ -77,12 +77,12 @@ namespace CertificationMS.Controllers
             try
             {
                 _Db.Convocations.Remove(convocation);
-                _Db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "Succes" });
+                await _Db.SaveChangesAsync();
+                return RedirectToAction("List", new { message = "Successfully Deleted" });
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = "Failed"});
+                return RedirectToAction("List", new { message = "Failed to deleted"});
             }
 
 
