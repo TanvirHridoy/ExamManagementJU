@@ -1,5 +1,10 @@
-﻿@{
+﻿@model CertificationMS.ContextModels.formViewModel
+
+
+
+@{
     ViewData["Title"] = "Home Page -MARUF 2";
+    //var cnvList = ViewData["convocation"] as List<CertificationMS.ContextModels.Convocation>;
 }
 
 <!-- ======= Top Bar ======= -->
@@ -34,7 +39,7 @@
                 <li><a href="#services">Services</a></li>
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#team">Team</a></li>
-                <li><a asp-controller="Login" asp-action="Index">Login</a></li>
+                <li><a asp-controller="Department" asp-action="List">Login</a></li>
                 <li class="drop-down">
                     <a href="">Drop Down</a>
                     <ul>
@@ -202,7 +207,7 @@
                 <form class=" ">
 
 
-                    <div class="col-4 float-right">
+                    <div class="col-3 float-right">
                         <div class="custom-file mt-5">
                             <input type="file" class="custom-file-input" id="customFile">
                             <label class="custom-file-label" for="customFile">Choose Photo</label>
@@ -216,8 +221,8 @@
 
                     <div>
                         <div class="form-group row border-danger">
-                            <label for="staticEmail" class="col-sm-2 col-form-label">Name Of The Student</label>
-                            <div class="col-sm-10">
+                            <label for="staticEmail" class="col-sm-4 col-form-label">Name Of The Student</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" id="staticEmail">
                             </div>
                         </div>
@@ -229,24 +234,34 @@
 
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">(Id Full Form)</label>
-                        <div class="col-sm-10">
+                        <label for="inputPassword" style="margin-left:15px;" class="col-sm-2 col-form-label">Id Full Form</label>
+                        <div class="col-sm-5 " style="margin-left:86px;">
                             <input type="password" class="form-control" id="inputPassword">
                         </div>
                     </div>
 
                     <br />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label style="display: inline-block; float: left; margin: 0 20px 0;">Programe </label>
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-2 pt-0">Department</legend>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                 @*   @Html.DropDownListFor(m => m.DeptName, (SelectList)ViewBag.deplist, "Select", htmlAttributes: new { @class = "form-control" })*@
 
-                            <select class="form-control " style=" display: inline-block; float: left; width: 50%; margin-left:70px;">
-                                <option value="CSharp">CSE</option>
-                                <option value="CPP">BBA</option>
+                                    <select style="margin-left:78px;" class="form-control col-sm-6" id="exampleFormControlSelect1"  >
+                                        @foreach (var item in Model.deptLst)
+                                        {
+                                            <option value="@item.Id">@item.DeptName</option>
 
-                            </select>
+                                        }
+
+                                    </select>
+                                </div>
+
+
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
                     <br />
 
                     <div>
@@ -355,13 +370,15 @@
                             <p class="card-text">
                                 <div class="form-group col-md-4">
                                     <label for="inputState"> 3.Mention The Convocation Number </label>
-                                    <select id="inputState" class="form-control">
-                                        <option selected>Choose...</option>
-                                        <option>1st</option>
-                                        <option>2nd</option>
-                                        <option>3rd</option>
-                                        <option>4th</option>
+                                    <select style="margin-left:78px;" class="form-control col-sm-6" id="exampleFormControlSelect1">
+                                        @foreach (var item in Model.convLst)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+
+                                        }
+
                                     </select>
+
                                 </div>
                             </p>
                             <p class="card-text">4.If you Were Not Registered For Convocation then you habe to submiot money receipt(fee of main certificate) </p>

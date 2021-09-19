@@ -3,36 +3,37 @@
 @{
     ViewData["Title"] = "EditDepartment";
 }
-
-<h1>EditDepartment</h1>
-
-
-<hr />
-<div class="row">
-    <div class="col-md-8">
-        <form >
+<div class="card mb-4 col-md-6">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Department</h6>
+    </div>
+    <div class="card-body">
+        <form>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="DeptName" class="control-label"></label>
-                <input asp-for="DeptName" class="form-control" />
+                <label asp-for="DeptName" for="exampleInputEmail1">Department Name</label>
+                <input asp-for="DeptName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+
                 <span asp-validation-for="DeptName" class="text-danger"></span>
+
             </div>
             <div class="form-group">
-                <label asp-for="DeptSname" class="control-label"></label>
-                <input asp-for="DeptSname" class="form-control" />
+                <label asp-for="DeptSname" for="exampleInputPassword1">Department Short Name</label>
+                <input asp-for="DeptSname" class="form-control" id="exampleInputPassword1">
                 <span asp-validation-for="DeptSname" class="text-danger"></span>
             </div>
-            @*hi*@
+
+
             <div class="form-group">
-                
-                <input type="submit" asp-controller="Department" asp-action="Update"  value="Update" class="btn btn-primary " />
+
+                <input type="submit" asp-controller="Department" asp-action="Update" value="Update" class="btn btn-primary " />
             </div>
         </form>
+        <div class="card-footer text-muted">
+            <div>
+                <a asp-action="List">Back to List</a>
+            </div>
+        </div>
     </div>
 </div>
-
-<div>
-    <a class="" asp-action="List">Back to List</a>
-</div>
-
