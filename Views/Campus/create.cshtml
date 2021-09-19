@@ -3,37 +3,39 @@
 @{
     ViewData["Title"] = "create";
 }
-<h3>Campus</h3>
-<form asp-action="Add" class="col-md-8">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="CampusName" for="exampleInputEmail1">Campus Name</label>
-        <input asp-for="CampusName" class="form-control" id="exampleInputEmail1" placeholder="Enter Campus Name" aria-describedby="emailHelp">
-        <span asp-validation-for="CampusName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Address" for="exampleInputPassword1">Address</label>
-        <input asp-for="Address" class="form-control" placeholder="Enter Address" id="exampleInputPassword1">
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="SortOrder" for="exampleInputPassword1">SortOrder</label>
-        <input asp-for="SortOrder" class="form-control" placeholder="Enter SortOrder" id="exampleInputPassword1">
-        <span asp-validation-for="SortOrder" class="text-danger"></span>
-    </div>
 
-    <div class="form-group">
-        <input type="submit" asp-action="Add" value="Create" class="btn btn-primary" />
+<div class="card mb-4 col-md-6">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Campus</h6>
     </div>
-</form>
-<div class="card-footer text-muted">
-    <div>
-        <a asp-action="List">Back to List</a>
+    <div class="card-body">
+        <form asp-action="Add">
+            <div class="form-group">
+                <label asp-for="CampusName" for="exampleInputEmail1">Campus Name</label>
+                <input asp-for="CampusName" placeholder="Enter Campus Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+                <span asp-validation-for="CampusName" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" for="exampleInputPassword1">Address</label>
+                <input asp-for="Address" placeholder="Enter Address" class="form-control" id="exampleInputPassword1">
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SortOrder" for="exampleInputPassword1">Short Order</label>
+                <input asp-for="SortOrder" placeholder="Enter Short Order" class="form-control" id="exampleInputPassword1">
+                <span asp-validation-for="SortOrder" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" asp-action="Add" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+        <div class="card-footer text-muted">
+            <div>
+                <a asp-action="List">Back to List</a>
+            </div>
+        </div>
     </div>
 </div>
-
-
-
-
-
-
