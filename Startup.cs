@@ -50,7 +50,7 @@ namespace CertificationMS
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Department}/{action=List}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
