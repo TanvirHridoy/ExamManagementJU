@@ -34,6 +34,7 @@ namespace CertificationMS.Controllers
             viewModel.CampusLst = await _Db.Campuses.ToListAsync();
             viewModel.convLst = await _Db.Convocations.ToListAsync();
             viewModel.deptLst = await _Db.Departments.ToListAsync();
+            viewModel.programLst = await _Db.Programs.ToListAsync();
             return View(viewModel);
         }
         // aniruddho hcnaged again by hridoy
