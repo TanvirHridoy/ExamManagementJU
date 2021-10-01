@@ -1,5 +1,6 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
@@ -35,9 +38,65 @@ namespace CertificationMS.Controllers
             viewModel.convLst = await _Db.Convocations.ToListAsync();
             viewModel.deptLst = await _Db.Departments.ToListAsync();
             viewModel.programLst = await _Db.Programs.ToListAsync();
+            viewModel.StudentTypeLst = await _Db.StudentTypes.ToListAsync();
             return View(viewModel);
         }
+
+        public byte[] ConvertToBytes(IFormFile image)
+        {
+            byte[] s = null;
+
+            using (var ms = new MemoryStream())
+            {
+                image.CopyTo(ms);
+                s = ms.ToArray();
+            }
+            return s;
+        }
+        [HttpPost]
+        public async Task<IActionResult> ApplyForCertificate(CertApplication application)
+        {
+            CertApplication app = application;
+            var file = Request.Form.Files["ImageData"];
+            if (file.Length > 0)
+            {
+                app.ExtraOne = ConvertToBytes(file);
+            }
+            app.ApplyDate = DateTime.Now;
+            var g = Guid.NewGuid();
+            app.TrackId = g.ToString();
+            _Db.CertApplications.Add(app);
+            try
+            {
+                await _Db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> RetriveImage(int ID)
+        {
+
+            var cert = await _Db.CertApplications.SingleAsync(e => e.Id == ID);
+            var file = cert.ExtraOne;
+            if (file.Length > 0)
+            {
+                byte[] Image = file;
+                return File(Image, "image/jpg");
+            }
+            else
+            {
+                return null;
+            }
+
+        }
         // aniruddho hcnaged again by hridoy
+
+        
         public IActionResult Privacy()
         {
             return View();
@@ -45,11 +104,10 @@ namespace CertificationMS.Controllers
 
 
         public List<Department> LoadDept()
-
         {
             List<Department> Deptlist = new List<Department>();
             Deptlist = _Db.Departments.ToList();
-        
+
             return Deptlist;
         }
 
@@ -58,7 +116,7 @@ namespace CertificationMS.Controllers
         {
             List<Convocation> Convocationlist = new List<Convocation>();
             Convocationlist = _Db.Convocations.ToList();
-       //     Convocationlist.Insert(0, new Convocation { Id = 0, Name = "Please Select" });
+            //     Convocationlist.Insert(0, new Convocation { Id = 0, Name = "Please Select" });
             return Convocationlist;
 
         }

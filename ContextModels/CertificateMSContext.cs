@@ -25,8 +25,7 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
 
-        
-
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
@@ -59,9 +58,7 @@ namespace CertificationMS.ContextModels
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Address).IsRequired();
 
                 entity.Property(e => e.ApplyDate)
                     .HasColumnType("datetime")
@@ -101,8 +98,6 @@ namespace CertificationMS.ContextModels
 
                 entity.Property(e => e.ConvocationId).HasColumnName("ConvocationID");
 
-                entity.Property(e => e.ExtraOne).HasDefaultValueSql("(' ')");
-
                 entity.Property(e => e.ExtraThree).HasDefaultValueSql("(' ')");
 
                 entity.Property(e => e.ExtraTwo).HasDefaultValueSql("(' ')");
@@ -127,64 +122,6 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.TrackId)
                     .IsRequired()
                     .HasColumnName("TrackID");
-
-                entity.HasOne(d => d.ApprovedByExamNavigation)
-                    .WithMany(p => p.CertApplicationApprovedByExamNavigations)
-                    .HasForeignKey(d => d.ApprovedByExam)
-                    .HasConstraintName("FK_CertApplications_ApvStatus_exam");
-
-                entity.HasOne(d => d.ApvStatusAcadNavigation)
-                    .WithMany(p => p.CertApplicationApvStatusAcadNavigations)
-                    .HasForeignKey(d => d.ApvStatusAcad)
-                    .HasConstraintName("FK_CertApplications_ApvStatus_Acad");
-
-                entity.HasOne(d => d.ApvStatusAccNavigation)
-                    .WithMany(p => p.CertApplicationApvStatusAccNavigations)
-                    .HasForeignKey(d => d.ApvStatusAcc)
-                    .HasConstraintName("FK_CertApplications_ApvStatus_Acc");
-
-                entity.HasOne(d => d.ApvStatusDeptNavigation)
-                    .WithMany(p => p.CertApplicationApvStatusDeptNavigations)
-                    .HasForeignKey(d => d.ApvStatusDept)
-                    .HasConstraintName("FK_CertApplications_ApvStatus_Dept");
-
-                entity.HasOne(d => d.ApvStatusLibNavigation)
-                    .WithMany(p => p.CertApplicationApvStatusLibNavigations)
-                    .HasForeignKey(d => d.ApvStatusLib)
-                    .HasConstraintName("FK_CertApplications_ApvStatus_Lib");
-
-                entity.HasOne(d => d.Convocation)
-                    .WithMany(p => p.CertApplications)
-                    .HasForeignKey(d => d.ConvocationId)
-                    .HasConstraintName("FK_CertApplications_Convocation");
-
-                entity.HasOne(d => d.FromNubCampusNavigation)
-                    .WithMany(p => p.CertApplicationFromNubCampusNavigations)
-                    .HasForeignKey(d => d.FromNubCampus)
-                    .HasConstraintName("FK_FromCampus");
-
-                entity.HasOne(d => d.MajorSubjectNavigation)
-                    .WithMany(p => p.CertApplications)
-                    .HasForeignKey(d => d.MajorSubject)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CertApplications_MajorSubjects");
-
-                entity.HasOne(d => d.Program)
-                    .WithMany(p => p.CertApplications)
-                    .HasForeignKey(d => d.ProgramId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CertApplications_Program");
-
-                entity.HasOne(d => d.StudentTypeNavigation)
-                    .WithMany(p => p.CertApplications)
-                    .HasForeignKey(d => d.StudentType)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CertApplications_StudentType");
-
-                entity.HasOne(d => d.ToNubCampusNavigation)
-                    .WithMany(p => p.CertApplicationToNubCampusNavigations)
-                    .HasForeignKey(d => d.ToNubCampus)
-                    .HasConstraintName("FK_ToCampus");
             });
 
             modelBuilder.Entity<Convocation>(entity =>

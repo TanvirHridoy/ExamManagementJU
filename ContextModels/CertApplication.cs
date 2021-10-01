@@ -38,21 +38,9 @@ namespace CertificationMS.ContextModels
         public DateTime? ApvAcaddate { get; set; }
         public DateTime? ApvExamDate { get; set; }
         public bool? IsDelivered { get; set; }
-        public string ExtraOne { get; set; }
+        public byte[] ExtraOne { get; set; }
         public string ExtraTwo { get; set; }
         public string ExtraThree { get; set; }
         public string ExtraFour { get; set; }
-
-        public virtual ApvStatus ApprovedByExamNavigation { get; set; }
-        public virtual ApvStatus ApvStatusAcadNavigation { get; set; }
-        public virtual ApvStatus ApvStatusAccNavigation { get; set; }
-        public virtual ApvStatus ApvStatusDeptNavigation { get; set; }
-        public virtual ApvStatus ApvStatusLibNavigation { get; set; }
-        public virtual Convocation Convocation { get; set; }
-        public virtual Campus FromNubCampusNavigation { get; set; }
-        public virtual Department MajorSubjectNavigation { get; set; }
-        public virtual Program Program { get; set; }
-        public virtual StudentType StudentTypeNavigation { get; set; }
-        public virtual Campus ToNubCampusNavigation { get; set; }
     }
 }

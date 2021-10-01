@@ -17,6 +17,7 @@
   <ItemGroup>
     <Folder Include="Views\Admin\" />
     <Folder Include="wwwroot\AdminLayout\" />
+    <Folder Include="wwwroot\ApplicationImage\" />
   </ItemGroup>
 
 </Project>
