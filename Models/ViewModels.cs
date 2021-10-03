@@ -38,4 +38,13 @@ namespace CertificationMS.Models
         public IEnumerable<StudentType> list { get; set; }
         public string message { get; set; }
     }
+    public class DeptSectionViewModel
+    {
+        public string message { get; set; }
+        public List<DeptSectionListModels> Applications { get; set; }
+
+        public List<Department> departments = new List<Department>();
+       public List<StudentType> studentTypes = new List<StudentType>();
+       public List<ContextModels.Program> programs = new List<ContextModels.Program>();
+    }
 }

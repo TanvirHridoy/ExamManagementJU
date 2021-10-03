@@ -2,15 +2,12 @@
 using CertificationMS.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
@@ -54,28 +51,32 @@ namespace CertificationMS.Controllers
             return s;
         }
         [HttpPost]
-        public async Task<IActionResult> ApplyForCertificate(CertApplication application)
+        public IActionResult ApplyForCertificate(CertApplication application)
         {
             CertApplication app = application;
             var file = Request.Form.Files["ImageData"];
-            if (file.Length > 0)
+            if (file != null)
             {
-                app.ExtraOne = ConvertToBytes(file);
+                if (file.Length > 0)
+                {
+                    app.ExtraOne = ConvertToBytes(file);
+                }
             }
+
             app.ApplyDate = DateTime.Now;
             var g = Guid.NewGuid();
             app.TrackId = g.ToString();
             _Db.CertApplications.Add(app);
             try
             {
-                await _Db.SaveChangesAsync();
+                _Db.SaveChanges();
             }
             catch (Exception ex)
             {
                 var msg = ex.Message;
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("ShowTracking", new Message { TrackingID = g.ToString() });
         }
 
         public async Task<ActionResult> RetriveImage(int ID)
@@ -96,10 +97,9 @@ namespace CertificationMS.Controllers
         }
         // aniruddho hcnaged again by hridoy
 
-        
-        public IActionResult Privacy()
+        public IActionResult ShowTracking(Message message)
         {
-            return View();
+            return View(message);
         }
 
 

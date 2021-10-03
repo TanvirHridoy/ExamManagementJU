@@ -1,0 +1,94 @@
+﻿@model CertificationMS.Models.DeptSectionViewModel
+
+@{
+    ViewData["Title"] = "Department";
+}
+@if (!String.IsNullOrEmpty(Model.message))
+{
+    if (Model.message.StartsWith("Success"))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>
+                @Model.message
+            </strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    else if (Model.message.StartsWith("Failed"))
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>
+                @Model.message
+            </strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+}
+
+<div class="row mb-3">
+    <div class="col-sm-12 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Departments</h6>
+                <a class="m-0 float-right btn btn-success btn-sm" asp-action="create">
+                    Add New <i class="fas fa-plus"></i>
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Sl#</th>
+                            <th>Student Id</th>
+                            <th>Student Name</th>
+                            <th>Department</th>
+                            <th>Program</th>
+                            <th>Student Type</th>
+                            <th>Applied on</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{int sl = 0; }
+                        @foreach (var item in Model.Applications)
+                        {
+                            sl = sl + 1;
+                        <tr>
+                            <td>@sl</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StudentId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StudentName)
+                            </td>
+                            <td>
+                                @Model.departments.Where(e=>e.Id==item.MajorSubjectID).Select(f=>f.DeptSname).First()
+                            </td>
+                            <td>
+                                @Model.programs.Where(w => w.Id == item.ProgramId).Select(r => r.ProgramName).First()
+                            </td>
+                            <td>
+                                @Model.studentTypes.Where(e => e.Id == item.StudentTypeID).Select(e => e.Type).First()
+                            </td>
+                            <td>
+                                @item.ApplyDate.ToString("dd-MMM-yyyy");
+                            </td>
+                            <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
+                            <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer"></div>
+        </div>
+    </div>
+
+</div>
