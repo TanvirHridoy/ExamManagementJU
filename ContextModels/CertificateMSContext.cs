@@ -25,7 +25,15 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
 
-      
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=HRIDOYPCWORK\\SQLEXP2K19;Database=CertificateMS;User ID=sa;Password=1234;Trusted_Connection=True;MultipleActiveResultSets=true ");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
@@ -88,13 +96,22 @@ namespace CertificationMS.ContextModels
 
                 entity.Property(e => e.ApvStatusAcad)
                     .HasColumnName("ApvStatusACAD")
+                    .HasDefaultValueSql("((1))")
                     .HasComment("Approval StatusID For ACADsection");
 
-                entity.Property(e => e.ApvStatusAcc).HasComment("Approval StatusID For Accounts section");
+                entity.Property(e => e.ApvStatusAcc)
+                    .HasDefaultValueSql("((1))")
+                    .HasComment("Approval StatusID For Accounts section");
 
-                entity.Property(e => e.ApvStatusDept).HasComment("Approval Status ID For Dept");
+                entity.Property(e => e.ApvStatusDept)
+                    .HasDefaultValueSql("((1))")
+                    .HasComment("Approval Status ID For Dept");
 
-                entity.Property(e => e.ApvStatusLib).HasComment("Approval StatusID For library section");
+                entity.Property(e => e.ApvStatusExam).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ApvStatusLib)
+                    .HasDefaultValueSql("((1))")
+                    .HasComment("Approval StatusID For library section");
 
                 entity.Property(e => e.ConvocationId).HasColumnName("ConvocationID");
 

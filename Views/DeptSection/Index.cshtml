@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Department";
 }
+@section StyleSheet{
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+}
 @if (!String.IsNullOrEmpty(Model.message))
 {
     if (Model.message.StartsWith("Success"))
@@ -40,7 +43,7 @@
                 </a>
             </div>
             <div class="table-responsive">
-                <table class="table align-items-center table-flush">
+                <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                         <tr>
                             <th>Sl#</th>
@@ -48,7 +51,7 @@
                             <th>Student Name</th>
                             <th>Department</th>
                             <th>Program</th>
-                            <th>Student Type</th>
+
                             <th>Applied on</th>
                             <th>Edit</th>
                             <th>Delete</th>
@@ -59,30 +62,27 @@
                         @foreach (var item in Model.Applications)
                         {
                             sl = sl + 1;
-                        <tr>
-                            <td>@sl</td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.StudentId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.StudentName)
-                            </td>
-                            <td>
-                                @Model.departments.Where(e=>e.Id==item.MajorSubjectID).Select(f=>f.DeptSname).First()
-                            </td>
-                            <td>
-                                @Model.programs.Where(w => w.Id == item.ProgramId).Select(r => r.ProgramName).First()
-                            </td>
-                            <td>
-                                @Model.studentTypes.Where(e => e.Id == item.StudentTypeID).Select(e => e.Type).First()
-                            </td>
-                            <td>
-                                @item.ApplyDate.ToString("dd-MMM-yyyy");
-                            </td>
-                            <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
-                            <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
+                            <tr>
+                                <td>@sl</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StudentId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StudentName)
+                                </td>
+                                <td>
+                                    @Model.departments.Where(e => e.Id == item.MajorSubjectID).Select(f => f.DeptSname).First()
+                                </td>
+                                <td>
+                                    @Model.programs.Where(w => w.Id == item.ProgramId).Select(r => r.ProgramName).First()
+                                </td>
+                                <td>
+                                    @item.ApplyDate.ToString("dd-MMM-yyyy");
+                                </td>
+                                <td><a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-warning">View</a></td>
+                                <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 
-                        </tr>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -92,3 +92,16 @@
     </div>
 
 </div>
+@section Scripts{
+    <!-- Page level plugins -->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script>
+        $(document).ready(function () {
+           // $('#dataTable').DataTable(); // ID From dataTable
+            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+}

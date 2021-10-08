@@ -3,7 +3,9 @@
   src: url(../font/Nunito-Regular.ttf);
   src: url(../font/Nunito-Regular.ttf) format('ttf'), url(../font/Nunito-Regular.ttf) format('truetype')
 }
-
+.darkgreenlbl {
+    color: darkgreen;
+}
 html {
   position: relative;
   min-height: 100%;
@@ -1802,7 +1804,7 @@ a:focus {
 }
 
 footer.sticky-footer {
-  padding: 2rem 0;
+  padding: 1rem 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
   -webkit-box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);

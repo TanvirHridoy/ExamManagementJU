@@ -22,11 +22,11 @@ namespace CertificationMS.ContextModels
         public int? ConvocationId { get; set; }
         public DateTime ApplyDate { get; set; }
         public string TrackId { get; set; }
-        public int? ApprovedByDept { get; set; }
-        public int? ApprovedByAcc { get; set; }
-        public int? ApprovedByLib { get; set; }
-        public int? ApprovedByAcad { get; set; }
-        public int? ApprovedByExam { get; set; }
+        public int ApprovedByDept { get; set; }
+        public int ApprovedByAcc { get; set; }
+        public int ApprovedByLib { get; set; }
+        public int ApprovedByAcad { get; set; }
+        public int ApprovedByExam { get; set; }
         public int? ApvStatusDept { get; set; }
         public int? ApvStatusAcc { get; set; }
         public int? ApvStatusLib { get; set; }

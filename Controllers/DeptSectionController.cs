@@ -26,7 +26,9 @@ namespace CertificationMS.Controllers
             viewModel.programs = await _Db.Programs.ToListAsync();
 
             
-            viewModel.Applications = await _Db.CertApplications.Select(e => new DeptSectionListModels
+            viewModel.Applications = await _Db.CertApplications
+                .Where(f=>f.ApvStatusAcad==1 && f.ApvStatusAcc==1 && f.ApvStatusExam==1 && f.ApvStatusLib==1)
+                .Select(e => new DeptSectionListModels
             {
                 Id = e.Id,
                 ApplyDate = e.ApplyDate,
@@ -41,9 +43,17 @@ namespace CertificationMS.Controllers
         }
 
         // GET: DeptSectionController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
+            viewModel.Application = await _Db.CertApplications.SingleAsync(e => e.Id == id);
+            viewModel.ApvStatusLst = await _Db.ApvStatuses.ToListAsync();
+            viewModel.departments = await _Db.Departments.ToListAsync();
+            viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
+            viewModel.programs = await _Db.Programs.ToListAsync();
+            viewModel.Campuses = await _Db.Campuses.ToListAsync();
+            viewModel.Convocations = await _Db.Convocations.ToListAsync();
+            return View(viewModel);
         }
 
         // GET: DeptSectionController/Create

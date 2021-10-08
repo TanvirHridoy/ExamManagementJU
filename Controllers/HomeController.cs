@@ -64,6 +64,10 @@ namespace CertificationMS.Controllers
             }
 
             app.ApplyDate = DateTime.Now;
+            if(app.FromNubCampus!=null && app.ToNubCampus != null)
+            {
+                app.ChangeNubCampus = true;
+            }
             var g = Guid.NewGuid();
             app.TrackId = g.ToString();
             _Db.CertApplications.Add(app);
