@@ -26,8 +26,10 @@
 
                     <div class="col-3 float-right">
                         <div class="custom-file mt-5">
+
                             <input type="file" class="custom-file-input" asp-for="@Model.Application.ExtraOne" name="ImageData" id="ImageData">
                             <label class="custom-file-label" for="customFile">Choose Photo</label>
+                            <output id="list"></output>
                         </div>
                     </div>
                     <br />
@@ -111,10 +113,10 @@
 
                         </div>
                         <br />
-                        <div class="form-group">
-                            <div class="row">
-                                <div style="margin-left:15px;" class="col-md-3">StudentShip Information</div>
-                                <select class="form-control col-md-3" id="StudentType" required asp-for="@Model.Application.StudentType">
+                        <div class="form-group row">
+                            <div class="col-md-6 row">
+                                <div style="margin-left:15px;" class="col-md-5">StudentShip Information</div>
+                                <select class="form-control col-md-6" id="StudentType" required asp-for="@Model.Application.StudentType">
 
                                     @foreach (var item in Model.StudentTypeLst)
                                     {
@@ -122,6 +124,18 @@
                                     }
                                 </select>
                             </div>
+                            <div class="col-md-6 row">
+                                <label for="staticEmail" class="col-sm-4 col-form-label">Major Subject</label>
+                                <div class="col-sm-7">
+                                    <select asp-for="@Model.Application.MajorSubject" class="form-control col-sm-6" id="MajorSubject">
+                                        @foreach (var item in Model.deptLst)
+                                        {
+                                            <option value="@item.Id">@item.DeptSname</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
                         <div>
                             <div class="form-group row">
@@ -140,14 +154,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 row">
-                                    <label for="staticEmail" class="col-sm-4 col-form-label">Major Subject</label>
+                                    <label for="email" class="col-sm-4 col-form-label">Email Address</label>
                                     <div class="col-sm-7">
-                                        <select asp-for="@Model.Application.MajorSubject" class="form-control col-sm-6" id="MajorSubject">
-                                            @foreach (var item in Model.deptLst)
-                                            {
-                                                <option value="@item.Id">@item.DeptSname</option>
-                                            }
-                                        </select>
+                                       <input  type="email" asp-for="@Model.Application.ExtraThree" class="form-control" placeholder="Enter Email Address" id="email"/>
                                     </div>
                                 </div>
 
@@ -180,7 +189,7 @@
                             <p class="card-text">
                                 <div class="row">
                                     <label for="Conv" class="col-md-4"> 3.Mention The Convocation Number </label>
-                                    <select style="margin-left:78px;" asp-for="@Model.Application.ConvocationId" required class="form-control col-md-2" id="Conv">
+                                    <select style="margin-left:78px;" asp-for="@Model.Application.ConvocationId" disabled required class="form-control col-md-2" id="Conv">
                                         @foreach (var item in Model.convLst)
                                         {
                                             <option value="@item.Id">@item.Name</option>
@@ -188,7 +197,14 @@
                                     </select>
                                 </div>
                             </p>
-                            <p class="card-text">4.If you Were Not Registered For Convocation then you habe to submiot money receipt(fee of main certificate) </p>
+                            <p class="card-text">
+                                <div class="row">
+                                    <label for="Conv" class="col-md-8">4.If you haven't Registered For Convocation!!!Submit Money Receipt(fee of main certificate)</label>
+                                    <input type="text" class="form-control col-md-3"  asp-for="@Model.Application.ExtraTwo" id="MoneyRecipt" placeholder="Money Receipt No">
+                                </div>
+                                
+                                
+                            </p>
                             <p class="card-text">5.You Have To Submit the Clearence Of Convocation Costume </p>
                             <p class="card-text">6.Registration Fee of Convoction will Detarmined by The Authority From Time To Time  </p>
                         </div>
@@ -202,3 +218,52 @@
     </section><!-- End Skills Section -->
 
 </main>
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $("#ConvRegYes").change(function () {
+            if (this.checked) {
+                $("#MoneyRecipt").prop('disabled', true);
+                $("#Conv").prop('disabled', false);
+
+
+            } else {
+                $("#MoneyRecipt").prop('disabled', false);
+                $("#Conv").prop('disabled', true);
+            }
+        });
+
+      
+
+            $("#inlineRadio1").on("click", function () {
+                    if ($("#inlineRadio1").is(":checked")) {
+                         $(".invigible").removeClass("d-none");
+                    }
+            })
+
+            $("#inlineRadio2").on("click", function () {
+                    if ($("#inlineRadio2").is(":checked")) {
+                         $(".invigible").addClass("d-none");
+                    }
+            })
+
+
+    </script>
+    <script>
+        function handleFileSelect(evt) {
+            var files = evt.target.files; // FileList object
+
+            // files is a FileList of File objects. List some properties.
+            var output = [];
+            for (var i = 0, f; f = files[i]; i++) {
+                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes',
+                    '</li>');
+            }
+            document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+
+        document.getElementById('ImageData').addEventListener('change', handleFileSelect, false);
+    </script>
+}

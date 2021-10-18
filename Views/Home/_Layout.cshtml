@@ -72,7 +72,7 @@
                             <li><a href="#about">About</a></li>
                             <li><a href="#contact">Contact</a></li>
                             <li><a href="#faq">F.A.Q</a></li>
-                            <li><a asp-controller="Department" asp-action="List">Login</a></li>
+                            <li><a asp-controller="Login" asp-action="Index">Login</a></li>
                         </ul>
                     </nav><!-- .nav-menu -->
 
@@ -440,28 +440,7 @@
 
 
 
-        <script>
-
-            $("#inlineRadio1").on("click", function () {
-                if ($("#inlineRadio1").is(":checked")) {
-                    $(".invigible").removeClass("d-none");
-
-                }
-            })
-            $("#inlineRadio2").on("click", function () {
-                if ($("#inlineRadio2").is(":checked")) {
-                    $(".invigible").addClass("d-none");
-
-                }
-            })
-
-                                                            //if ($("#inlineRadio1").prop("checked")) {
-                                                            //    alert();
-                                                            //    $(invigible).removeClass("d-none");
-                                                            //}
-
-
-        </script>
+        
     </div>
 </body>
 </html>

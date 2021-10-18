@@ -18,6 +18,11 @@ namespace CertificationMS.ContextModels
         }
 
         public virtual DbSet<ApvStatus> ApvStatuses { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<Campus> Campuses { get; set; }
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
@@ -25,14 +30,7 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=HRIDOYPCWORK\\SQLEXP2K19;Database=CertificateMS;User ID=sa;Password=1234;Trusted_Connection=True;MultipleActiveResultSets=true ");
-            }
-        }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +43,65 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<AspNetRole>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<AspNetUser>(entity =>
+            {
+                entity.Property(e => e.Email).HasMaxLength(256);
+
+                entity.Property(e => e.LockoutEndDateUtc).HasColumnType("datetime");
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<AspNetUserClaim>(entity =>
+            {
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserClaims)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId");
+            });
+
+            modelBuilder.Entity<AspNetUserLogin>(entity =>
+            {
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey, e.UserId })
+                    .HasName("PK_dbo.AspNetUserLogins");
+
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
+
+                entity.Property(e => e.ProviderKey).HasMaxLength(128);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserLogins)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId");
+            });
+
+            modelBuilder.Entity<AspNetUserRole>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.RoleId })
+                    .HasName("PK_dbo.AspNetUserRoles");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.RoleId)
+                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserRoles)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId");
             });
 
             modelBuilder.Entity<Campus>(entity =>

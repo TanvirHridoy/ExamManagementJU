@@ -15,7 +15,6 @@ namespace CertificationMS.Controllers
     public class HomeController : Controller
     {
         public readonly CertificateMSContext _Db;
-
         public HomeController(CertificateMSContext Db)
         {
             _Db = Db;
@@ -42,7 +41,6 @@ namespace CertificationMS.Controllers
         public byte[] ConvertToBytes(IFormFile image)
         {
             byte[] s = null;
-
             using (var ms = new MemoryStream())
             {
                 image.CopyTo(ms);
@@ -85,7 +83,6 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> RetriveImage(int ID)
         {
-
             var cert = await _Db.CertApplications.SingleAsync(e => e.Id == ID);
             var file = cert.ExtraOne;
             if (file.Length > 0)
@@ -97,7 +94,6 @@ namespace CertificationMS.Controllers
             {
                 return null;
             }
-
         }
         // aniruddho hcnaged again by hridoy
 
@@ -111,7 +107,6 @@ namespace CertificationMS.Controllers
         {
             List<Department> Deptlist = new List<Department>();
             Deptlist = _Db.Departments.ToList();
-
             return Deptlist;
         }
 
