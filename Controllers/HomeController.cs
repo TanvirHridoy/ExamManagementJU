@@ -68,6 +68,11 @@ namespace CertificationMS.Controllers
             }
             var g = Guid.NewGuid();
             app.TrackId = g.ToString();
+            app.ApvStatusDept = 1;
+            app.ApvStatusAcad = 1;
+            app.ApvStatusAcc = 1;
+            app.ApvStatusExam = 1;
+            app.ApvStatusLib = 1;
             _Db.CertApplications.Add(app);
             try
             {
@@ -85,7 +90,11 @@ namespace CertificationMS.Controllers
         {
             var cert = await _Db.CertApplications.SingleAsync(e => e.Id == ID);
             var file = cert.ExtraOne;
-            if (file.Length > 0)
+            if (file == null)
+            {
+                return null;
+            }
+            else if (file.Length > 0)
             {
                 byte[] Image = file;
                 return File(Image, "image/jpg");

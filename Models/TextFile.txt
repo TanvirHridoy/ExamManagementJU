@@ -1,2 +1,2 @@
 ﻿Scaffold-DbContext "Server=HRIDOYPCWORK\SQLEXP2K19;Database=CertificateMS;User ID=sa;Password=1234;Trusted_Connection=True;MultipleActiveResultSets=true " Microsoft.EntityFrameworkCore.SqlServer -OutputDir ContextModels 
-Scaffold-DbContext "Server=HRIDOYPCWORK\SQLEXP2K19;Database=CertificateMS;User ID=sa;Password=1234;Trusted_Connection=True;MultipleActiveResultSets=true " Microsoft.EntityFrameworkCore.SqlServer -OutputDir ContextModels -Force
+Scaffold-DbContext "Server=HRIDOYPCWORK\SQL2K19EXP;Database=CertificateMS;User ID=sa;Password=1234;Trusted_Connection=True;MultipleActiveResultSets=true " Microsoft.EntityFrameworkCore.SqlServer -OutputDir ContextModels -Force

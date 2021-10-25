@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CertificationMS.ContextModels
 {
-    public partial class CertificateMSContext : DbContext
+    public partial class CertificateMSContext : IdentityDbContext
     {
         public CertificateMSContext()
         {
@@ -16,13 +17,9 @@ namespace CertificationMS.ContextModels
             : base(options)
         {
         }
+        
 
         public virtual DbSet<ApvStatus> ApvStatuses { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<Campus> Campuses { get; set; }
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
@@ -30,231 +27,11 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
 
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
-            modelBuilder.Entity<ApvStatus>(entity =>
-            {
-                entity.ToTable("ApvStatus");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<AspNetRole>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(256);
-            });
-
-            modelBuilder.Entity<AspNetUser>(entity =>
-            {
-                entity.Property(e => e.Email).HasMaxLength(256);
-
-                entity.Property(e => e.LockoutEndDateUtc).HasColumnType("datetime");
-
-                entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasMaxLength(256);
-            });
-
-            modelBuilder.Entity<AspNetUserClaim>(entity =>
-            {
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<AspNetUserLogin>(entity =>
-            {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey, e.UserId })
-                    .HasName("PK_dbo.AspNetUserLogins");
-
-                entity.Property(e => e.LoginProvider).HasMaxLength(128);
-
-                entity.Property(e => e.ProviderKey).HasMaxLength(128);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<AspNetUserRole>(entity =>
-            {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK_dbo.AspNetUserRoles");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId");
-            });
-
-            modelBuilder.Entity<Campus>(entity =>
-            {
-                entity.ToTable("Campus");
-
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .HasDefaultValueSql("(' ')");
-
-                entity.Property(e => e.CampusName)
-                    .IsRequired()
-                    .HasMaxLength(200)
-                    .HasDefaultValueSql("(' ')");
-            });
-
-            modelBuilder.Entity<CertApplication>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.Address).IsRequired();
-
-                entity.Property(e => e.ApplyDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.ApprovedByAcad)
-                    .HasColumnName("ApprovedByACAD")
-                    .HasComment("User Id who approved In ACAD section");
-
-                entity.Property(e => e.ApprovedByAcc).HasComment("User Id who approved In Accounts section");
-
-                entity.Property(e => e.ApprovedByDept).HasComment("User Id who approved In Department section");
-
-                entity.Property(e => e.ApprovedByLib).HasComment("User Id who approved In Library section");
-
-                entity.Property(e => e.ApvAcaddate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("ApvACADDate");
-
-                entity.Property(e => e.ApvAccDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ApvDeptDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ApvExamDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ApvLibDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ApvStatusAcad)
-                    .HasColumnName("ApvStatusACAD")
-                    .HasDefaultValueSql("((1))")
-                    .HasComment("Approval StatusID For ACADsection");
-
-                entity.Property(e => e.ApvStatusAcc)
-                    .HasDefaultValueSql("((1))")
-                    .HasComment("Approval StatusID For Accounts section");
-
-                entity.Property(e => e.ApvStatusDept)
-                    .HasDefaultValueSql("((1))")
-                    .HasComment("Approval Status ID For Dept");
-
-                entity.Property(e => e.ApvStatusExam).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.ApvStatusLib)
-                    .HasDefaultValueSql("((1))")
-                    .HasComment("Approval StatusID For library section");
-
-                entity.Property(e => e.ConvocationId).HasColumnName("ConvocationID");
-
-                entity.Property(e => e.ExtraThree).HasDefaultValueSql("(' ')");
-
-                entity.Property(e => e.ExtraTwo).HasDefaultValueSql("(' ')");
-
-                entity.Property(e => e.IsDelivered).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.PhoneNo)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.ProgramId).HasColumnName("ProgramID");
-
-                entity.Property(e => e.StudentId)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("StudentID");
-
-                entity.Property(e => e.StudentName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.TrackId)
-                    .IsRequired()
-                    .HasColumnName("TrackID");
-            });
-
-            modelBuilder.Entity<Convocation>(entity =>
-            {
-                entity.ToTable("Convocation");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ProgramDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Year)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Department>(entity =>
-            {
-                entity.ToTable("Department");
-
-                entity.Property(e => e.DeptName).HasMaxLength(50);
-
-                entity.Property(e => e.DeptSname)
-                    .HasMaxLength(20)
-                    .HasColumnName("DeptSName");
-            });
-
-            modelBuilder.Entity<Program>(entity =>
-            {
-                entity.ToTable("Program");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.ProgramName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<StudentType>(entity =>
-            {
-                entity.ToTable("StudentType");
-
-                entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("(' ')");
-            });
-
-            OnModelCreatingPartial(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

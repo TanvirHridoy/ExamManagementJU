@@ -28,7 +28,7 @@ namespace CertificationMS
         {
             services.AddControllersWithViews();
             services.AddDbContext<CertificateMSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppCon")));
-            services.AddIdentity<AspNetUser, IdentityRole>().AddEntityFrameworkStores<CertificateMSContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<CertificateMSContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +45,7 @@ namespace CertificationMS
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
