@@ -1,5 +1,6 @@
 using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using CertificationMS.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +30,7 @@ namespace CertificationMS
             services.AddControllersWithViews();
             services.AddDbContext<CertificateMSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppCon")));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<CertificateMSContext>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +54,7 @@ namespace CertificationMS
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=DeptSection}/{action=Index}/{id?}");
             });
         }
     }

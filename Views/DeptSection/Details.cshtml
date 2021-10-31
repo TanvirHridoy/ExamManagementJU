@@ -106,7 +106,7 @@
                 </select>
             </div>
             <div class="col-md-6">
-                <label style="color:darkgreen;" for="ChangedCampus" class="col-form-label darkgreenlbl">StudentShip:</label>
+                <label style="color:darkgreen;" for="ChangedCampus" class="col-form-label darkgreenlbl">Changed Campus?:</label>
                 <select disabled class="form-control" id="ChangedCampus" asp-for="Application.ChangeNubCampus">
                     @if (Model.Application.ChangeNubCampus == true)
                     {
@@ -204,7 +204,17 @@
                 </div>
              } 
     }
-
+    
+</div>
+<div class="row" style="margin-bottom:5px;">
+    <div class="col-md-6">
+        <label style="color:darkgreen;" for="StudentShip" class="col-form-label darkgreenlbl">Email:</label>
+        <input disabled class="form-control" id="Email" asp-for="Application.ExtraThree"/>
+    </div>
+    <div class="col-md-6">
+        <label style="color:darkgreen;" for="PhoneNo" class="col-form-label darkgreenlbl">Phone:</label>
+        <input disabled class="form-control" id="PhoneNo" asp-for="Application.PhoneNo" />
+    </div>
 </div>
         <div class="row" style="margin-bottom:5px;">
             <div class="col-md-12">
@@ -214,8 +224,11 @@
         </div>
         <div class="row">
             <div class="col-md-12" style="text-align:right;">
-                <button type="button" class="btn btn-success col-md-2">Approve</button>
-                <button type="button" class="btn btn-danger col-md-2">Reject</button>
+                <form method="post">
+                    <button type="submit" asp-action="Approve" asp-controller="DeptSection" asp-route-ID="@Model.Application.Id" class="btn btn-success col-md-2">Approve</button>
+                    <button type="submit" asp-action="Reject" asp-controller="DeptSection" asp-route-ID="@Model.Application.Id" class="btn btn-danger col-md-2">Reject</button>
+                </form>
+                
             </div>
         </div>
 </div>

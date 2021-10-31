@@ -1,9 +1,11 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using CertificationMS.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,21 +15,23 @@ namespace CertificationMS.Controllers
     {
         public readonly CertificateMSContext _Db;
 
-        public DeptSectionController(CertificateMSContext Db)
+        public IConfiguration _config;
+        public DeptSectionController(CertificateMSContext Db, IConfiguration configuration)
         {
             _Db = Db;
+            _config = configuration;
         }
         // GET: DeptSectionController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(Status message=null)
         {
             DeptSectionViewModel viewModel = new DeptSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
             viewModel.programs = await _Db.Programs.ToListAsync();
-
+            viewModel.message = message != null ? message.MessageText : "";
             
             viewModel.Applications = await _Db.CertApplications
-                .Where(f=>f.ApvStatusAcad==1 && f.ApvStatusAcc==1 && f.ApvStatusExam==1 && f.ApvStatusLib==1)
+                .Where(f=>f.ApvStatusAcad==1 && f.ApvStatusAcc==1 && f.ApvStatusExam==1 && f.ApvStatusLib==1 &&  f.ApvStatusDept == 1)
                 .Select(e => new DeptSectionListModels
             {
                 Id = e.Id,
@@ -42,7 +46,6 @@ namespace CertificationMS.Controllers
             return View(viewModel);
         }
 
-        // GET: DeptSectionController/Details/5
         public async Task<ActionResult> Details(int id)
         {
             ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
@@ -57,11 +60,45 @@ namespace CertificationMS.Controllers
         }
 
         // GET: DeptSectionController/Create
-        public ActionResult Create()
+        [HttpPost]
+        public async Task<ActionResult> Approve(int id)
         {
-            return View();
+             MailHelper mail = new MailHelper(_config);
+            var application = await _Db.CertApplications.FindAsync(id);
+                try
+                {
+                    application.ApprovedByDept = UserInfo.Id;
+                    application.ApvStatusDept = 2;
+                    application.ApvDeptDate = DateTime.Now;
+                    await _Db.SaveChangesAsync();
+                    mail.SendEmail("kmhridoynub@gmail.com","Accounts dept","Certificate Application Came",application.StudentId);
+                    return RedirectToAction("Index",new Status {  MessageText="Successfully Approved "+application.StudentName+"'s application"});
+                }
+                catch(Exception ex)
+                {
+                    var msg = ex.Message;
+                    return RedirectToAction("Index", new Status { MessageText = "Failed To Approved " + application.StudentName + "'s application" });
+                }
         }
-
+        [HttpPost]
+        public async Task<ActionResult> Reject(int id)
+        {
+            var application = await _Db.CertApplications.FindAsync(id);
+            try
+            {
+                application.ApprovedByDept = UserInfo.Id;
+                application.ApvStatusDept = 3;
+                application.ApvDeptDate = DateTime.Now;
+                await _Db.SaveChangesAsync();
+               
+                return RedirectToAction("Index", new Status { MessageText = "Successfully Rejected " + application.StudentName + "'s application" });
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                return RedirectToAction("Index", new Status { MessageText = "Failed To Rejected " + application.StudentName + "'s application" });
+            }
+        }
         // POST: DeptSectionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
