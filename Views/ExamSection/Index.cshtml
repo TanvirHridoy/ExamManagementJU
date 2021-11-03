@@ -1,7 +1,7 @@
-﻿@model CertificationMS.Models.DeptSectionViewModel
+﻿@model CertificationMS.Models.AccSectionViewModel
 
 @{
-    ViewData["Title"] = "Department";
+    ViewData["Title"] = "Exam Section";
 }
 @section StyleSheet{
     <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -37,7 +37,7 @@
     <div class="col-sm-12 col-lg-12 mb-4">
         <div class="card">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Department Section</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Exam Section</h6>
                 
             </div>
             <div class="table-responsive">
@@ -58,7 +58,7 @@
                        
                         @foreach (var item in Model.Applications)
                         {
-                           
+                            
                             <tr>
                                 <td>@item.Id</td>
                                 <td>

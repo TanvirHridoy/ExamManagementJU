@@ -10,6 +10,7 @@ namespace CertificationMS.Models
         public int Id { get; set; }
         public string StudentName { get; set; }
         public string StudentId { get; set; }
+        public string AppStatus { get; set; }
         public string Program { get; set; }
         public int ProgramId { get; set; }
         public string StudentType { get; set; }
