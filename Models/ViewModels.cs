@@ -41,6 +41,7 @@ namespace CertificationMS.Models
     public class DeptSectionViewModel
     {
         public string message { get; set; }
+        public string Department { get; set; } = "";
         public List<DeptSectionListModels> Applications { get; set; }
 
         public List<Department> departments = new List<Department>();

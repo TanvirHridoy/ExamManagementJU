@@ -61,12 +61,19 @@ namespace CertificationMS.Controllers
 
         // GET: DeptSectionController/Create
         [HttpPost]
-        public async Task<ActionResult> Approve(int id)
+        public async Task<ActionResult> Approve(IFormCollection form, int id)
         {
+            var TotalPayable= form["Application.TotalPayable"];
+            var FeeForCertificate = form["Application.FeeForCertificate"];
+            var TotalPaid = form["Application.TotalPaid"];
+
             MailHelper mail = new MailHelper(_config);
             var application = await _Db.CertApplications.FindAsync(id);
             try
             {
+                application.TotalPayable =Convert.ToDecimal( TotalPayable);
+                application.TotalPaid =  Convert.ToDecimal(TotalPaid);
+                application.FeeForCertificate = Convert.ToDecimal(FeeForCertificate);
                 application.ApprovedByAcc = UserInfo.Id;
                 application.ApvStatusAcc = 2;
                 application.ApvAccDate = DateTime.Now;
@@ -81,11 +88,17 @@ namespace CertificationMS.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> Reject(int id)
+        public async Task<ActionResult> Reject(IFormCollection form, int id)
         {
+            var TotalPayable = form["Application.TotalPayable"];
+            var FeeForCertificate = form["Application.FeeForCertificate"];
+            var TotalPaid = form["Application.TotalPaid"];
             var application = await _Db.CertApplications.FindAsync(id);
             try
             {
+                application.TotalPayable = Convert.ToDecimal(TotalPayable);
+                application.TotalPaid = Convert.ToDecimal(TotalPaid);
+                application.FeeForCertificate = Convert.ToDecimal(FeeForCertificate);
                 application.ApprovedByAcc = UserInfo.Id;
                 application.ApvStatusAcc = 3;
                 application.ApvAccDate = DateTime.Now;

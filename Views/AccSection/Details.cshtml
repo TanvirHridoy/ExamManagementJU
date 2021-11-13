@@ -28,19 +28,20 @@
         </div>
     }
 }
+<form method="post" enctype="multipart/form-data">
+    <div class="container-fluid">
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12" style="text-align:center;">
-            <img src="/Home/RetriveImage/@Model.Application.Id" alt="@Model.Application.StudentName" style="height: 125px; width: 100px; text-align:center;">
+        <div class="row">
+            <div class="col-md-12" style="text-align:center;">
+                <img src="/Home/RetriveImage/@Model.Application.Id" alt="@Model.Application.StudentName" style="height: 125px; width: 100px; text-align:center;">
+            </div>
         </div>
-    </div>
-    <div class="row"> 
-        <div class="col-md-12" style="text-align:center;">
-            <p style="color:darkgreen">Applied On: @Model.Application.ApplyDate.ToString("dd-MMM-yyyy") </p>
-            <input asp-for="Application.ApplyDate" hidden />
+        <div class="row">
+            <div class="col-md-12" style="text-align:center;">
+                <p style="color:darkgreen">Applied On: @Model.Application.ApplyDate.ToString("dd-MMM-yyyy") </p>
+                <input asp-for="Application.ApplyDate" hidden />
+            </div>
         </div>
-    </div>
         <div class="row">
             <div class="col-md-6">
                 <label style="color:darkgreen;" for="StudentName" class="col-form-label darkgreenlbl">Student Name:</label>
@@ -161,74 +162,87 @@
             }
         }
 
-<div class="row">
-    <div class="col-md-6">
-        <label style="color:darkgreen;" for="IsRegConv" class="col-form-label darkgreenlbl">Registered For Convocation?:</label>
-        <select disabled class="form-control" id="IsRegConv" asp-for="Application.RegisteredConv">
-            @if (Model.Application.RegisteredConv == true)
-            {
-                <option value="true" selected>Yes</option>
-                <option value="false">No</option>
-            }
-            else
-            {
-                <option value="true">Yes</option>
-                <option value="false" selected>No</option>
-            }
-        </select>
-    </div>
-    @{
-        if (Model.Application.RegisteredConv == true)
-        {
-        <div class="col-md-6">
-            <label style="color:darkgreen;" for="ConvID" class="col-form-label darkgreenlbl">Convocation No:</label>
-            <select disabled class="form-control" id="ConvID" asp-for="Application.ConvocationId">
-                @foreach (var item in Model.Convocations)
-                {
-                    if (item.Id == Model.Application.ConvocationId)
+        <div class="row">
+            <div class="col-md-6">
+                <label style="color:darkgreen;" for="IsRegConv" class="col-form-label darkgreenlbl">Registered For Convocation?:</label>
+                <select disabled class="form-control" id="IsRegConv" asp-for="Application.RegisteredConv">
+                    @if (Model.Application.RegisteredConv == true)
                     {
-                        <option value="@item.Id" selected="selected">@item.Name</option>
+                        <option value="true" selected>Yes</option>
+                        <option value="false">No</option>
                     }
                     else
                     {
-                        <option value="@item.Id">@item.Name</option>
+                        <option value="true">Yes</option>
+                        <option value="false" selected>No</option>
                     }
+                </select>
+            </div>
+            @{
+                if (Model.Application.RegisteredConv == true)
+                {
+                    <div class="col-md-6">
+                        <label style="color:darkgreen;" for="ConvID" class="col-form-label darkgreenlbl">Convocation No:</label>
+                        <select disabled class="form-control" id="ConvID" asp-for="Application.ConvocationId">
+                            @foreach (var item in Model.Convocations)
+                            {
+                                if (item.Id == Model.Application.ConvocationId)
+                                {
+                                    <option value="@item.Id" selected="selected">@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
                 }
-            </select>
+                else
+                {
+                    <div class="col-md-6">
+                        <label style="color:darkgreen;" for="MoneyReceipt" class="col-form-label darkgreenlbl">Money Receipt No:</label>
+                        <input type="text" disabled class="form-control" asp-for="Application.ExtraTwo" id="MoneyReceipt" />
+                    </div>
+                }
+            }
+
         </div>
-        }
-        else {
-                <div class="col-md-6">
-                    <label style="color:darkgreen;" for="MoneyReceipt" class="col-form-label darkgreenlbl">Money Receipt No:</label>
-                    <input type="text" disabled class="form-control" asp-for="Application.ExtraTwo" id="MoneyReceipt" />
-                </div>
-             } 
-    }
-    
-</div>
-<div class="row" style="margin-bottom:5px;">
-    <div class="col-md-6">
-        <label style="color:darkgreen;" for="StudentShip" class="col-form-label darkgreenlbl">Email:</label>
-        <input disabled class="form-control" id="Email" asp-for="Application.ExtraThree"/>
-    </div>
-    <div class="col-md-6">
-        <label style="color:darkgreen;" for="PhoneNo" class="col-form-label darkgreenlbl">Phone:</label>
-        <input disabled class="form-control" id="PhoneNo" asp-for="Application.PhoneNo" />
-    </div>
-</div>
+        <div class="row" style="margin-bottom:5px;">
+            <div class="col-md-6">
+                <label style="color:darkgreen;" for="StudentShip" class="col-form-label darkgreenlbl">Email:</label>
+                <input disabled class="form-control" id="Email" asp-for="Application.ExtraThree" />
+            </div>
+            <div class="col-md-6">
+                <label style="color:darkgreen;" for="PhoneNo" class="col-form-label darkgreenlbl">Phone:</label>
+                <input disabled class="form-control" id="PhoneNo" asp-for="Application.PhoneNo" />
+            </div>
+        </div>
         <div class="row" style="margin-bottom:5px;">
             <div class="col-md-12">
                 <label style="color:darkgreen;" for="address" class="col-form-label darkgreenlbl">Address:</label>
                 <textarea class="form-control" disabled id="address" asp-for="Application.Address"></textarea>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12" style="text-align:right;">
-                <form method="post">
-                    <button type="submit" asp-action="Approve" asp-controller="AccSection" asp-route-ID="@Model.Application.Id" class="btn btn-success col-md-2">Approve</button>
-                    <button type="submit" asp-action="Reject" asp-controller="AccSection" asp-route-ID="@Model.Application.Id" class="btn btn-danger col-md-2">Reject</button>
-                </form>
-                
+        <div class="row" style="margin-bottom:5px;">
+            <div class="col-md-6">
+                <label style="color:darkgreen;" for="TotalPayable" class="col-form-label darkgreenlbl">Total Payable For The Program:</label>
+                <input class="form-control" id="TotalPayable" asp-for="Application.TotalPayable" />
+            </div>
+            <div class="col-md-6">
+                <label style="color:darkgreen;" for="Fee" class="col-form-label darkgreenlbl">Fee for PVC/Main Certificate:</label>
+                <input class="form-control" id="Fee" asp-for="Application.FeeForCertificate" />
             </div>
         </div>
-</div>
+        <div class="row">
+            <div class="col-md-6">
+                <label style="color:darkgreen;" for="TotalPaid" class="col-form-label darkgreenlbl">Total Paid:</label>
+                <input class="form-control" id="TotalPaid" asp-for="Application.TotalPaid" />
+            </div>
+            <div class="col-md-6" style="text-align: right; align-self: center;">
+                <button type="submit" asp-action="Approve" asp-controller="AccSection" asp-route-id="@Model.Application.Id" class="btn btn-success col-md-3">Approve</button>
+                <button type="submit" asp-action="Reject" asp-controller="AccSection" asp-route-id="@Model.Application.Id" class="btn btn-danger col-md-3">Reject</button>
+            </div>
+        </div>
+    </div>
+</form>

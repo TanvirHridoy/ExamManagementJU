@@ -1,7 +1,7 @@
 ﻿@model CertificationMS.Models.DeptSectionViewModel
 
 @{
-    ViewData["Title"] = "Department";
+    ViewData["Title"] = "Department "+Model.Department;
 }
 @section StyleSheet{
     <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -37,7 +37,7 @@
     <div class="col-sm-12 col-lg-12 mb-4">
         <div class="card">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Department Section</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Department Section @Model.Department</h6>
                 
             </div>
             <div class="table-responsive">
@@ -91,11 +91,11 @@
 
 </div>
 @section Scripts{
-    <!-- Page level plugins -->
+     @*Page level plugins*@ 
     <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <!-- Page level custom scripts -->
+     @*Page level custom scripts*@ 
     <script>
         $(document).ready(function () {
            // $('#dataTable').DataTable(); // ID From dataTable

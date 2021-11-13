@@ -42,5 +42,8 @@ namespace CertificationMS.ContextModels
         public string ExtraTwo { get; set; }
         public string ExtraThree { get; set; }
         public string ExtraFour { get; set; }
+        public decimal? TotalPayable { get; set; }
+        public decimal? FeeForCertificate { get; set; }
+        public decimal? TotalPaid { get; set; }
     }
 }

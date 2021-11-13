@@ -22,28 +22,48 @@ namespace CertificationMS.Controllers
             _config = configuration;
         }
         // GET: DeptSectionController
-        public async Task<ActionResult> Index(Status message=null)
+        public async Task<ActionResult> Index(int id=0, Status message=null)
         {
             DeptSectionViewModel viewModel = new DeptSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
             viewModel.programs = await _Db.Programs.ToListAsync();
             viewModel.message = message != null ? message.MessageText : "";
-            
-            viewModel.Applications = await _Db.CertApplications
-                .Where(f=>f.ApvStatusAcad==1 && f.ApvStatusAcc==1 && f.ApvStatusExam==1 && f.ApvStatusLib==1 )
-                .Select(e => new DeptSectionListModels
+            if (id == 0)
             {
-                Id = e.Id,
-                ApplyDate = e.ApplyDate,
-                MajorSubjectID = e.MajorSubject,
-                ProgramId = e.ProgramId,
-                StudentId = e.StudentId,
-                StudentName = e.StudentName,
-                StudentTypeID = e.StudentType,
-                AppStatus= e.ApvStatusDept==1?"Pending":e.ApvStatusDept==2?"Approved":e.ApvStatusDept==3?"Rejected":"Unknown"
-            }
+                viewModel.Applications = await _Db.CertApplications
+                .Select(e => new DeptSectionListModels
+                {
+                    Id = e.Id,
+                    ApplyDate = e.ApplyDate,
+                    MajorSubjectID = e.MajorSubject,
+                    ProgramId = e.ProgramId,
+                    StudentId = e.StudentId,
+                    StudentName = e.StudentName,
+                    StudentTypeID = e.StudentType,
+                    AppStatus = e.ApvStatusDept == 1 ? "Pending" : e.ApvStatusDept == 2 ? "Approved" : e.ApvStatusDept == 3 ? "Rejected" : "Unknown"
+                }
             ).ToListAsync();
+            }
+            else
+            {
+                viewModel.Department = viewModel.departments.SingleOrDefault(e => e.Id == id).DeptSname;
+                viewModel.Applications = await _Db.CertApplications
+                .Where(f =>  f.MajorSubject==id)
+                .Select(e => new DeptSectionListModels
+                {
+                    Id = e.Id,
+                    ApplyDate = e.ApplyDate,
+                    MajorSubjectID = e.MajorSubject,
+                    ProgramId = e.ProgramId,
+                    StudentId = e.StudentId,
+                    StudentName = e.StudentName,
+                    StudentTypeID = e.StudentType,
+                    AppStatus = e.ApvStatusDept == 1 ? "Pending" : e.ApvStatusDept == 2 ? "Approved" : e.ApvStatusDept == 3 ? "Rejected" : "Unknown"
+                }
+            ).ToListAsync();
+            }
+            
             return View(viewModel);
         }
 
@@ -73,12 +93,12 @@ namespace CertificationMS.Controllers
                     application.ApvDeptDate = DateTime.Now;
                     await _Db.SaveChangesAsync();
                     mail.SendEmail("kmhridoynub@gmail.com","Accounts dept","Certificate Application Came",application.StudentId);
-                    return RedirectToAction("Index", "DeptSection", new Status {  MessageText="Successfully Approved "+application.StudentName+"'s application"});
+                    return RedirectToAction("Index", "DeptSection", new {id=application.MajorSubject, message= new Status { MessageText = "Successfully Approved " + application.StudentName + "'s application" } });
                 }
                 catch(Exception ex)
                 {
                     var msg = ex.Message;
-                    return RedirectToAction("Index", "DeptSection", new Status { MessageText = "Failed To Approved " + application.StudentName + "'s application" });
+                    return RedirectToAction("Index", "DeptSection",new {id=application.MajorSubject, message= new Status { MessageText = "Failed To Approved " + application.StudentName + "'s application" } } );
                 }
         }
         [HttpPost]
@@ -92,12 +112,12 @@ namespace CertificationMS.Controllers
                 application.ApvDeptDate = DateTime.Now;
                 await _Db.SaveChangesAsync();
                
-                return RedirectToAction("Index", "DeptSection", new Status { MessageText = "Successfully Rejected " + application.StudentName + "'s application" });
+                return RedirectToAction("Index", "DeptSection",new {id=application.MajorSubject,messsage = new Status { MessageText = "Successfully Rejected " + application.StudentName + "'s application" } });
             }
             catch (Exception ex)
             {
                 var msg = ex.Message;
-                return RedirectToAction("Index", "DeptSection", new Status { MessageText = "Failed To Rejected " + application.StudentName + "'s application" });
+                return RedirectToAction("Index", "DeptSection",new {id=application.MajorSubject,message= new Status { MessageText = "Failed To Rejected " + application.StudentName + "'s application" } } );
             }
         }
         // POST: DeptSectionController/Create
