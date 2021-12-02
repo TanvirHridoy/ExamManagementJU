@@ -26,6 +26,39 @@ namespace CertificationMS.Controllers
             return View();
         }
 
+        public IActionResult Track()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult TrackApplication(int TrackingID)
+        {
+            List<ApvStatus> statuses = new List<ApvStatus>();
+            statuses = _Db.ApvStatuses.ToList();
+            var cert = _Db.CertApplications.Where(e => e.Id == TrackingID)
+            .SingleOrDefault();
+            TrackingViewModel viewModel = new TrackingViewModel();
+            if (cert != null)
+            {
+                
+                viewModel.TrackId = cert.Id.ToString();
+                viewModel.ApvStatusDept = statuses.Where(f => f.Id == cert.ApvStatusDept).Select(i => i.Name).SingleOrDefault();
+                viewModel.ApvStatusAcad = statuses.Where(f => f.Id == cert.ApvStatusAcad).Select(i => i.Name).SingleOrDefault();
+                viewModel.ApvStatusAcc = statuses.Where(f => f.Id == cert.ApvStatusAcc).Select(i => i.Name).SingleOrDefault();
+                viewModel.ApvStatusLib = statuses.Where(f => f.Id == cert.ApvStatusLib).Select(i => i.Name).SingleOrDefault();
+                viewModel.ApvStatusExam = statuses.Where(f => f.Id == cert.ApvStatusExam).Select(i => i.Name).SingleOrDefault();
+                viewModel.ApplyDate = cert.ApplyDate.ToString("dd-MMM-yyyy");
+                viewModel.ApvAcadDate = cert.ApvAcaddate==null?"---":cert.ApvAcaddate?.ToString("dd-MMM-yyyy");
+                viewModel.ApvAccDate = cert.ApvAccDate == null ? "---" : cert.ApvAccDate?.ToString("dd-MMM-yyyy");
+                viewModel.ApvDeptDate = cert.ApvDeptDate == null ? "---" : cert.ApvDeptDate?.ToString("dd-MMM-yyyy");
+                viewModel.ApvExamDate = cert.ApvExamDate == null ? "---" : cert.ApvExamDate?.ToString("dd-MMM-yyyy");
+                viewModel.ApvLibDate = cert.ApvLibDate == null ? "---" : cert.ApvLibDate?.ToString("dd-MMM-yyyy");
+                viewModel.DeliveryDate = cert.DeliveryDate == null ? "---" : cert.DeliveryDate?.ToString("dd-MMM-yyyy");
+              
+            }
+            return Json(viewModel);
+        }
 
         public async Task<IActionResult> Index()
         {
@@ -66,8 +99,8 @@ namespace CertificationMS.Controllers
             {
                 app.ChangeNubCampus = true;
             }
-            var g = Guid.NewGuid();
-            app.TrackId = g.ToString();
+            
+            
             app.ApvStatusDept = 1;
             app.ApvStatusAcad = 1;
             app.ApvStatusAcc = 1;
@@ -82,8 +115,8 @@ namespace CertificationMS.Controllers
             {
                 var msg = ex.Message;
             }
-
-            return RedirectToAction("ShowTracking", new Message { TrackingID = g.ToString() });
+            var TrackingId = _Db.CertApplications.Where(e=>e.StudentId==app.StudentId && e.ProgramId==app.ProgramId && e.StudentName==app.StudentName).OrderBy(e=>e.ApplyDate).LastOrDefault();
+            return RedirectToAction("ShowTracking", new Message { TrackingID = TrackingId.Id.ToString() });
         }
 
         public async Task<ActionResult> RetriveImage(int ID)

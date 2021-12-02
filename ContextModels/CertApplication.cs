@@ -21,7 +21,6 @@ namespace CertificationMS.ContextModels
         public bool RegisteredConv { get; set; }
         public int? ConvocationId { get; set; }
         public DateTime ApplyDate { get; set; }
-        public string TrackId { get; set; }
         public int ApprovedByDept { get; set; }
         public int ApprovedByAcc { get; set; }
         public int ApprovedByLib { get; set; }
@@ -37,6 +36,7 @@ namespace CertificationMS.ContextModels
         public DateTime? ApvLibDate { get; set; }
         public DateTime? ApvAcaddate { get; set; }
         public DateTime? ApvExamDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
         public bool? IsDelivered { get; set; }
         public byte[] ExtraOne { get; set; }
         public string ExtraTwo { get; set; }

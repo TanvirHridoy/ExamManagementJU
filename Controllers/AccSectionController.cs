@@ -31,6 +31,7 @@ namespace CertificationMS.Controllers
 
             viewModel.Applications = await _Db.CertApplications
                 .Where(f => f.ApvStatusAcad == 1  && f.ApvStatusExam == 1 && f.ApvStatusLib == 1 && f.ApvStatusDept == 2)
+                
                 .Select(e => new DeptSectionListModels
                 {
                     Id = e.Id,
@@ -43,6 +44,7 @@ namespace CertificationMS.Controllers
                     AppStatus = e.ApvStatusAcc == 1 ? "Pending" : e.ApvStatusAcc == 2 ? "Approved" : e.ApvStatusAcc == 3 ? "Rejected" : "Unknown"
                 }
             ).ToListAsync();
+            viewModel.Applications = viewModel.Applications.OrderByDescending(e => e.AppStatus.StartsWith("P")).ToList();
             return View(viewModel);
         }
 
