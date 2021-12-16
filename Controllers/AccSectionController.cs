@@ -13,9 +13,9 @@ namespace CertificationMS.Controllers
 {
     public class AccSectionController : Controller
     {
-        public readonly CertificateMSContext _Db;
+        public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
-        public AccSectionController(CertificateMSContext Db, IConfiguration configuration)
+        public AccSectionController(CertificateMSV2Context Db, IConfiguration configuration)
         {
             _Db = Db;
             _config = configuration;

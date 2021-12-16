@@ -12,11 +12,11 @@ namespace CertificationMS.Controllers
     public class ApprovalStatusController : Controller
     {
 
-        public readonly CertificateMSContext _db;
+        public readonly CertificateMSV2Context _db;
 
 
 
-        public ApprovalStatusController (CertificateMSContext Db)
+        public ApprovalStatusController (CertificateMSV2Context Db)
         {
             _db = Db;
         }

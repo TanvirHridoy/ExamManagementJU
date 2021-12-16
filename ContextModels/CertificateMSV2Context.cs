@@ -18,136 +18,26 @@ namespace CertificationMS.ContextModels
         }
 
         public virtual DbSet<ApvStatus> ApvStatuses { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Campus> Campuses { get; set; }
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
+        public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
+        public virtual DbSet<TblGroup> TblGroups { get; set; }
+        public virtual DbSet<TblGroupInRole> TblGroupInRoles { get; set; }
+        public virtual DbSet<TblMenu> TblMenus { get; set; }
+        public virtual DbSet<TblMenusInRole> TblMenusInRoles { get; set; }
+        public virtual DbSet<TblModule> TblModules { get; set; }
+        public virtual DbSet<TblRole> TblRoles { get; set; }
+        public virtual DbSet<TblUser> TblUsers { get; set; }
 
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
-            modelBuilder.Entity<AspNetRole>(entity =>
-            {
-                entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
-                    .IsUnique()
-                    .HasFilter("([NormalizedName] IS NOT NULL)");
-
-                entity.Property(e => e.Name).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedName).HasMaxLength(256);
-            });
-
-            modelBuilder.Entity<AspNetRoleClaim>(entity =>
-            {
-                entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
-
-                entity.Property(e => e.RoleId).IsRequired();
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AspNetRoleClaims)
-                    .HasForeignKey(d => d.RoleId);
-            });
-
-            modelBuilder.Entity<AspNetUser>(entity =>
-            {
-                entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
-
-                entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
-                    .IsUnique()
-                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
-
-                entity.Property(e => e.Id).HasMaxLength(256);
-
-                entity.Property(e => e.Email).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
-
-                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
-
-                entity.Property(e => e.UserName).HasMaxLength(256);
-            });
-
-            modelBuilder.Entity<AspNetUserClaim>(entity =>
-            {
-                entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserLogin>(entity =>
-            {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
-
-                entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserRole>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
-
-                entity.Property(e => e.RoleId).IsRequired();
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.HasOne(d => d.Role)
-                    .WithMany()
-                    .HasForeignKey(d => d.RoleId);
-
-                entity.HasOne(d => d.User)
-                    .WithMany()
-                    .HasForeignKey(d => d.UserId);
-            });
-
-            modelBuilder.Entity<AspNetUserToken>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.LoginProvider)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(450);
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(256);
-
-                entity.HasOne(d => d.User)
-                    .WithMany()
-                    .HasForeignKey(d => d.UserId);
-            });
 
             modelBuilder.Entity<CertApplication>(entity =>
             {
@@ -164,6 +54,203 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.TotalPayable)
                     .HasColumnType("decimal(18, 2)")
                     .HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<Section>(entity =>
+            {
+                entity.Property(e => e.SectionName)
+                    .HasMaxLength(200)
+                    .HasDefaultValueSql("(' ')");
+            });
+
+            modelBuilder.Entity<TblGroup>(entity =>
+            {
+                entity.HasKey(e => e.GroupId);
+
+                entity.HasIndex(e => e.GroupName, "IX_TblGroups")
+                    .IsUnique();
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GroupName)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TblGroupInRole>(entity =>
+            {
+                entity.HasKey(e => e.GroupRoleId);
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.TblGroupInRoles)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TblGroupInRoles_TblGroups");
+            });
+
+            modelBuilder.Entity<TblMenu>(entity =>
+            {
+                entity.HasKey(e => e.MenuId)
+                    .HasName("PK_TblMenus_1");
+
+                entity.Property(e => e.MenuCaption)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MenuCaptionBng)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MenuIconClass)
+                    .HasMaxLength(200)
+                    .HasDefaultValueSql("(N'far fa-fw fa-window-maximize')");
+
+                entity.Property(e => e.MenuName)
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PageUrl)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TblMenusInRole>(entity =>
+            {
+                entity.HasKey(e => e.MenuRoleId);
+
+                entity.Property(e => e.Opadd).HasColumnName("OPAdd");
+
+                entity.Property(e => e.Opcancel).HasColumnName("OPCancel");
+
+                entity.Property(e => e.Opdelete).HasColumnName("OPDelete");
+
+                entity.Property(e => e.Opedit).HasColumnName("OPEdit");
+
+                entity.Property(e => e.Opprint).HasColumnName("OPPrint");
+
+                entity.HasOne(d => d.Menu)
+                    .WithMany(p => p.TblMenusInRoles)
+                    .HasForeignKey(d => d.MenuId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TblMenusInRoles_TblMenus");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.TblMenusInRoles)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TblMenusInRoles_TblRoles");
+            });
+
+            modelBuilder.Entity<TblModule>(entity =>
+            {
+                entity.HasKey(e => e.ModuleId);
+
+                entity.HasIndex(e => e.ModuleName, "IX_TblModules")
+                    .IsUnique();
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(256)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModuleName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModuleTitle)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TblRole>(entity =>
+            {
+                entity.HasKey(e => e.RoleId);
+
+                entity.HasIndex(e => e.RoleName, "IX_TblRoles")
+                    .IsUnique();
+
+                entity.Property(e => e.Description).HasMaxLength(256);
+
+                entity.Property(e => e.RoleName)
+                    .IsRequired()
+                    .HasMaxLength(256);
+
+                entity.HasOne(d => d.Module)
+                    .WithMany(p => p.TblRoles)
+                    .HasForeignKey(d => d.ModuleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_TblRoles_TblModules");
+            });
+
+            modelBuilder.Entity<TblUser>(entity =>
+            {
+                entity.HasKey(e => e.UserId)
+                    .HasName("PK_TblUserInfo");
+
+                entity.Property(e => e.Comment)
+                    .HasMaxLength(3000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Designation)
+                    .HasMaxLength(200)
+                    .HasDefaultValueSql("(' ')");
+
+                entity.Property(e => e.EmailAddress)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmpId)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastLockoutDate).HasColumnType("datetime");
+
+                entity.Property(e => e.LastLoginDate).HasColumnType("datetime");
+
+                entity.Property(e => e.LastPasswordChangedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.LoginId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SectionId).HasColumnName("SectionID");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Group)
+                    .WithMany(p => p.TblUsers)
+                    .HasForeignKey(d => d.GroupId)
+                    .HasConstraintName("FK_TblUsers_TblGroups");
             });
 
             OnModelCreatingPartial(modelBuilder);

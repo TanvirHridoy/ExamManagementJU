@@ -28,8 +28,12 @@ namespace CertificationMS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<CertificateMSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AppCon")));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<CertificateMSContext>();
+            services.AddScoped<HmsConst>();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(50);
+            });
+            services.AddDbContext<CertificateMSV2Context>(options => options.UseSqlServer(Configuration.GetConnectionString("AppCon")));
+           
             
         }
 
@@ -45,7 +49,7 @@ namespace CertificationMS
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -54,7 +58,7 @@ namespace CertificationMS
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Track}/{id?}");
+                    pattern: "{controller=LogIn}/{action=LogIn}/{id?}");
             });
         }
     }

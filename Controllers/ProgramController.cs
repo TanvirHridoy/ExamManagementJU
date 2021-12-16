@@ -9,9 +9,9 @@ namespace CertificationMS.Controllers
 {
     public class ProgramController : Controller
     {
-        private readonly CertificateMSContext _Db;
+        private readonly CertificateMSV2Context _Db;
 
-        public ProgramController(CertificateMSContext Db)
+        public ProgramController(CertificateMSV2Context Db)
         {
             _Db = Db;
         }

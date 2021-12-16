@@ -1,28 +1,26 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CertificationMS</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body>
-    
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <link rel="icon" href="~/favicon.ico">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - CertificationMS
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <title>@ViewData["Title"] - Certificate MS</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <link href="~/Login/css/bootstrap.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="~/Login/css/Style2.css" rel="stylesheet" />
+</head>
+
+<body class="text-center">
+    @RenderBody()
+
+    <script src="~/Login/js/jquery.min.js"></script>
+    <script src="~/Login/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

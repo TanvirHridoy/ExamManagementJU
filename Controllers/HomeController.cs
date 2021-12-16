@@ -14,8 +14,8 @@ namespace CertificationMS.Controllers
 {
     public class HomeController : Controller
     {
-        public readonly CertificateMSContext _Db;
-        public HomeController(CertificateMSContext Db)
+        public readonly CertificateMSV2Context _Db;
+        public HomeController(CertificateMSV2Context Db)
         {
             _Db = Db;
         }

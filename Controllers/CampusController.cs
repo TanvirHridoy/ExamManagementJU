@@ -11,9 +11,9 @@ namespace CertificationMS.Controllers
 {
     public class CampusController : Controller
     {
-        private readonly CertificateMSContext _Db;
+        private readonly CertificateMSV2Context _Db;
 
-        public CampusController(CertificateMSContext Db)
+        public CampusController(CertificateMSV2Context Db)
         {
             _Db = Db;
         }

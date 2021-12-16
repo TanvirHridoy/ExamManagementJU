@@ -11,10 +11,10 @@ namespace CertificationMS.Controllers
 {
     public class ConvocationController : Controller
     {
-        public readonly CertificateMSContext _Db;
+        public readonly CertificateMSV2Context _Db;
 
 
-        public ConvocationController(CertificateMSContext Db)
+        public ConvocationController(CertificateMSV2Context Db)
         {
             _Db = Db;
         }
