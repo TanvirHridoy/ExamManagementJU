@@ -13,16 +13,28 @@ namespace CertificationMS.Controllers
 {
     public class AccSectionController : Controller
     {
+        private string? Session;
         public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
+        private EmpMenus menu = new EmpMenus();
         public AccSectionController(CertificateMSV2Context Db, IConfiguration configuration)
         {
             _Db = Db;
             _config = configuration;
+            if (HmsConst.LoginResp != null)
+            {
+                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "AccSection").SingleOrDefault();
+            }
         }
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
             AccSectionViewModel viewModel = new AccSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
@@ -50,6 +62,13 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
+
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
             viewModel.Application = await _Db.CertApplications.SingleAsync(e => e.Id == id);
             viewModel.ApvStatusLst = await _Db.ApvStatuses.ToListAsync();
@@ -65,6 +84,13 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Approve(IFormCollection form, int id)
         {
+
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             var TotalPayable= form["Application.TotalPayable"];
             var FeeForCertificate = form["Application.FeeForCertificate"];
             var TotalPaid = form["Application.TotalPaid"];
@@ -76,7 +102,7 @@ namespace CertificationMS.Controllers
                 application.TotalPayable =Convert.ToDecimal( TotalPayable);
                 application.TotalPaid =  Convert.ToDecimal(TotalPaid);
                 application.FeeForCertificate = Convert.ToDecimal(FeeForCertificate);
-                application.ApprovedByAcc = UserInfo.Id;
+                application.ApprovedByAcc = HmsConst.LoginResp.empInfo.UserId;
                 application.ApvStatusAcc = 2;
                 application.ApvAccDate = DateTime.Now;
                 await _Db.SaveChangesAsync();
@@ -92,6 +118,13 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Reject(IFormCollection form, int id)
         {
+
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             var TotalPayable = form["Application.TotalPayable"];
             var FeeForCertificate = form["Application.FeeForCertificate"];
             var TotalPaid = form["Application.TotalPaid"];
@@ -101,7 +134,7 @@ namespace CertificationMS.Controllers
                 application.TotalPayable = Convert.ToDecimal(TotalPayable);
                 application.TotalPaid = Convert.ToDecimal(TotalPaid);
                 application.FeeForCertificate = Convert.ToDecimal(FeeForCertificate);
-                application.ApprovedByAcc = UserInfo.Id;
+                application.ApprovedByAcc = HmsConst.LoginResp.empInfo.UserId;
                 application.ApvStatusAcc = 3;
                 application.ApvAccDate = DateTime.Now;
                 await _Db.SaveChangesAsync();

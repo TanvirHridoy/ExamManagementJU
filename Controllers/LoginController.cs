@@ -59,6 +59,7 @@ namespace CertificationMS.Controllers
                     message = "Invalid Credential";
                     return RedirectToAction("LogIn", new { message = message });
                 }
+                LoginResp.EmpId=model.user.EmployeeId;
                 LoginResp.empInfo=r[0];
                 if (LoginResp.EmpMenuList.Count<1 || LoginResp.EmpMenuList == null)
                 {
@@ -91,6 +92,24 @@ namespace CertificationMS.Controllers
             HttpContext.Session.Remove("northern");
 
             return RedirectToAction("LogIn");
+        }
+        public ActionResult RetriveImage()
+        {
+            var file = HmsConst.LoginResp.empInfo.Photo;
+
+            if (file == null)
+            {
+                return null;
+            }
+            else if (file.Length > 0)
+            {
+                byte[] Image = file;
+                return File(Image, "image/jpg");
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

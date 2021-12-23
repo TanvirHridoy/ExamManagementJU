@@ -1,5 +1,6 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,19 +13,37 @@ namespace CertificationMS.Controllers
     public class CampusController : Controller
     {
         private readonly CertificateMSV2Context _Db;
+        private string? Session;
+        private EmpMenus menu = new EmpMenus();
 
         public CampusController(CertificateMSV2Context Db)
         {
             _Db = Db;
+            if (HmsConst.LoginResp != null)
+            {
+                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "CampusSetup").SingleOrDefault();
+            }
         }
 
         public IActionResult create()
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
             return View();
         }
 
         public async Task<IActionResult> Add(Campus obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _Db.Campuses.Add(obj);
@@ -41,6 +60,12 @@ namespace CertificationMS.Controllers
         }
        public async Task<IActionResult> List(string message)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
             CampusViewModel model = new CampusViewModel();
             var Campuslist = await _Db.Campuses.ToListAsync();
             model.list = Campuslist;
@@ -52,12 +77,24 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             Campus obj = await _Db.Campuses.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
         }
 
         public async Task<IActionResult> Update(Campus obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;
@@ -72,6 +109,12 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPDelete==false) { return RedirectToAction("LogIn", "Login"); }
             var campus = await _Db.Campuses.FindAsync(id);
             try
             {
@@ -87,23 +130,15 @@ namespace CertificationMS.Controllers
 
         }
 
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    Campus obj = await _Db.Campuses.FindAsync(id);
-        //    try
-        //    {
-        //        _Db.Campuses.Remove(obj);
-        //      await  _Db.SaveChangesAsync();
-        //        return RedirectToAction("List", new { message = "Successfully Deleted" + obj.CampusName });
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return RedirectToAction("List", new { message = "Failed Deleted" + obj.CampusName });
-        //    }
-        //}
+        
 
         public IActionResult Index()
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
             return View();
         }
     }

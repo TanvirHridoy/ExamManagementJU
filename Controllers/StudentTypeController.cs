@@ -1,5 +1,6 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,21 +12,35 @@ namespace CertificationMS.Controllers
 {
     public class StudentTypeController : Controller
     {
-
-
         private readonly CertificateMSV2Context _Db;
-
+        private string? Session;
+        private EmpMenus menu = new EmpMenus();
         public StudentTypeController(CertificateMSV2Context Db)
         {
             _Db = Db;
+            if (HmsConst.LoginResp != null)
+            {
+                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "StudentTypeSetup").SingleOrDefault();
+            }
         }
         public IActionResult create()
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
             return View();
         }
         public async Task<IActionResult> List(string message)
         {
-
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
             StudentTypeViewModel model = new StudentTypeViewModel();
             var list = await _Db.StudentTypes.ToListAsync();
             model.list = list;
@@ -36,6 +51,12 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Add(StudentType obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _Db.StudentTypes.Add(obj);
@@ -49,6 +70,12 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPDelete==false) { return RedirectToAction("LogIn", "Login"); }
             var st= await _Db.StudentTypes.FindAsync(id);
             try
             {
@@ -63,6 +90,12 @@ namespace CertificationMS.Controllers
         }
          public async Task<IActionResult> Edit(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             StudentType obj =await _Db.StudentTypes.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
 
@@ -70,6 +103,12 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult>Update(StudentType obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;
@@ -87,6 +126,11 @@ namespace CertificationMS.Controllers
 
         public IActionResult Index()
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
             return View();
         }
     }

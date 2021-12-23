@@ -1,4 +1,5 @@
 ﻿using CertificationMS.ContextModels;
+using CertificationMS.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ namespace CertificationMS.Controllers
     public class CertApplicationController : Controller
     {
         public readonly CertificateMSV2Context _db;
-
-
+       
         public CertApplicationController(CertificateMSV2Context Db)
         {
             _db = Db;
+            
         }
 
     public async Task<IActionResult> Add(CertApplication Obj)

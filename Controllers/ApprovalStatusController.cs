@@ -1,5 +1,6 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,16 +14,25 @@ namespace CertificationMS.Controllers
     {
 
         public readonly CertificateMSV2Context _db;
-
-
-
+        private string? Session;
+        private EmpMenus menu = new EmpMenus();
         public ApprovalStatusController (CertificateMSV2Context Db)
         {
             _db = Db;
+            if (HmsConst.LoginResp != null)
+            {
+                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "StatusSetup").SingleOrDefault();
+            }
         }
 
         public async Task<IActionResult> List(string message)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
             ApvStatusViewModel model = new ApvStatusViewModel();
             var ApvStatusList = await _db.ApvStatuses.ToListAsync();
             model.list = ApvStatusList;
@@ -33,12 +43,24 @@ namespace CertificationMS.Controllers
 
         public IActionResult create()
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
             return View();
         }
 
 
         public  async Task<IActionResult> Add(ApvStatus obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _db.ApvStatuses.Add(obj);
@@ -55,12 +77,24 @@ namespace CertificationMS.Controllers
         
         public async Task<IActionResult> Edit(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             ApvStatus obj = await _db.ApvStatuses.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
         }
 
         public async Task<IActionResult> Update(ApvStatus obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _db.Entry(obj).State = EntityState.Modified;
@@ -75,6 +109,12 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPDelete==false) { return RedirectToAction("LogIn", "Login"); }
             var apstatus = await _db.ApvStatuses.FindAsync(id);
             try
             {
@@ -87,20 +127,7 @@ namespace CertificationMS.Controllers
                 return RedirectToAction("List", new { message = " Failed to delete "  });
             }
         }
-
-
-
-
-
-
-
-
-
-
     }
-
-   
-
 }
 
 

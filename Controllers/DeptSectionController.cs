@@ -16,14 +16,26 @@ namespace CertificationMS.Controllers
         public readonly CertificateMSV2Context _Db;
 
         public IConfiguration _config;
+        private string? Session;
+        private EmpMenus? menu = new EmpMenus();
         public DeptSectionController(CertificateMSV2Context Db, IConfiguration configuration)
         {
             _Db = Db;
             _config = configuration;
+            if (HmsConst.LoginResp != null)
+            {
+                menu = HmsConst.LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
+            }
         }
         // GET: DeptSectionController
         public async Task<ActionResult> Index(int id=0, Status message=null)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
             DeptSectionViewModel viewModel = new DeptSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
@@ -69,6 +81,12 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
             viewModel.Application = await _Db.CertApplications.SingleAsync(e => e.Id == id);
             viewModel.ApvStatusLst = await _Db.ApvStatuses.ToListAsync();
@@ -84,11 +102,17 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Approve(int id)
         {
-             MailHelper mail = new MailHelper(_config);
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+            MailHelper mail = new MailHelper(_config);
             var application = await _Db.CertApplications.FindAsync(id);
                 try
                 {
-                    application.ApprovedByDept = UserInfo.Id;
+                    application.ApprovedByDept = HmsConst.LoginResp.empInfo.UserId;
                     application.ApvStatusDept = 2;
                     application.ApvDeptDate = DateTime.Now;
                     await _Db.SaveChangesAsync();
@@ -104,10 +128,16 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Reject(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             var application = await _Db.CertApplications.FindAsync(id);
             try
             {
-                application.ApprovedByDept = UserInfo.Id;
+                application.ApprovedByDept = HmsConst.LoginResp.empInfo.UserId;
                 application.ApvStatusDept = 3;
                 application.ApvDeptDate = DateTime.Now;
                 await _Db.SaveChangesAsync();
@@ -121,23 +151,17 @@ namespace CertificationMS.Controllers
             }
         }
         // POST: DeptSectionController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
 
         // GET: DeptSectionController/Edit/5
         public ActionResult Edit(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             return View();
         }
 
@@ -146,6 +170,12 @@ namespace CertificationMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 return RedirectToAction(nameof(Index));
@@ -156,25 +186,25 @@ namespace CertificationMS.Controllers
             }
         }
 
-        // GET: DeptSectionController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //// GET: DeptSectionController/Delete/5
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
-        // POST: DeptSectionController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// POST: DeptSectionController/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

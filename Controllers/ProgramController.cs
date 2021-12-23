@@ -1,8 +1,10 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
@@ -10,15 +12,25 @@ namespace CertificationMS.Controllers
     public class ProgramController : Controller
     {
         private readonly CertificateMSV2Context _Db;
-
+        private string? Session;
+        private EmpMenus menu = new EmpMenus();
         public ProgramController(CertificateMSV2Context Db)
         {
             _Db = Db;
+            if (HmsConst.LoginResp != null)
+            {
+                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName.EndsWith("ProgramSetup")).SingleOrDefault();
+            }
         }
 
         public async Task<IActionResult> List(string message)
         {
-
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
             ProgramViewModel model = new ProgramViewModel();
             var list = await _Db.Programs.ToListAsync();
             model.list = list;
@@ -29,12 +41,24 @@ namespace CertificationMS.Controllers
 
         public IActionResult Create()
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); } 
             return View();
         }
 
 
         public async Task<IActionResult> Add(CertificationMS.ContextModels.Program obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _Db.Programs.Add(obj);
@@ -57,6 +81,12 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPDelete==false) { return RedirectToAction("LogIn", "Login"); }
             var item = await _Db.Programs.FindAsync(id);
             try
             {
@@ -71,18 +101,25 @@ namespace CertificationMS.Controllers
             }
 
         }
-
-
-
-
-
         public async Task<IActionResult> Edit(int id)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             ContextModels.Program  obj = await _Db.Programs.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
         }
         public async Task<IActionResult> Update(ContextModels.Program obj)
         {
+            Session = HttpContext.Session.GetString("northern");
+            if (Session == String.Empty || Session == null)
+            {
+                return RedirectToAction("LogIn", "Login");
+            }
+            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;
