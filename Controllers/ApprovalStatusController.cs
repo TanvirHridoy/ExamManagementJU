@@ -1,34 +1,31 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using CertificationMS.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
     public class ApprovalStatusController : Controller
     {
-
         public readonly CertificateMSV2Context _db;
-        private string? Session;
         private EmpMenus menu = new EmpMenus();
-        public ApprovalStatusController (CertificateMSV2Context Db)
+        public ApprovalStatusController(CertificateMSV2Context Db)
         {
             _db = Db;
-            if (HmsConst.LoginResp != null)
-            {
-                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "StatusSetup").SingleOrDefault();
-            }
         }
 
         public async Task<IActionResult> List(string message)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StatusSetup");
+
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -43,8 +40,11 @@ namespace CertificationMS.Controllers
 
         public IActionResult create()
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StatusSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -53,10 +53,13 @@ namespace CertificationMS.Controllers
         }
 
 
-        public  async Task<IActionResult> Add(ApvStatus obj)
+        public async Task<IActionResult> Add(ApvStatus obj)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StatusSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -65,7 +68,7 @@ namespace CertificationMS.Controllers
             {
                 _db.ApvStatuses.Add(obj);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("List", new { message = "Successfully Added " + obj.Name});
+                return RedirectToAction("List", new { message = "Successfully Added " + obj.Name });
 
             }
             catch (Exception)
@@ -74,11 +77,14 @@ namespace CertificationMS.Controllers
             }
 
         }
-        
+
         public async Task<IActionResult> Edit(int id)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StatusSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -89,8 +95,11 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Update(ApvStatus obj)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StatusSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -109,8 +118,11 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StatusSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -124,7 +136,7 @@ namespace CertificationMS.Controllers
             }
             catch (Exception)
             {
-                return RedirectToAction("List", new { message = " Failed to delete "  });
+                return RedirectToAction("List", new { message = " Failed to delete " });
             }
         }
     }

@@ -13,7 +13,7 @@ namespace CertificationMS.Controllers
 {
     public class AccSectionController : Controller
     {
-        private string? Session;
+      
         public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
         private EmpMenus menu = new EmpMenus();
@@ -21,19 +21,20 @@ namespace CertificationMS.Controllers
         {
             _Db = Db;
             _config = configuration;
-            if (HmsConst.LoginResp != null)
-            {
-                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "AccSection").SingleOrDefault();
-            }
+            
         }
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "AccSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
+            
             if (menu==null) { return RedirectToAction("LogIn", "Login"); }
             AccSectionViewModel viewModel = new AccSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
@@ -63,8 +64,11 @@ namespace CertificationMS.Controllers
         public async Task<ActionResult> Details(int id)
         {
 
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "AccSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -85,8 +89,11 @@ namespace CertificationMS.Controllers
         public async Task<ActionResult> Approve(IFormCollection form, int id)
         {
 
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "AccSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -102,7 +109,7 @@ namespace CertificationMS.Controllers
                 application.TotalPayable =Convert.ToDecimal( TotalPayable);
                 application.TotalPaid =  Convert.ToDecimal(TotalPaid);
                 application.FeeForCertificate = Convert.ToDecimal(FeeForCertificate);
-                application.ApprovedByAcc = HmsConst.LoginResp.empInfo.UserId;
+                application.ApprovedByAcc = HttpContext.Session.GetUserId("User");
                 application.ApvStatusAcc = 2;
                 application.ApvAccDate = DateTime.Now;
                 await _Db.SaveChangesAsync();
@@ -119,8 +126,11 @@ namespace CertificationMS.Controllers
         public async Task<ActionResult> Reject(IFormCollection form, int id)
         {
 
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "AccSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -131,10 +141,11 @@ namespace CertificationMS.Controllers
             var application = await _Db.CertApplications.FindAsync(id);
             try
             {
+                
                 application.TotalPayable = Convert.ToDecimal(TotalPayable);
                 application.TotalPaid = Convert.ToDecimal(TotalPaid);
                 application.FeeForCertificate = Convert.ToDecimal(FeeForCertificate);
-                application.ApprovedByAcc = HmsConst.LoginResp.empInfo.UserId;
+                application.ApprovedByAcc = HttpContext.Session.GetUserId("User");
                 application.ApvStatusAcc = 3;
                 application.ApvAccDate = DateTime.Now;
                 await _Db.SaveChangesAsync();

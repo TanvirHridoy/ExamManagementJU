@@ -15,22 +15,21 @@ namespace CertificationMS.Controllers
     {
         public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
-        private string? Session;
         private EmpMenus menu = new EmpMenus();
         public AcadSectionController(CertificateMSV2Context Db, IConfiguration configuration)
         {
             _Db = Db;
             _config = configuration;
-            if (HmsConst.LoginResp != null)
-            {
-                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "AcadSection").SingleOrDefault();
-            }
         }
+        
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+              menu = HttpContext.Session.GetMenu("User", "AcadSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -60,8 +59,11 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "AcadSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -85,8 +87,11 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Approve(int id)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "AcadSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -96,7 +101,7 @@ namespace CertificationMS.Controllers
                 var application = await _Db.CertApplications.FindAsync(id);
                 try
                 {
-                    application.ApprovedByAcad = HmsConst.LoginResp.empInfo.UserId;
+                    application.ApprovedByAcad = HttpContext.Session.GetUserId("User");
                     application.ApvStatusAcad = 2;
                     application.ApvAcaddate = DateTime.Now;
                     await _Db.SaveChangesAsync();
@@ -116,8 +121,11 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Reject(int id)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "AcadSection");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -126,7 +134,7 @@ namespace CertificationMS.Controllers
                 var application = await _Db.CertApplications.FindAsync(id);
                 try
                 {
-                    application.ApprovedByAcad = HmsConst.LoginResp.empInfo.UserId;
+                    application.ApprovedByAcad = HttpContext.Session.GetUserId("User");
                     application.ApvStatusAcad = 3;
                     application.ApvAcaddate = DateTime.Now;
                     await _Db.SaveChangesAsync();

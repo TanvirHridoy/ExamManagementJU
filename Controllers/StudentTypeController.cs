@@ -1,5 +1,6 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using CertificationMS.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,15 +19,15 @@ namespace CertificationMS.Controllers
         public StudentTypeController(CertificateMSV2Context Db)
         {
             _Db = Db;
-            if (HmsConst.LoginResp != null)
-            {
-                menu = HmsConst.LoginResp.EmpMenuList.Where(e => e.MenuName == "StudentTypeSetup").SingleOrDefault();
-            }
+            
         }
         public IActionResult create()
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -35,8 +36,11 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> List(string message)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -51,8 +55,11 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Add(StudentType obj)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -70,8 +77,11 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }
@@ -90,8 +100,11 @@ namespace CertificationMS.Controllers
         }
          public async Task<IActionResult> Edit(int id)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
+            try
+            {
+                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
+            }
+            catch
             {
                 return RedirectToAction("LogIn", "Login");
             }

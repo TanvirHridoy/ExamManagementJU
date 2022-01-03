@@ -1,6 +1,12 @@
 ﻿@using Microsoft.EntityFrameworkCore;
 @inject CertificationMS.ContextModels.CertificateMSV2Context _context
 @using CertificationMS.Models
+@using CertificationMS.Utility;
+
+@{ 
+    LoggedInModel LoginResp = new LoggedInModel();
+    LoginResp=Context.Session.GetObject<LoggedInModel>("User");
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +46,7 @@
             <div class="sidebar-heading">
                 Features
             </div>
-            @{ var Menus = HmsConst.LoginResp.EmpMenuList.OrderBy(e => e.SerialNo).ToList();
+            @{ var Menus = LoginResp.EmpMenuList.OrderBy(e => e.SerialNo).ToList();
                 var Menugroup = Menus.Where(e => e.ParentMenuId == 0).ToList();
                 foreach (var item in Menugroup)
                 {
@@ -82,9 +88,9 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
-                                <img class="img-profile rounded-circle" src="/Login/RetriveImage" style="max-width: 60px">
+                                <img class="img-profile rounded-circle" src="/Admin/RetriveImage" style="max-width: 60px">
                                 @*<img src="/Login/RetriveImage" alt="@Model.Application.StudentName" style="height: 125px; width: 100px; text-align:center;">*@
-                                <span class="ml-2 d-none d-lg-inline text-white small">@HmsConst.LoginResp.empInfo.Name (@HmsConst.LoginResp.EmpId)</span>
+                                <span class="ml-2 d-none d-lg-inline text-white small">@LoginResp.empInfo.Name (@LoginResp.EmpId)</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">

@@ -1,5 +1,6 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using CertificationMS.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +38,7 @@ namespace CertificationMS.Controllers
             LoggedInModel LoginResp = new LoggedInModel();
             //Password hash maker
             model.user.Password = Hashgenerator.GetPassHash(model.user.Password);
-            string userdata = JsonConvert.SerializeObject(model.user);
+            
             
             try
             {
@@ -69,8 +70,7 @@ namespace CertificationMS.Controllers
                
                 if (LoginResp.EmpMenuList.Count() != 0)
                 {
-                    HttpContext.Session.SetString("northern", userdata);
-                    HmsConst.LoginResp = LoginResp;
+                    HttpContext.Session.SetObject("User", LoginResp);
                     return RedirectToAction("Index", "Admin");
                 }
                 else
@@ -89,27 +89,10 @@ namespace CertificationMS.Controllers
         // GET: LogInController/Create
         public ActionResult LogOut()
         {
-            HttpContext.Session.Remove("northern");
+            HttpContext.Session.Remove("User");
 
             return RedirectToAction("LogIn");
         }
-        public ActionResult RetriveImage()
-        {
-            var file = HmsConst.LoginResp.empInfo.Photo;
-
-            if (file == null)
-            {
-                return null;
-            }
-            else if (file.Length > 0)
-            {
-                byte[] Image = file;
-                return File(Image, "image/jpg");
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
     }
 }

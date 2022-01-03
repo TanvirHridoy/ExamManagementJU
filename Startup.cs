@@ -28,9 +28,10 @@ namespace CertificationMS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddScoped<HmsConst>();
+            //services.AddSingleton<HmsConst>();
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(50);
+                
             });
             services.AddDbContext<CertificateMSV2Context>(options => options.UseSqlServer(Configuration.GetConnectionString("AppCon")));
            
