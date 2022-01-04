@@ -16,10 +16,9 @@ namespace CertificationMS.Controllers
         private readonly CertificateMSV2Context _Db;
         private string? Session;
         private EmpMenus menu = new EmpMenus();
-        public StudentTypeController(CertificateMSV2Context Db)
+        public StudentTypeController(CertificateMSV2Context Db, IHttpContextAccessor httpContext)
         {
             _Db = Db;
-            
         }
         public IActionResult create()
         {

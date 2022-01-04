@@ -1,0 +1,199 @@
+﻿@model CertificationMS.Models.RoleFormViewModel
+
+@{
+    ViewData["Title"] = "User Group";
+}
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <span class="align-self-center box message01"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+                @*<h4>User Group</h4>*@
+            </div>
+        </div>
+        <div class="col-md-6">
+            @*<a href="#" class="btn btn-secondary float-right" id="addNewGroup">Add New</a>*@
+            <a asp-action="Create" asp-controller="UserGroup" class="btn btn-secondary float-right">Add New</a>
+        </div>
+
+    </div>
+    <hr class="mt-2" />
+    <div class="row tbl_UserGroup">
+        <div class="col-md-12">
+            <table id="tableGroup01" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                <thead style="background-color: #3f5c6c; color:#fff;text-align:center">
+                    <tr>
+                        <th>
+                            SL#
+                        </th>
+                        <th>
+                            Group Name
+                        </th>
+                        <th>
+                            Group Description
+                        </th>
+                        <th>Role Name</th>
+                        <th>
+                            Edit
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int i = 1;}
+                    @if (Model.GroupList != null)
+                    {
+                        foreach (var item in Model.GroupList)
+                        {
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @item.GroupName
+                                </td>
+                                <td>
+                                    @item.Description
+                                </td>
+                                <td>
+                                    @item.RoleName
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-controller="UserGroup" asp-route-grp_id="@item.GroupId">
+                                        @*btnUserGroupEdit*@
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+@section Scripts {
+
+    <script src="~/js/notifyMe.js"></script>
+    <script>
+        //$("#tableGroup01").DataTable();
+
+        $(".btnUserGroupEdit").on("click", function () {
+            var usr_grp_id = $(this).attr("usr-group-id");
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("EditUserGroup", "User")',
+                data: { usr_grp_id: usr_grp_id},
+                //dataType:"json",
+                error: function (result) {
+                    console.log(result);
+                },
+                success: function (result) {
+                    console.log(result)
+                    return;
+                    $body.removeClass("loading");
+                    if (result.status == true) {
+
+                        alert("Successfully Updated Role!")
+                        var baseUrl = "/Roles";
+                        window.location.href = baseUrl;
+                    }
+                    else {
+                        alert("Failed:"+result);
+                    }
+                }
+            });
+        })
+
+
+        $(".add-role").hide();
+        $("#addNewGroup").on("click", function () {
+
+            $(".add-role").toggle(
+                //function () {
+
+                //    $("#addNewGroup").css({ "color": "blue" });
+                //},
+                //function () {
+                //    $("#addNewGroup").css({ "color": "white" });
+
+                //}
+            );
+            var s = $("#addNewGroup").text();
+
+            if (s == "Add New") {
+
+                //$(".message01").notify("Access granted", "success");
+
+
+                //  alert(s)
+                $(".tbl_UserGroup").addClass("d-none");
+                $("#addNewGroup").text("Show Group");
+                $("#addNewGroup").removeClass("btn-secondary");
+                $("#addNewGroup").addClass("btn-dark");
+            } else {
+                $(".tbl_UserGroup").removeClass("d-none");
+
+                $("#addNewGroup").addClass("btn-secondary");
+                $("#addNewGroup").removeClass("btn-dark");
+                $("#addNewGroup").text("Add New");
+            }
+        })
+
+       // getUserGroup()
+        function getUserGroup() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("UserGroup", "User")',
+                data: {typ:"ugroup"},
+                //dataType:"json",
+                error: function (result) {
+                    console.log(result);
+                },
+                success: function (result) {
+
+                    $("#tableGroup01 tbody").empty();
+
+                    var tr = "";
+                    var j = 1;
+                    for (var i = 0; i < result.length; ++i) {
+                        tr += "<tr><td>" + j + "</td><td>" + result[i].groupName + "</td><td>" + result[i].description + "</td><td>" + result[i].roleName + "</td><td></td></tr>";
+                        j++;
+                    }
+
+
+                    $("#tableGroup01 tbody").append(tr);
+                    $("#tableGroup01").DataTable();
+                    return;
+                }
+            });
+        }
+
+    </script>
+}
+
+@*Success
+        $.notify("Access granted", "success");Info
+        $.notify("Do not press this button", "info");Warning
+        $.notify("Warning: Self-destruct in 3.. 2..", "warn");Error
+        $.notify("BOOM!", "error");
+
+    $(".pos-demo").notify(
+      "I'm to the right of this box",
+      { position:"right" }
+    );
+
+*@

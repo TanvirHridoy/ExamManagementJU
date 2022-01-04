@@ -1,0 +1,108 @@
+﻿@model CertificationMS.Models.MenuCreateViewModel
+@using CertificationMS.Models;
+@using CertificationMS.Utility;
+
+@{
+
+    var menu = Context.Session.GetMenu("User", "MenusSetup");
+    ViewData["Title"] = "Menus Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-11" style="margin:auto">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group d-none">
+                <label asp-for="Menu.MenuId" class="control-label"></label>
+                <input asp-for="Menu.MenuId" class="form-control" />
+                <div class="col-md-6 row d-none">
+                    <label asp-for="Menu.ModuleId" class="mt-2 col-md-3 "> Module Id</label>
+                    <input asp-for="Menu.ModuleId" class="form-control col-md-6 ml-2" value="1" placeholder="Enter Module Id" />
+                    <span asp-validation-for="Menu.ModuleId" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6 row">
+                    <label asp-for="Menu.MenuName" class="mt-2 col-md-3"> Name</label>
+                    <input asp-for="Menu.MenuName" required class="form-control col-md-6 ml-2 " placeholder="Enter Menu Name" />
+                    <span asp-validation-for="Menu.MenuName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 row">
+                    <label asp-for="Menu.MenuCaption" class="mt-2 col-md-3"> Manu Caption</label>
+                    <input asp-for="Menu.MenuCaption" class="form-control col-md-6 ml-2" placeholder="Enter Menu Caption" />
+                    <span asp-validation-for="Menu.MenuCaption" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-6 row">
+                    <label asp-for="Menu.MenuCaptionBng" class="mt-2 col-md-3"> Caption Bangla</label>
+                    <input asp-for="Menu.MenuCaptionBng" class="form-control col-md-6 ml-2" placeholder="Enter Menu Caption Bangla" />
+                    <span asp-validation-for="Menu.MenuCaptionBng" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 row">
+                    <label asp-for="Menu.SerialNo" class="mt-2 col-md-3">Serial No</label>
+                    <input asp-for="Menu.SerialNo" required class="form-control col-md-6 ml-2 " placeholder="Enter  Serial No" />
+                    <span asp-validation-for="Menu.SerialNo" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6 row">
+                    <label asp-for="Menu.PageUrl" class="mt-2 col-md-3 "> Page Url</label>
+                    <input asp-for="Menu.PageUrl " required class="form-control col-md-6 ml-2" placeholder="Enter Page Url" />
+                    <span asp-validation-for="Menu.PageUrl" class="text-danger"></span>
+
+                </div>
+                <div class="col-md-6 row ">
+                        <label asp-for="Menu.ParentMenuId" class="mt-2 col-md-3 "> Parent Menu</label>
+                        <select class="form-control col-md-6 ml-2" required asp-for="Menu.ParentMenuId">
+                            <option value="">self Parent</option>
+                                @{ 
+                                    foreach(var item in Model.List)
+                                    {
+                                        <option value="@item.MenuId">@item.MenuName</option>
+                                    }
+                                }
+                        </select>
+                        <span asp-validation-for="Menu.ParentMenuId" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6 row">
+                    <label asp-for="Menu.OrderNo" class="mt-2 col-md-3 "> Order No</label>
+                    <input asp-for="Menu.OrderNo" required class="form-control col-md-6 ml-2" placeholder="Enter Order No" />
+                    <span asp-validation-for="Menu.OrderNo" class="text-danger"></span>
+
+                </div>
+                <div class="col-md-6 row">
+                </div>
+
+            </div>
+            <div class="row mt-5 justify-content-center">
+                <div class="form-group">
+                    @if (menu.OPAdd)
+                    {
+                        <input type="submit" value="Create"  asp-action="Create" class="btn btn-success" />
+                    }
+                </div>
+                <div class="form-group ml-2">
+                    <a asp-action="Index" class="btn btn-warning ">Back to List</a>
+                </div>
+
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+

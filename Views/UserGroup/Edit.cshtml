@@ -1,0 +1,211 @@
+﻿@model CertificationMS.Models.RoleFormViewModel
+@{ 
+    ViewData["Title"] = "Edit - User Group";
+}
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <span class="align-self-center box message01"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+               @* <h4>Update User Group</h4>*@
+            </div>
+        </div>
+    </div>
+    <hr class="mt-2" />
+
+
+    <form action="/" method="post" class="add-role" id="frmUserGroup01">
+        <div class="row">
+            <div class="col-sm-4">
+                <div>
+                    <div class="form-group">
+                        <div>
+                            <label>Group Name: </label>
+                            <span class="labelRequired">*</span>
+                            @Html.Hidden("Model.GroupList[0].GroupId", Model.GroupList[0].GroupId)
+
+                            @*@Html.TextBox(Model.GroupList[0].GroupName, null, new { @class = "form-control" })*@
+
+                            @*<input type="hidden" class="form-control" name="Model.GroupList[0].GroupId" value="" />*@
+                            <input type="text" class="form-control" name="Model.GroupList[0].GroupName" value="@Model.GroupList[0].GroupName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <label>Group Description:</label>
+                            <span class="labelRequired">*</span>
+                            <input type="text" class="form-control" name="Model.GroupList[0].Description" value="@Model.GroupList[0].Description" />
+                        </div>
+                    </div>
+                    <div class="clearfix text-right">
+                        <a class="btn btn-warning" asp-action="Index" asp-controller="UserGroup">Back</a>
+                        <input class="btn btn-success" type="submit" value="Update changes" id="" asp-action="UpdateUserGroup" asp-controller="UserGroup" name="btnUpdateUserGroup" />
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label>Role</label>
+                <span class="labelRequired">*</span>
+                @for (int j = 0; j < Model.RoleList.Count; j++)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-1">
+                            @*@Html.CheckBoxFor(m => m.RoleList[j].IsAssignedRole)*@
+
+                            @Html.CheckBox("Model.RoleList[" + j.ToString() + "].IsAssignedRole", Model.RoleList[j].IsAssignedRole)
+                            @*@Html.Hidden("Model.RoleList[" + j.ToString() + "].IsAssignedRole", Model.RoleList[j].IsAssignedRole)*@
+                            @Html.Hidden("Model.RoleList[" + j.ToString() + "].RoleId", Model.RoleList[j].RoleId.ToString())
+                        </label>
+                        <div class="col-md-10">
+                            @Html.DisplayFor(m => m.RoleList[j].RoleName)
+
+                            @*@Html.Hidden("Model.RoleList[" + j.ToString() + "].RoleId", Model.RoleList[j].RoleId.ToString())*@
+                            @Html.Hidden("Model.RoleList[" + j.ToString() + "].RoleName", Model.RoleList[j].RoleName.ToString())
+
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+@section Scripts {
+    <script>
+        $("#btnUpdateUserGroup").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateUserGroup", "UserGroup")',
+                data: $("#frmUserGroup01").serialize(),
+                //dataType:"json",
+                error: function (result) {
+                    console.log(result);
+                },
+                success: function (result) {
+                    window.location.href = "/user/usergroup";
+                    return;
+                    getUserGroup();
+
+                    $(".message01").notify(result.message01, result.message02);
+                    //message01
+                    return;
+                    $body.removeClass("loading");
+                    if (result.status == true) {
+
+                        alert("Successfully Updated Role!")
+                        var baseUrl = "/Roles";
+                        window.location.href = baseUrl;
+                    }
+                    else {
+                        alert("Failed:"+result);
+                    }
+                }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+
+        var zoneId = 0;
+        $(document).ready(function () {
+            zoneId = $('#Model_User_ZoneId').val();
+        });
+
+        $('#Model_User_ZoneId').on("change", function (e) {
+            zoneId = $('#Model_User_ZoneId').val();
+        });
+
+
+        $(document).ready(function () {
+            $('ul#roletree').collapsibleCheckboxTree({
+                checkParents: true,
+                checkChildren: false,
+                uncheckChildren: true,
+                initialState: 'expand'
+            });
+
+        });
+
+        function tree() {
+            $(document).ready(function ($) {
+
+                $('input:checkbox').click(function () {
+                    if ($(this).prop('checked')) {
+                        // Check all child checkboxes
+                        $(this).closest('li').find('input:checkbox').prop('checked', true);
+                    }
+                    else {
+                        // Uncheck all child checkboxes
+                        $(this).closest('li').find('input:checkbox').attr('checked', false);
+                    }
+                });
+            });
+        }
+
+        //$(document).ready(function () {
+        //    $('ul#roletree').collapsibleCheckboxTree({
+        //        checkParents: true,
+        //        checkChildren: false,
+        //        uncheckChildren: true,
+        //        initialState: 'expand'
+        //    });
+
+        //});
+
+        function PopulateModuleDropDown() {
+            var url = "/Security/User/GetModuleList";
+            var form = $("#frmUserEdit");
+            var serializedForm = form.serialize();
+
+            $.post(url, serializedForm, function (result) {
+                $("#Model_ModuleId").fillSelect(result);
+            }, "json");
+
+            return false;
+        }
+
+        $(function () {
+            $(".WaterMarkEffect").each(function () {
+                $TextBox = $(this);
+
+                if ($TextBox.val() == $("#Model_OldPassword").val()) {
+
+                }
+                else {
+                    $TextBox.removeClass("WaterMarkEffect");
+                }
+            });
+
+            $(".WaterMarkEffect").focus(function () {
+                $TextBox = $(this);
+                if ($TextBox.val() == $("#Model_OldPassword").val()) {
+                    $TextBox.val("");
+                }
+            });
+
+            $(".WaterMarkEffect").blur(function () {
+                $TextBox = $(this);
+                if ($.trim($TextBox.val()) == "") {
+                    $TextBox.val($("#Model_OldPassword").val());
+                    $TextBox.addClass("WaterMarkEffect");
+                }
+                else if ($.trim($TextBox.val()) != $("#Model_OldPassword").val()) {
+                    $TextBox.removeClass("WaterMarkEffect");
+                }
+            });
+        });
+
+    </script>
+
+}

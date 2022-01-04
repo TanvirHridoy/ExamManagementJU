@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CertificationMS.ContextModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,5 +16,15 @@ namespace CertificationMS.Models
     {
         public LoginModel user { get; set; }
         public string Message { get; set; }
+    }
+    public class MenusViewModel
+    {
+        public List<TblMenu> List { get; set; }
+        public string message { get; set; }
+    }
+    public class MenuCreateViewModel
+    {
+        public List<TblMenu> List { get; set; }
+        public TblMenu Menu { get; set; }
     }
 }
