@@ -238,23 +238,23 @@ namespace CertificationMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateUserRoleAsync(RoleFormViewModel postModel)
+        public ActionResult UpdateUserRoleAsync(RoleFormViewModel model)
         {
             Storeproc storeproc = new Storeproc();
             SqlParameter[] parameters = new SqlParameter[4];
 
-            var selectedMenuList = postModel.MenuList.Where(x => x.IsAddAssigned != false || x.IsEditAssigned != false || x.IsPrintAssigned != false || x.IsDeleteAssigned != false || x.IsCancelAssigned != false || x.ParentMenuId == 0).ToList();
-            var roleId = postModel.RoleList.Select(x => x.RoleId.ToString()).FirstOrDefault();
+            var selectedMenuList = model.MenuList.Where(x => x.IsAddAssigned != false || x.IsEditAssigned != false || x.IsPrintAssigned != false || x.IsDeleteAssigned != false || x.IsCancelAssigned != false || x.ParentMenuId == 0).ToList();
+            var roleId = model.RoleList.Select(x => x.RoleId.ToString()).FirstOrDefault();
 
             try
             {
-                RoleFormViewModel model = new RoleFormViewModel();
+                RoleFormViewModel model2 = new RoleFormViewModel();
                 SqlConnection sqlConnection = new SqlConnection(_Config.GetConnectionString("AppCon"));
                 SqlParameter ProcId = new SqlParameter(parameterName: "@ProcID", dbType: SqlDbType.NVarChar);
                 ProcId.Value = "UPDATE_ROLEINF";
 
                 SqlParameter Dxml01 = new SqlParameter(parameterName: "@Pxml01", dbType: SqlDbType.NVarChar);
-                Dxml01.Value = ListToXml.ToXml<List<UserRole>>(postModel.RoleList, "ds");
+                Dxml01.Value = ListToXml.ToXml<List<UserRole>>(model.RoleList, "ds");
 
                 SqlParameter Dxml02 = new SqlParameter(parameterName: "@Pxml02", dbType: SqlDbType.NVarChar);
                 Dxml02.Value = ListToXml.ToXml<List<HRMMenus>>(selectedMenuList, "ds");
@@ -276,29 +276,29 @@ namespace CertificationMS.Controllers
                     if (msg.Contains("duplicate key"))
                     {
 
-                        model.Message01 = "Can't Insert Duplicate Role Name (" + postModel.RoleList.Select(x => x.RoleName).FirstOrDefault() + ")";
-                        model.Message02 = "danger";
+                        model2.Message01 = "Can't Insert Duplicate Role Name (" + model.RoleList.Select(x => x.RoleName).FirstOrDefault() + ")";
+                        model2.Message02 = "danger";
                         
                     }
                     else
                     {
-                        model.Message01 = "Something went wrong!";
-                        model.Message02 = "danger";
+                        model2.Message01 = "Something went wrong!";
+                        model2.Message02 = "danger";
                        
                     }
                 }
                 else
                 {
-                    model.Message01 = ds.Tables[0].Rows[0]["msg"].ToString();
-                    model.Message02 = ds.Tables[0].Rows[0]["msg02"].ToString();
+                    model2.Message01 = ds.Tables[0].Rows[0]["msg"].ToString();
+                    model2.Message02 = ds.Tables[0].Rows[0]["msg02"].ToString();
                     if (ds.Tables[1] != null)
-                        model.RoleList = DtToList.ConvertDataTable<UserRole>(ds.Tables[1]);
+                        model2.RoleList = DtToList.ConvertDataTable<UserRole>(ds.Tables[1]);
                     
                 }
 
-                UserRoleList01 = model.RoleList;
+                UserRoleList01 = model2.RoleList;
                 // model.MenuList = res.; // AuditDataAccess<AuditMenus>.AuditGetDataList01(ProcessID: "AUDITMENUS_INFO01", _param01: "ALL", _param02: "", _param03: "", _param04: "", _param05: ""); ;// AuditALLMenuList01;
-                return Json(model);
+                return Json(model2);
             }
             catch (System.Exception Ex)
             {
