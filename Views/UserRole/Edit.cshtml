@@ -1,0 +1,310 @@
+﻿@model CertificationMS.Models.RoleFormViewModel
+@{
+    ViewData["Title"] = "Edit Role";
+}
+
+
+<div class="page-body">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <span class="align-self-center box message01"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @*<h4>Edit User Role</h4>*@
+        </div>
+        <div class="col-md-6">
+
+        </div>
+
+    </div>
+
+
+
+
+    <div class="add-role">
+        <div class="box box-info">
+            <div class="box-body">
+                <form id="frmUserEdit" method="post" action="">
+
+                    @if (true)
+                    {
+                        <div class="ui-corner-all divMsg">
+                            <p>
+                                @*@Model.Message*@
+
+                            </p>
+                        </div>
+                    }
+                    @*<div class="clearfix">
+                        </div>*@
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div>
+                                <div class="form-group">
+                                    <div>
+                                        <label>Role Name: </label>
+                                        <span class="labelRequired">*</span>
+                                        <input type="hidden" class="form-control" name="Model.RoleList[0].RoleId" value="@Model.RoleList[0].RoleId" />
+                                        <input type="text" class="form-control" name="Model.RoleList[0].RoleName" value="@Model.RoleList[0].RoleName" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label> Description:</label>
+                                        <span class="labelRequired">*</span>
+                                        <input type="text" class="form-control" name="Model.RoleList[0].Description" value="@Model.RoleList[0].Description" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-8">
+                            <div class="divTreeView clearfix" style="height:400px;overflow:auto">
+                                <ul id="roletree" onclick="tree();">
+                                    <li>
+                                        <input type="checkbox" name="" />
+                                        <label class="treeheaderstyle">  Menus</label>
+                                        <ul>
+                                            @for (int index = 0; index < Model.MenuList.Count; index++)
+                                            {
+                                                if (Model.MenuList[index].ParentMenuId != -1 && Model.MenuList[index].ParentMenuId != 0)
+                                                {
+                                                    int tempParentId = Model.MenuList[index].ParentMenuId;
+                                                    bool isChild = true;
+                                                    <li>
+                                                        <input type="checkbox" />
+                                                        <label class="treeheaderstyle">@Model.MenuList[index].ParentMenuName </label>
+                                                        <ul>
+                                                            @while (isChild)
+                                                            {
+                                                                <li>
+                                                                    @Html.CheckBox("Model.MenuList[" + index.ToString() + "].IsAssignedMenu", Model.MenuList[index].IsAssignedMenu)
+                                                                    <label class="treechildstyle">@Model.MenuList[index].MenuCaption </label>
+                                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].MenuId", Model.MenuList[index].MenuId.ToString())
+                                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].ParentMenuId", Model.MenuList[index].ParentMenuId)
+                                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].ParentMenuName", Model.MenuList[index].ParentMenuName)
+                                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].MenuName", Model.MenuList[index].MenuName)
+                                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].MenuCaption", Model.MenuList[index].MenuCaption)
+                                                                    <ul>
+                                                                        <li>
+                                                                            @Html.CheckBox("Model.MenuList[" + index.ToString() + "].IsAddAssigned", Model.MenuList[index].IsAddAssigned)
+                                                                            @if (Model.MenuList[index].MenuName.Contains("FileArchive"))
+                                                                            {
+                                                                                <label class="treechildstyle">Upload</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="treechildstyle">Add</label>
+                                                                            }
+                                                                        </li>
+                                                                        <li>
+                                                                            @Html.CheckBox("Model.MenuList[" + index.ToString() + "].IsEditAssigned", Model.MenuList[index].IsEditAssigned)
+                                                                            <label class="treechildstyle">
+                                                                                Edit
+                                                                            </label>
+                                                                        </li>
+                                                                        <li>
+                                                                            @Html.CheckBox("Model.MenuList[" + index.ToString() + "].IsDeleteAssigned", Model.MenuList[index].IsDeleteAssigned)
+                                                                            <label class="treechildstyle">
+                                                                                Delete
+                                                                            </label>
+                                                                        </li>
+                                                                        <li>
+                                                                            @Html.CheckBox("Model.MenuList[" + index.ToString() + "].IsCancelAssigned", Model.MenuList[index].IsCancelAssigned)
+                                                                            <label class="treechildstyle">
+                                                                                Cancel
+                                                                            </label>
+                                                                        </li>
+                                                                        <li>
+                                                                            @Html.CheckBox("Model.MenuList[" + index.ToString() + "].IsPrintAssigned", Model.MenuList[index].IsPrintAssigned)
+                                                                            @if (Model.MenuList[index].MenuName.Contains("FileArchive"))
+                                                                            {
+                                                                                <label class="treechildstyle">Download</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="treechildstyle">Print</label>
+                                                                            }
+                                                                        </li>
+                                                                    </ul>
+                                                                </li>
+                                                                index = index + 1;
+                                                                if (index == Model.MenuList.Count)
+                                                                {
+                                                                    isChild = false;
+                                                                }
+                                                                else if (tempParentId != Model.MenuList[index].ParentMenuId)
+                                                                {
+                                                                    isChild = false; index = index - 1;
+                                                                }
+                                                            }
+                                                        </ul>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].IsAssignedMenu", Model.MenuList[index].IsAssignedMenu)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].MenuId", Model.MenuList[index].MenuId.ToString())
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].ParentMenuId", Model.MenuList[index].ParentMenuId)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].ParentMenuName", Model.MenuList[index].ParentMenuName)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].MenuName", Model.MenuList[index].MenuName)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].MenuCaption", Model.MenuList[index].MenuCaption)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].IsAddAssigned", Model.MenuList[index].IsAddAssigned)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].IsEditAssigned", Model.MenuList[index].IsEditAssigned)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].IsDeleteAssigned", Model.MenuList[index].IsDeleteAssigned)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].IsCancelAssigned", Model.MenuList[index].IsCancelAssigned)
+                                                    @Html.Hidden("Model.MenuList[" + index.ToString() + "].IsPrintAssigned", Model.MenuList[index].IsPrintAssigned)
+                                                }
+                                            }
+                                        </ul>
+
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="clearfix text-right">
+                        <a class="btn btn-warning" asp-action="Index" asp-controller="UserRole">Back</a>
+                        @*<button type="button" class="btn btn-success" onclick="return SaveData('frmUserEdit','/Security/User/Edit','MyDialog');">Save changes</button>*@
+                        <input class="btn btn-success" type="button" onclick="Done()" value="Save changes" id="btnSave" name="btnSave" />
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function Done() {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateUserRole", "UserRole")',
+            data: $("#frmUserEdit").serialize(),
+            //dataType:"json",
+            error: function (result) {
+                console.log(result);
+            },
+            success: function (result) {
+                $(".message01").notify(result.message01, result.message02);
+                return;
+                $body.removeClass("loading");
+                if (result.status == true) {
+
+                    alert("Successfully Updated Role!")
+                    var baseUrl = "/Roles";
+                    window.location.href = baseUrl;
+                }
+                else {
+                    alert("Failed:"+result);
+                }
+            }
+        });
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        var zoneId = 0;
+        $(document).ready(function () {
+            zoneId = $('#Model_User_ZoneId').val();
+        });
+
+        $('#Model_User_ZoneId').on("change", function (e) {
+            zoneId = $('#Model_User_ZoneId').val();
+        });
+
+
+        $(document).ready(function () {
+            $('ul#roletree').collapsibleCheckboxTree({
+                checkParents: true,
+                checkChildren: false,
+                uncheckChildren: true,
+                initialState: 'expand'
+            });
+
+        });
+
+        function tree() {
+            $(document).ready(function ($) {
+
+                $('input:checkbox').click(function () {
+                    if ($(this).prop('checked')) {
+                        // Check all child checkboxes
+                        $(this).closest('li').find('input:checkbox').prop('checked', true);
+                    }
+                    else {
+                        // Uncheck all child checkboxes
+                        $(this).closest('li').find('input:checkbox').attr('checked', false);
+                    }
+                });
+            });
+        }
+
+        //$(document).ready(function () {
+        //    $('ul#roletree').collapsibleCheckboxTree({
+        //        checkParents: true,
+        //        checkChildren: false,
+        //        uncheckChildren: true,
+        //        initialState: 'expand'
+        //    });
+
+        //});
+
+        //function PopulateModuleDropDown() {
+        //    var url = "/Security/User/GetModuleList";
+        //    var form = $("#frmUserEdit");
+        //    var serializedForm = form.serialize();
+
+        //    $.post(url, serializedForm, function (result) {
+        //        $("#Model_ModuleId").fillSelect(result);
+        //    }, "json");
+
+        //    return false;
+        //}
+
+        $(function () {
+            $(".WaterMarkEffect").each(function () {
+                $TextBox = $(this);
+
+                if ($TextBox.val() == $("#Model_OldPassword").val()) {
+
+                }
+                else {
+                    $TextBox.removeClass("WaterMarkEffect");
+                }
+            });
+
+            $(".WaterMarkEffect").focus(function () {
+                $TextBox = $(this);
+                if ($TextBox.val() == $("#Model_OldPassword").val()) {
+                    $TextBox.val("");
+                }
+            });
+
+            $(".WaterMarkEffect").blur(function () {
+                $TextBox = $(this);
+                if ($.trim($TextBox.val()) == "") {
+                    $TextBox.val($("#Model_OldPassword").val());
+                    $TextBox.addClass("WaterMarkEffect");
+                }
+                else if ($.trim($TextBox.val()) != $("#Model_OldPassword").val()) {
+                    $TextBox.removeClass("WaterMarkEffect");
+                }
+            });
+        });
+
+    </script>
+
+}

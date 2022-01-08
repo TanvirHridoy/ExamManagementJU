@@ -23,7 +23,7 @@ namespace CertificationMS.Controllers
             }
             catch
             {
-                return RedirectToAction("LogIn", "Login");
+                return RedirectToAction("LogOut", "Login");
             }
            
             return View();
@@ -38,7 +38,7 @@ namespace CertificationMS.Controllers
             }
             catch
             {
-                return RedirectToAction("LogIn", "Login");
+                return RedirectToAction("LogOut", "Login");
             }
             var file = LoginResp.empInfo.Photo;
 

@@ -20,7 +20,12 @@
     <title>@ViewData["Title"] - CertificationMS</title>
     <link href="~/AdminLayout/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="~/AdminLayout/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <link href="~/vendor/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/AdminLayout/vendor/jquery/css/jquery-ui.min.css" rel="stylesheet" />
     <link href="~/AdminLayout/css/ruang-admin.css" rel="stylesheet">
+    <link href="~/css/jquery.collapsibleCheckboxTree.css" rel="stylesheet" />
+    <link href="~/css/Loader.css" rel="stylesheet" />
     @await RenderSectionAsync("StyleSheet", required: false)
 
 </head>
@@ -98,13 +103,13 @@
                                     Profile
                                 </a>
                                 @*<a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activity Log
-                </a>*@
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Settings
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Activity Log
+                                    </a>*@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -172,8 +177,18 @@
 
     <script src="~/AdminLayout/vendor/jquery/jquery.min.js"></script>
     <script src="~/AdminLayout/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/AdminLayout/vendor/jquery/jquery-ui-1.12.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="~/AdminLayout/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/vendor/select2/dist/js/select2.full.min.js"></script>
     <script src="~/AdminLayout/js/ruang-admin.min.js"></script>
+    <script src="~/js/notifyMe.js"></script>
+    <script src="~/js/jquery.collapsibleCheckboxTree.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select-single').select2();
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

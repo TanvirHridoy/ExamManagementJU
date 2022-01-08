@@ -11,31 +11,25 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class AccSectionController : Controller
     {
-      
+       
         public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
         private EmpMenus menu = new EmpMenus();
-        public AccSectionController(CertificateMSV2Context Db, IConfiguration configuration)
+        public AccSectionController(CertificateMSV2Context Db, IConfiguration configuration, IHttpContextAccessor HttpContext)
         {
+            menu = HttpContext.HttpContext.Session.GetMenu("User", "AccSection");
             _Db = Db;
             _config = configuration;
-            
         }
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "AccSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
             
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             AccSectionViewModel viewModel = new AccSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
@@ -64,15 +58,8 @@ namespace CertificationMS.Controllers
         public async Task<ActionResult> Details(int id)
         {
 
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "AccSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
             viewModel.Application = await _Db.CertApplications.SingleAsync(e => e.Id == id);
             viewModel.ApvStatusLst = await _Db.ApvStatuses.ToListAsync();
@@ -89,15 +76,8 @@ namespace CertificationMS.Controllers
         public async Task<ActionResult> Approve(IFormCollection form, int id)
         {
 
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "AccSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             var TotalPayable= form["Application.TotalPayable"];
             var FeeForCertificate = form["Application.FeeForCertificate"];
             var TotalPaid = form["Application.TotalPaid"];
@@ -126,15 +106,7 @@ namespace CertificationMS.Controllers
         public async Task<ActionResult> Reject(IFormCollection form, int id)
         {
 
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "AccSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             var TotalPayable = form["Application.TotalPayable"];
             var FeeForCertificate = form["Application.FeeForCertificate"];
             var TotalPaid = form["Application.TotalPaid"];

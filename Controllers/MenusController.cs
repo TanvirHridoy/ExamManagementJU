@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class MenusController : Controller
     {
         public HttpClient _client = new HttpClient();

@@ -10,27 +10,22 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class ProgramController : Controller
     {
         private readonly CertificateMSV2Context _Db;
         private string? Session;
         private EmpMenus menu = new EmpMenus();
-        public ProgramController(CertificateMSV2Context Db)
+        public ProgramController(CertificateMSV2Context Db,IHttpContextAccessor httpContext)
         {
+            menu = httpContext.HttpContext.Session.GetMenu("User", "ProgramSetup");
             _Db = Db;
         }
 
         public async Task<IActionResult> List(string message)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ProgramSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             ProgramViewModel model = new ProgramViewModel();
             var list = await _Db.Programs.ToListAsync();
             model.list = list;
@@ -41,30 +36,16 @@ namespace CertificationMS.Controllers
 
         public IActionResult Create()
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ProgramSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); } 
+           
+            if (menu.OPAdd==false) { return RedirectToAction("LogOut", "Login"); } 
             return View();
         }
 
 
         public async Task<IActionResult> Add(CertificationMS.ContextModels.Program obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ProgramSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPAdd==false) { return RedirectToAction("LogOut", "Login"); }
             try
             {
                 _Db.Programs.Add(obj);
@@ -87,15 +68,8 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ProgramSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPDelete==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPDelete==false) { return RedirectToAction("LogOut", "Login"); }
             var item = await _Db.Programs.FindAsync(id);
             try
             {
@@ -112,29 +86,15 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Edit(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ProgramSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             ContextModels.Program  obj = await _Db.Programs.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
         }
         public async Task<IActionResult> Update(ContextModels.Program obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ProgramSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;

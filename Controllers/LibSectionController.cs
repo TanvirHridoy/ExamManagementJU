@@ -11,28 +11,22 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class LibSectionController : Controller
     {
         public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
         private EmpMenus menu = new EmpMenus();
-        public LibSectionController(CertificateMSV2Context Db, IConfiguration configuration)
+        public LibSectionController(CertificateMSV2Context Db, IConfiguration configuration, IHttpContextAccessor HttpContext)
         {
             _Db = Db;
+            menu = HttpContext.HttpContext.Session.GetMenu("User", "LibSection");
             _config = configuration;
         }
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "LibSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             AccSectionViewModel viewModel = new AccSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
@@ -58,15 +52,8 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "LibSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+          
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
             viewModel.Application = await _Db.CertApplications.SingleAsync(e => e.Id == id);
             viewModel.ApvStatusLst = await _Db.ApvStatuses.ToListAsync();
@@ -82,15 +69,8 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Approve(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "LibSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+        
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             MailHelper mail = new MailHelper(_config);
             var application = await _Db.CertApplications.FindAsync(id);
             try
@@ -111,15 +91,8 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Reject(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "LibSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+    
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             var application = await _Db.CertApplications.FindAsync(id);
             try
             {

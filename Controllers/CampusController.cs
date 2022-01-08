@@ -9,43 +9,31 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class CampusController : Controller
     {
         private readonly CertificateMSV2Context _Db;
         private string? Session;
         private EmpMenus menu = new EmpMenus();
 
-        public CampusController(CertificateMSV2Context Db)
+        public CampusController(CertificateMSV2Context Db, IHttpContextAccessor HttpContext)
         {
-            _Db = Db;
+            menu = HttpContext.HttpContext.Session.GetMenu("User", "CampusSetup");
 
+            _Db = Db;
         }
 
         public IActionResult create()
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "CampusSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPAdd==false) { return RedirectToAction("LogOut", "Login"); }
             return View();
         }
 
         public async Task<IActionResult> Add(Campus obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "CampusSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPAdd==false) { return RedirectToAction("LogOut", "Login"); }
             try
             {
                 _Db.Campuses.Add(obj);
@@ -62,15 +50,8 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> List(string message)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "CampusSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             CampusViewModel model = new CampusViewModel();
             var Campuslist = await _Db.Campuses.ToListAsync();
             model.list = Campuslist;
@@ -81,30 +62,15 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "CampusSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             Campus obj = await _Db.Campuses.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
         }
 
         public async Task<IActionResult> Update(Campus obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "CampusSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;
@@ -119,15 +85,7 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "CampusSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPDelete==false) { return RedirectToAction("LogIn", "Login"); }
+            if (menu.OPDelete==false) { return RedirectToAction("LogOut", "Login"); }
             var campus = await _Db.Campuses.FindAsync(id);
             try
             {

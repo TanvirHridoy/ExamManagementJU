@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class UserGroupController : Controller
     {
         public HttpClient _client = new HttpClient();
@@ -32,7 +33,7 @@ namespace CertificationMS.Controllers
         }
 
 
-        private async void Inital()
+        private async Task Inital()
         {
             if (UserGroupList01 == null || UserGroupList01.Count == 0)
                 GetDatas("0", "AllUserGroupInfo");
@@ -41,13 +42,14 @@ namespace CertificationMS.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            if (menu==null) { return RedirectToAction("Logout", "login"); }
             RoleFormViewModel model = new RoleFormViewModel();
 
             model.RoleList = UserRoleList01;
             if (UserGroupList01 == null || UserRoleList01 == null)
-                Inital();
+                await Inital();
 
             model.GroupList = UserGroupList01;
 
@@ -56,6 +58,7 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Create()
         {
+            if (!menu.OPAdd) { return RedirectToAction("Logout", "login"); }
             RoleFormViewModel model = new RoleFormViewModel();
             GetDatas("0", "AllRoleInfo");
             model.RoleList = UserRoleList01;
@@ -67,6 +70,7 @@ namespace CertificationMS.Controllers
         }
         public IActionResult Edit(string grp_id)
         {
+            if (!menu.OPEdit) { return RedirectToAction("Logout", "login"); }
             var single_usr_grp = UserGroupList01.Where(x => x.GroupId == int.Parse(grp_id)).ToList();
 
             RoleFormViewModel roleFormView = new RoleFormViewModel();
@@ -89,6 +93,7 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public ActionResult UpdateUserGroupAsync(RoleFormViewModel model)
         {
+            if (!menu.OPEdit) { return RedirectToAction("Logout", "login"); }
             Storeproc storeproc = new Storeproc();
             SqlParameter[] parameters = new SqlParameter[4];
             try
@@ -159,6 +164,7 @@ namespace CertificationMS.Controllers
        
         private void GetDatas(string menuid, string type)
         {
+            if (menu==null) { return; }
             List<HRMMenus> menus = new List<HRMMenus>();
             List<UserRole> roles = new List<UserRole>();
             List<UserGroup> groups = new List<UserGroup>();

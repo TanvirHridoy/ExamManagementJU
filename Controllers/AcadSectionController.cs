@@ -11,13 +11,15 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class AcadSectionController : Controller
     {
         public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
         private EmpMenus menu = new EmpMenus();
-        public AcadSectionController(CertificateMSV2Context Db, IConfiguration configuration)
+        public AcadSectionController(CertificateMSV2Context Db, IConfiguration configuration, IHttpContextAccessor HttpContext)
         {
+            menu = HttpContext.HttpContext.Session.GetMenu("User", "AcadSection");
             _Db = Db;
             _config = configuration;
         }
@@ -25,15 +27,8 @@ namespace CertificationMS.Controllers
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
-            try
-            {
-              menu = HttpContext.Session.GetMenu("User", "AcadSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+          
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             AccSectionViewModel viewModel = new AccSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
@@ -59,14 +54,6 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "AcadSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
             if (menu.OPEdit)
             {
                 ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
@@ -79,7 +66,7 @@ namespace CertificationMS.Controllers
                 viewModel.Convocations = await _Db.Convocations.ToListAsync();
                 return View(viewModel);
             }
-            else { return RedirectToAction("LogIn", "Login"); }
+            else { return RedirectToAction("LogOut", "Login"); }
             
         }
 
@@ -87,14 +74,7 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Approve(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "AcadSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+
             if (menu.OPEdit)
             {
                 MailHelper mail = new MailHelper(_config);
@@ -115,20 +95,13 @@ namespace CertificationMS.Controllers
                 }
             
             }
-            else { return RedirectToAction("LogIn", "Login"); }
+            else { return RedirectToAction("LogOut", "Login"); }
             
         }
         [HttpPost]
         public async Task<ActionResult> Reject(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "AcadSection");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+
             if (menu.OPEdit)
             {
                 var application = await _Db.CertApplications.FindAsync(id);
@@ -147,7 +120,7 @@ namespace CertificationMS.Controllers
                     return RedirectToAction("Index", "AcadSection", new Status { MessageText = "Failed To Rejected " + application.StudentName + "'s application" });
                 }
             }
-            else { return RedirectToAction("LogIn", "Login"); }
+            else { return RedirectToAction("LogOut", "Login"); }
            
         }
     }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class StudentTypeController : Controller
     {
         private readonly CertificateMSV2Context _Db;
@@ -18,32 +19,18 @@ namespace CertificationMS.Controllers
         private EmpMenus menu = new EmpMenus();
         public StudentTypeController(CertificateMSV2Context Db, IHttpContextAccessor httpContext)
         {
+            menu = httpContext.HttpContext.Session.GetMenu("User", "StudentTypeSetup");
             _Db = Db;
         }
         public IActionResult create()
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
+            if (menu.OPAdd==false) { return RedirectToAction("LogOut", "Login"); }
             return View();
         }
         public async Task<IActionResult> List(string message)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             StudentTypeViewModel model = new StudentTypeViewModel();
             var list = await _Db.StudentTypes.ToListAsync();
             model.list = list;
@@ -54,15 +41,8 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Add(StudentType obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPAdd==false) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu.OPAdd==false) { return RedirectToAction("LogOut", "Login"); }
             try
             {
                 _Db.StudentTypes.Add(obj);
@@ -76,15 +56,8 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPDelete==false) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu.OPDelete==false) { return RedirectToAction("LogOut", "Login"); }
             var st= await _Db.StudentTypes.FindAsync(id);
             try
             {
@@ -99,15 +72,8 @@ namespace CertificationMS.Controllers
         }
          public async Task<IActionResult> Edit(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "StudentTypeSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+           
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             StudentType obj =await _Db.StudentTypes.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
 
@@ -115,12 +81,8 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult>Update(StudentType obj)
         {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;
@@ -133,17 +95,5 @@ namespace CertificationMS.Controllers
             }
         }
 
-
-
-
-        public IActionResult Index()
-        {
-            Session = HttpContext.Session.GetString("northern");
-            if (Session == String.Empty || Session == null)
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            return View();
-        }
     }
 }

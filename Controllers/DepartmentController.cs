@@ -10,26 +10,22 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class DepartmentController : Controller
     {
 
         private readonly CertificateMSV2Context _Db;
         private EmpMenus menu = new EmpMenus();
-        public DepartmentController(CertificateMSV2Context Db)
+        public DepartmentController(CertificateMSV2Context Db, IHttpContextAccessor HttpContext)
         {
+            menu = HttpContext.HttpContext.Session.GetMenu("User", "DepartmentSetup");
+
             _Db = Db;
         }
         public async Task<IActionResult> List(string message)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "DepartmentSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             DepartmentViewModel model = new DepartmentViewModel();
             var deplist = await _Db.Departments.ToListAsync();
             model.deptlist = deplist;
@@ -39,28 +35,15 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "DepartmentSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            if(menu.OPEdit==false){ return RedirectToAction("Logout", "Login"); }
             Department obj = await _Db.Departments.SingleOrDefaultAsync(e => e.Id == id);
             return View(obj);
         }
 
         public async Task<IActionResult> Update(Department obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "DepartmentSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            if (menu.OPEdit==false) { return RedirectToAction("Logout", "Login"); }
+
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;
@@ -75,27 +58,15 @@ namespace CertificationMS.Controllers
 
         public IActionResult Create()
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "DepartmentSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            if (menu.OPAdd==false) { return RedirectToAction("Logout", "Login"); }
+
             return View();
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "DepartmentSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            if (menu.OPDelete==false) { return RedirectToAction("Logout", "Login"); }
+
             var department = await _Db.Departments.FindAsync(id);
             try
             {
@@ -110,14 +81,7 @@ namespace CertificationMS.Controllers
         }
         public async Task<IActionResult> Add(Department obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "DepartmentSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            if (menu.OPAdd==false) { return RedirectToAction("Logout", "Login"); }
             try
             {
                 if (obj.Id == 0)

@@ -1,0 +1,29 @@
+#roletree ul {
+    padding-left: 20px;
+}
+
+#roletree li {
+    list-style: none;
+}
+
+#roletree ul.hide {
+    display: none;
+}
+
+.treeheaderstyle {
+    font-size: 14px;
+}
+
+.treechildstyle {
+    font-size: 12px;
+}
+
+#roletree span {
+    color: #999;
+    font-size: 11px;
+    cursor: default;
+}
+
+    #roletree span.expanded, #roletree span.collapsed {
+        cursor: pointer;
+    }

@@ -11,28 +11,23 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class ConvocationController : Controller
     {
         public readonly CertificateMSV2Context _Db;
         private string? Session;
         private EmpMenus menu = new EmpMenus();
-        public ConvocationController(CertificateMSV2Context Db)
+        public ConvocationController(CertificateMSV2Context Db, IHttpContextAccessor HttpContext)
         {
+            menu = HttpContext.HttpContext.Session.GetMenu("User", "ConvocationSetup");
+
             _Db = Db;
         }
 
 
         public async Task<IActionResult> List(string message)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ConvocationSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             ConvocationViewModel model = new ConvocationViewModel();
             var Cnvctlist= await _Db.Convocations.ToListAsync();
             model.list = Cnvctlist;
@@ -43,26 +38,12 @@ namespace CertificationMS.Controllers
 
         public IActionResult create()
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ConvocationSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            
             return View();
         }
         public async Task<IActionResult> Add(Convocation obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ConvocationSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            
             try
             {
                 _Db.Convocations.Add(obj);
@@ -79,27 +60,14 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ConvocationSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            if (menu.OPEdit!) { return RedirectToAction("Logout", "Login"); }
             Convocation obj = await _Db.Convocations.SingleOrDefaultAsync(e=>e.Id==id);
             return View(obj);
         }
         public async Task<IActionResult> Update(Convocation obj)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ConvocationSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            
+            if (menu.OPEdit!) { return RedirectToAction("Logout", "Login"); }
             try
             {
                 _Db.Entry(obj).State = EntityState.Modified;
@@ -116,14 +84,7 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                menu = HttpContext.Session.GetMenu("User", "ConvocationSetup");
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
+            if (menu.OPDelete!) { return RedirectToAction("Logout", "Login"); }
             var convocation = await _Db.Convocations.FindAsync(id);
             try
             {

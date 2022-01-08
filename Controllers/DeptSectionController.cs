@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class DeptSectionController : Controller
     {
         public readonly CertificateMSV2Context _Db;
@@ -19,8 +20,11 @@ namespace CertificationMS.Controllers
         private string? Session;
         private EmpMenus? menu = new EmpMenus();
         LoggedInModel LoginResp = new LoggedInModel();
-        public DeptSectionController(CertificateMSV2Context Db, IConfiguration configuration)
+        public DeptSectionController(CertificateMSV2Context Db, IConfiguration configuration, IHttpContextAccessor HttpContext)
         {
+
+            LoginResp=HttpContext.HttpContext.Session.GetObject<LoggedInModel>("User");
+            menu = LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
             _Db = Db;
             _config = configuration;
         }
@@ -28,17 +32,7 @@ namespace CertificationMS.Controllers
         public async Task<ActionResult> Index(int id=0, Status message=null)
         {
 
-            try
-            {
-                LoginResp=HttpContext.Session.GetObject<LoggedInModel>("User");
-                menu = LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            
-            if (menu==null) { return RedirectToAction("LogIn", "Login"); }
+            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             DeptSectionViewModel viewModel = new DeptSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
@@ -84,16 +78,8 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            try
-            {
-                LoginResp=HttpContext.Session.GetObject<LoggedInModel>("User");
-                menu = LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
             viewModel.Application = await _Db.CertApplications.SingleAsync(e => e.Id == id);
             viewModel.ApvStatusLst = await _Db.ApvStatuses.ToListAsync();
@@ -109,16 +95,8 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Approve(int id)
         {
-            try
-            {
-                LoginResp=HttpContext.Session.GetObject<LoggedInModel>("User");
-                menu = LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             MailHelper mail = new MailHelper(_config);
             var application = await _Db.CertApplications.FindAsync(id);
                 try
@@ -139,16 +117,8 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Reject(int id)
         {
-            try
-            {
-                LoginResp=HttpContext.Session.GetObject<LoggedInModel>("User");
-                menu = LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             var application = await _Db.CertApplications.FindAsync(id);
             try
             {
@@ -171,16 +141,8 @@ namespace CertificationMS.Controllers
         // GET: DeptSectionController/Edit/5
         public ActionResult Edit(int id)
         {
-            try
-            {
-                LoginResp=HttpContext.Session.GetObject<LoggedInModel>("User");
-                menu = LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             return View();
         }
 
@@ -189,16 +151,8 @@ namespace CertificationMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
-            try
-            {
-                LoginResp=HttpContext.Session.GetObject<LoggedInModel>("User");
-                menu = LoginResp.EmpMenuList.FindLast(e => e.MenuName.EndsWith("Dept"));
-            }
-            catch
-            {
-                return RedirectToAction("LogIn", "Login");
-            }
-            if (menu.OPEdit==false) { return RedirectToAction("LogIn", "Login"); }
+
+            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             try
             {
                 return RedirectToAction(nameof(Index));
