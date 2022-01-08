@@ -63,11 +63,20 @@ namespace CertificationMS.Controllers
         public async Task<IActionResult> Index()
         {
             formViewModel viewModel = new formViewModel();
-            viewModel.CampusLst = await _Db.Campuses.ToListAsync();
-            viewModel.convLst = await _Db.Convocations.ToListAsync();
-            viewModel.deptLst = await _Db.Departments.ToListAsync();
-            viewModel.programLst = await _Db.Programs.ToListAsync();
-            viewModel.StudentTypeLst = await _Db.StudentTypes.ToListAsync();
+            try
+            {
+                viewModel.CampusLst = await _Db.Campuses.ToListAsync();
+                viewModel.convLst = await _Db.Convocations.ToListAsync();
+                viewModel.deptLst = await _Db.Departments.ToListAsync();
+                viewModel.programLst = await _Db.Programs.ToListAsync();
+                viewModel.StudentTypeLst = await _Db.StudentTypes.ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                var r = ex.Message;
+            }
+           
+            
             return View(viewModel);
         }
 

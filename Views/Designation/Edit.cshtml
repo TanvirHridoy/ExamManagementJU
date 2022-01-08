@@ -1,0 +1,73 @@
+﻿@model CertificationMS.ContextModels.PrmDesignation
+@using CertificationMS.Utility;
+@{
+
+    var menu = Context.Session.GetMenu("User", "DesignationSetup");
+    ViewData["Title"] = "Designation Setup";
+}
+
+
+<div class="row">
+    <div class="col-md-11">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group d-none">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-6 row">
+                    <label asp-for="Name" class="mt-2 col-md-3"> Name</label>
+                    <input asp-for="Name" class="form-control col-md-6 ml-2 " placeholder="Enter Leave type" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 row">
+                    <label asp-for="NameB" class="mt-2 col-md-3"> Name In Bangla</label>
+                    <input asp-for="NameB " class="form-control col-md-6 ml-2" placeholder="Enter Name In Bangla" />
+                    <span asp-validation-for="NameB" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 row">
+                    <label asp-for="SortingOrder" class="mt-2 col-md-3"> SortingOrder</label>
+                    <input asp-for="SortingOrder" class="form-control col-md-6 ml-2 " placeholder="Enter  Sorting Order" />
+                    <span asp-validation-for="SortingOrder" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 row">
+                    <label asp-for="JobDescription" class="mt-2 col-md-3"> Job Description</label>
+                    <input asp-for="JobDescription " class="form-control col-md-6 ml-2" placeholder="Enter Job Description" />
+                    <span asp-validation-for="JobDescription" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 row">
+                    <label asp-for="ShortName" class="mt-2 col-md-3 "> Short Name</label>
+                    <input asp-for="ShortName " class="form-control col-md-6 ml-2" placeholder="Enter Short Name" />
+                    <span asp-validation-for="ShortName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 row">
+                </div>
+            </div>
+            <div class="row mt-5 justify-content-center">
+                <div class="form-group">
+
+                    @if (menu.OPEdit)
+                    {
+                        <input type="submit" value="Update" asp-action="Edit" class="btn btn-success " />
+                    }
+                </div>
+                <div class="form-group ml-2">
+                    <a asp-action="Index" class="btn btn-warning ">Back to List</a>
+                </div>
+
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+
+
