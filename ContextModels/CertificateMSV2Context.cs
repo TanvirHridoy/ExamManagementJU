@@ -22,6 +22,7 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<PrmDesignation> PrmDesignations { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
@@ -54,6 +55,26 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.TotalPayable)
                     .HasColumnType("decimal(18, 2)")
                     .HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<PrmDesignation>(entity =>
+            {
+                entity.ToTable("PRM_Designation");
+
+                entity.Property(e => e.JobDescription).IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NameB).HasMaxLength(100);
+
+                entity.Property(e => e.Remarks)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ShortName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Section>(entity =>
@@ -204,15 +225,12 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Designation)
-                    .HasMaxLength(200)
-                    .HasDefaultValueSql("(' ')");
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.EmailAddress)
                     .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.EmpId)
-                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.LastLockoutDate).HasColumnType("datetime");

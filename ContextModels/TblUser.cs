@@ -29,7 +29,6 @@ namespace CertificationMS.ContextModels
         public DateTime? LastLockoutDate { get; set; }
         public int? FailedPasswordAttemptCount { get; set; }
         public string Comment { get; set; }
-        public string EmpId { get; set; }
         public bool? ChangePasswordAtFirstLogin { get; set; }
 
         public virtual TblGroup Group { get; set; }
