@@ -11,7 +11,7 @@ namespace CertificationMS.ContextModels
         public string Name { get; set; }
         public string LoginId { get; set; }
         public string EmailAddress { get; set; }
-        public string Designation { get; set; }
+        public int Designation { get; set; }
         public int? SectionId { get; set; }
         public byte[] Photo { get; set; }
         public string Phone { get; set; }

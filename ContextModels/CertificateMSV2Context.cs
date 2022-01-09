@@ -34,7 +34,7 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<TblRole> TblRoles { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
 
-        
+     
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -224,10 +224,7 @@ namespace CertificationMS.ContextModels
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Designation)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasDefaultValueSql("('')");
+                entity.Property(e => e.Designation).HasDefaultValueSql("('')");
 
                 entity.Property(e => e.EmailAddress)
                     .HasMaxLength(50)

@@ -29,11 +29,12 @@ namespace CertificationMS.Utility
             if (value!=null)
             {
                 loggedInModel   = JsonConvert.DeserializeObject<LoggedInModel>(value);
+                if (loggedInModel != null)
+                {
+                    menus = loggedInModel.EmpMenuList.Where(e => e.MenuName == menuName).SingleOrDefault();
+                }
             }
-            if (loggedInModel!=null)
-            {
-                menus=loggedInModel.EmpMenuList.Where(e => e.MenuName == menuName).SingleOrDefault();
-            }
+            
 
             return menus;
         }

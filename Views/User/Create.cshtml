@@ -1,0 +1,98 @@
+﻿@model UserCreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" method="post" enctype="multipart/form-data" asp-controller="User"
+                      asp-route-User="@Model.User">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="User.Photo" class="control-label"></label>
+                <input asp-for="User.Photo" type="file" accept="images/jpg" class="form-control" />
+                <span asp-validation-for="User.Photo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Name" class="control-label"></label>
+                <input asp-for="User.Name" class="form-control" />
+                <span asp-validation-for="User.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.LoginId" class="control-label"></label>
+                <input asp-for="User.LoginId" class="form-control" />
+                <span asp-validation-for="User.LoginId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.EmailAddress" class="control-label"></label>
+                <input asp-for="User.EmailAddress" class="form-control" />
+                <span asp-validation-for="User.EmailAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.SectionId" class="control-label"></label>
+                <select asp-for="User.SectionId" class="form-control" id="Section">
+                    <option>Select One</option>
+                    @foreach (var item in Model.ListSection)
+                    {
+                        <option value="@item.Id">@item.SectionName</option>
+                    }
+
+                </select>
+                <span asp-validation-for="User.SectionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Designation" class="control-label"></label>
+                <select asp-for="User.Designation" required class="form-control" id="Designation">
+                    <option>Select One</option>
+                    @foreach (var item in Model.ListDesignations)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+
+                </select>
+                <span asp-validation-for="User.SectionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Phone" class="control-label"></label>
+                <input asp-for="User.Phone" class="form-control" />
+                <span asp-validation-for="User.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Password" class="control-label"></label>
+                <input asp-for="User.Password" type="password" class="form-control" />
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="User.GroupId" class="control-label"></label>
+                <select asp-for="User.GroupId" required class="form-control" id="Section">
+                    <option>Select One</option>
+                    @foreach (var item in Model.ListGroup)
+                    {
+                        <option value="@item.GroupId">@item.GroupName</option>
+                    }
+                </select>
+                <span asp-validation-for="User.GroupId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Comment" class="control-label"></label>
+                <input asp-for="User.Comment" class="form-control" />
+                <span asp-validation-for="User.Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

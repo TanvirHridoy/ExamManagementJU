@@ -1,161 +1,111 @@
-﻿@model IEnumerable<CertificationMS.ContextModels.TblUser>
+﻿@model UsersViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Users";
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LoginId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmailAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Designation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SectionId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Photo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NeverExperied)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastLoginDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsLockedOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastPasswordChangedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastLockoutDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FailedPasswordAttemptCount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ChangePasswordAtFirstLogin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Group)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoginId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Designation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SectionId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Photo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NeverExperied)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLoginDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsLockedOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastPasswordChangedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLockoutDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FailedPasswordAttemptCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ChangePasswordAtFirstLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Group.GroupName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
-            </td>
-        </tr>
+@section StyleSheet{
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 }
-    </tbody>
-</table>
+@if (!String.IsNullOrEmpty(Model.message))
+{
+    if (Model.message.StartsWith("Success"))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>
+                @Model.message
+            </strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    else if (Model.message.StartsWith("Failed"))
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>
+                @Model.message
+            </strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+}
+<div class="row mb-3">
+    <div class="col-sm-12 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Accounts Section</h6>
+
+            </div>
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Sl#</th>
+                            <th>Login ID</th>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>EmailAddress</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int i = 0;}
+                        @foreach (var item in Model.List)
+                        {
+                            i = i + 1;
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.LoginId</td>
+                                <td>
+                                   @item.Name
+                                </td>
+                                <td>
+                                    @Model.ListDeg.SingleOrDefault(e=>e.Id==item.Designation).Name
+                                    
+                                </td>
+                                <td>
+                                    @item.EmailAddress
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.Status)
+                                        {
+                                            <p class="text-success"> Active</p>
+
+                                        }
+                                        else
+                                        {
+                                            <p class="text-danger"> InActive</p>
+                                        }
+                                    }
+                                   
+                                </td>
+                                
+                                <td><a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-sm btn-warning">View</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer"></div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+    @*Page level plugins*@
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    @* Page level custom scripts*@
+    <script>
+        $(document).ready(function () {
+           // $('#dataTable').DataTable(); // ID From dataTable
+            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+        });
+    </script>
+}

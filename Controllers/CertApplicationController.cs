@@ -1,9 +1,5 @@
 ﻿using CertificationMS.ContextModels;
-using CertificationMS.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
@@ -11,14 +7,14 @@ namespace CertificationMS.Controllers
     public class CertApplicationController : Controller
     {
         public readonly CertificateMSV2Context _db;
-       
+
         public CertApplicationController(CertificateMSV2Context Db)
         {
             _db = Db;
-            
+
         }
 
-    public async Task<IActionResult> Add(CertApplication Obj)
+        public async Task<IActionResult> Add(CertApplication Obj)
         {
             _db.CertApplications.Add(Obj);
             await _db.SaveChangesAsync();
@@ -32,7 +28,7 @@ namespace CertificationMS.Controllers
             return View();
         }
 
-       
+
 
 
 
