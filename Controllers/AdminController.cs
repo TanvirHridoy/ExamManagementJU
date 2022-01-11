@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class AdminController : Controller
     {
-        private LoggedInModel LoginResp = new LoggedInModel();
+        private LoggedInModel? LoginResp = new LoggedInModel();
 
         private string? Session;
         // GET: AdminController
@@ -40,7 +41,7 @@ namespace CertificationMS.Controllers
             {
                 return RedirectToAction("LogOut", "Login");
             }
-            var file = LoginResp.empInfo.Photo;
+            var file = LoginResp?.empInfo.Photo;
 
             if (file == null)
             {

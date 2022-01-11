@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+    [SessionTimeout]
     public class UserController : Controller
     {
         public IConfiguration _Config { get; set; }
@@ -25,11 +26,13 @@ namespace CertificationMS.Controllers
         public static List<UserGroup> UserGroupList01 = null;
         public static List<HRMMenus> HRMMenuList01 = null;
         CertificateMSV2Context _Db;
+        public int UserId { get; set; }
 
         public UserController(IConfiguration configuration, CertificateMSV2Context context, IHttpContextAccessor httpContext)
         {
 
             menu = httpContext.HttpContext.Session.GetMenu("User", "User");
+            UserId = httpContext.HttpContext.Session.GetUserId("User");
             _Config = configuration;
             _Db = context;
         }
@@ -37,6 +40,7 @@ namespace CertificationMS.Controllers
 
         public async Task<IActionResult> Index(string message = "")
         {
+            if (menu == null) { return RedirectToAction("Index", "Admin"); }
             UsersViewModel viewModel = new UsersViewModel();
 
             viewModel.ListDeg =  _Db.PrmDesignations.ToList(); 
@@ -58,6 +62,7 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Create( UserCreateForm user = null,string message="")
         {
+            if (menu.OPAdd != false) { return RedirectToAction("Index", "User"); }
             UserCreateModel model = new UserCreateModel();
             model.ListDesignations = await _Db.PrmDesignations.ToListAsync();
             model.ListSection = await _Db.Sections.ToListAsync();
@@ -88,7 +93,7 @@ namespace CertificationMS.Controllers
                 return RedirectToAction("Create", new { user = User, message = "Failed!!! This Login ID is already exists" });
             }
             tblUser.Comment = User.Comment;
-            tblUser.CreatedBy = "";
+            tblUser.CreatedBy = UserId.ToString();
             tblUser.CreatedDate = DateTime.Now;
             tblUser.Designation = User.Designation;
             tblUser.EmailAddress = User.EmailAddress;
@@ -126,11 +131,79 @@ namespace CertificationMS.Controllers
             }
             return s;
         }
-        public IActionResult Edit(string userid)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            UserCreateModel model = new UserCreateModel();
+            model.ListDesignations = await _Db.PrmDesignations.ToListAsync();
+            model.ListSection = await _Db.Sections.ToListAsync();
+            model.ListGroup = await _Db.TblGroups.ToListAsync();
+            try
+            {
+                model.User = await _Db.TblUsers.Select(e => new UserCreateForm {
+                    UserId = e.UserId, Comment = e.Comment, Designation = e.Designation, EmailAddress = e.EmailAddress,
+                    GroupId = e.GroupId, LoginId = e.LoginId, Name = e.Name, Password = e.Password, Phone = e.Phone,
+                    Photo = e.Photo, SectionId = e.SectionId, Status = e.Status
+                }).SingleOrDefaultAsync(e=>e.UserId==id);
+                return View(model);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+           
+            //return View();
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Edit(UserCreateForm User)
+        {
+            TblUser? tblUser = new TblUser();
+            tblUser = await _Db.TblUsers.AsNoTracking().SingleOrDefaultAsync(e => e.LoginId == User.LoginId);
+            var r = User;
+            var file = Request.Form.Files["User.Photo"];
+            if (tblUser == null)
+            {
+                return RedirectToAction("Index", new {  message = "Failed!!!Something Weng Wrong" });
+            }
+            if (file != null)
+            {
+                if (file.Length > 0)
+                {
+                    User.Photo = ConvertToBytes(file);
+                }
+            }
+            tblUser.Comment = User.Comment;
+            tblUser.CreatedBy = UserId.ToString();
+            tblUser.CreatedDate = DateTime.Now;
+            tblUser.Designation = User.Designation;
+            tblUser.EmailAddress = User.EmailAddress;
+            tblUser.Name = User.Name;
+            tblUser.Photo = User.Photo==null?tblUser.Photo:User.Photo;
+            tblUser.SectionId = User.SectionId;
+            tblUser.Status = true;
+            tblUser.UpdatedBy = "";
+            tblUser.Phone = User.Phone;
+            tblUser.NeverExperied = false;
+            tblUser.Password = User.Password!=null? Hashgenerator.GetPassHash(User.Password): tblUser.Password;
+            tblUser.IsLockedOut = false;
+            tblUser.GroupId = User.GroupId;
+            tblUser.ChangePasswordAtFirstLogin = false;
+            tblUser.LoginId = User.LoginId;
+            try
+            {
+                 _Db.TblUsers.Update(tblUser);
+                await _Db.SaveChangesAsync();
+                return RedirectToAction("Index", new { message = "Successfully Created User for:" + User.Name });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", new { message = "Failed!!!Something Weng Wrong" });
+            }
+        }
+        public async Task<ActionResult> Delete(int Id)
+        {
+            return RedirectToAction(nameof(Index), new { message = "Successfully!!!Deleted User" });
+        }
         //public IActionResult Profile()
         //{
         //    string userId = HmsConst.LoginResp.EmpId;

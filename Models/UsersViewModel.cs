@@ -42,7 +42,6 @@ namespace CertificationMS.Models
         public byte[] Photo { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
-       
         public int? GroupId { get; set; }
         public bool Status { get; set; }
         public string Comment { get; set; }

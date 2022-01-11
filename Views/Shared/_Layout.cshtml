@@ -4,7 +4,7 @@
 @using CertificationMS.Utility;
 
 @{ 
-    LoggedInModel LoginResp = new LoggedInModel();
+    LoggedInModel? LoginResp = new LoggedInModel();
     LoginResp=Context.Session.GetObject<LoggedInModel>("User");
 }
 <!DOCTYPE html>
@@ -51,30 +51,36 @@
             <div class="sidebar-heading">
                 Features
             </div>
-            @{ var Menus = LoginResp.EmpMenuList.OrderBy(e => e.SerialNo).ToList();
-                var Menugroup = Menus.Where(e => e.ParentMenuId == 0).ToList();
-                foreach (var item in Menugroup)
+            @{
+                if (LoginResp != null)
                 {
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#@item.MenuName"
-                           aria-expanded="true" aria-controls="@item.MenuName">
-                            <i class="@item.MenuIconClass"></i>
-                            <span>@item.MenuCaption</span>
-                        </a>
-                        <div id="@item.MenuName" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">@item.MenuCaption</h6>
-                                @{
-                                    var SubMenus = Menus.Where(e => e.ParentMenuId == item.MenuId).OrderBy(e => e.SerialNo).ToList();
-                                    foreach (var menu in SubMenus)
-                                    {
-                                        <a class="collapse-item" href="@menu.PageUrl">@menu.MenuCaption</a>
+                    var Menus = LoginResp.EmpMenuList.OrderBy(e => e.SerialNo).ToList();
+                    var Menugroup = Menus.Where(e => e.ParentMenuId == 0).ToList();
+                    foreach (var item in Menugroup)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#@item.MenuName"
+                               aria-expanded="true" aria-controls="@item.MenuName">
+                                <i class="@item.MenuIconClass"></i>
+                                <span>@item.MenuCaption</span>
+                            </a>
+                            <div id="@item.MenuName" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                                <div class="bg-white py-2 collapse-inner rounded">
+                                    <h6 class="collapse-header">@item.MenuCaption</h6>
+                                    @{
+                                        var SubMenus = Menus.Where(e => e.ParentMenuId == item.MenuId).OrderBy(e => e.SerialNo).ToList();
+                                        foreach (var menu in SubMenus)
+                                        {
+                                            <a class="collapse-item" href="@menu.PageUrl">@menu.MenuCaption</a>
+                                        }
                                     }
-                                }
+                                </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
+                    }
+
                 }
+
             }
             <hr class="sidebar-divider">
             <div class="version" id="version-ruangadmin"></div>
@@ -95,7 +101,7 @@
                                aria-haspopup="true" aria-expanded="false">
                                 <img class="img-profile rounded-circle" src="/Admin/RetriveImage" style="max-width: 60px">
                                 @*<img src="/Login/RetriveImage" alt="@Model.Application.StudentName" style="height: 125px; width: 100px; text-align:center;">*@
-                                <span class="ml-2 d-none d-lg-inline text-white small">@LoginResp.empInfo.Name (@LoginResp.EmpId)</span>
+                                <span class="ml-2 d-none d-lg-inline text-white small">@LoginResp?.empInfo.Name (@LoginResp?.EmpId)</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
@@ -123,7 +129,7 @@
                 <!-- Container Fluid-->
                 <div class="container-fluid" id="container-wrapper">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800">@ViewData["Title"]</h1>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="./">Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>

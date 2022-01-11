@@ -1,0 +1,141 @@
+﻿@model UserCreateModel
+@using CertificationMS.Utility;
+
+@{
+    ViewData["Title"] = "Edit User";
+    EmpMenus menu = new EmpMenus();
+    menu = Context.Session.GetMenu("User", "User");
+    var image = Model.User.Photo != null ? Convert.ToBase64String(Model.User.Photo) : "0x";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group d-none">
+                <input asp-for="@Model.User.UserId" />
+                <input asp-for="User.LoginId" class="form-control" />
+            </div>
+            <img src="data:image/jpg;base64,@image" alt="Employe Photo" id="EmpImage" style="height: 125px; width: 100px; text-align:center;">
+            <div class="form-group">
+                <label asp-for="User.Photo" class="control-label"></label>
+                <input asp-for="User.Photo" type="file" accept="image/jpg" class="form-control" />
+                <span asp-validation-for="User.Photo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Name" class="control-label"></label>
+                <input asp-for="User.Name" class="form-control" />
+                <span asp-validation-for="User.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.EmailAddress" class="control-label"></label>
+                <input asp-for="User.EmailAddress" class="form-control" />
+                <span asp-validation-for="User.EmailAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.SectionId" class="control-label"></label>
+                <select asp-for="User.SectionId" class="form-control" id="Section">
+                    <option>Select One</option>
+                    @foreach (var item in Model.ListSection)
+                    {
+                        <option value="@item.Id">@item.SectionName</option>
+                    }
+
+                </select>
+                <span asp-validation-for="User.SectionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Designation" class="control-label"></label>
+                <select asp-for="User.Designation" required class="form-control" id="Designation">
+                    <option>Select One</option>
+                    @foreach (var item in Model.ListDesignations)
+                    {
+                        if (item.Id == Model.User.Designation)
+                        {
+                            <option value="@item.Id" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+
+                    }
+
+                </select>
+                <span asp-validation-for="User.SectionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Phone" class="control-label"></label>
+                <input asp-for="User.Phone" class="form-control" />
+                <span asp-validation-for="User.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Password" class="control-label"></label>
+                <input asp-for="User.Password" type="password" class="form-control" />
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.GroupId" class="control-label"></label>
+                <select asp-for="User.GroupId" required class="form-control" id="UserGroup">
+                    <option>Select One</option>
+                    @foreach (var item in Model.ListGroup)
+                    {
+                        if (item.GroupId == Model.User.GroupId)
+                        {
+                            <option value="@item.GroupId" selected>@item.GroupName</option>
+                        }
+                        else
+                        {
+                            <option value="@item.GroupId">@item.GroupName</option>
+                        }
+
+                    }
+                </select>
+                <span asp-validation-for="User.GroupId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Comment" class="control-label"></label>
+                <input asp-for="User.Comment" class="form-control" />
+                <span asp-validation-for="User.Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" asp-route-User="@Model.User" asp-action="Edit" asp-controller="User" value="Update" class="btn btn-primary col-md-2" />
+                <a class="btn btn-danger col-md-2" href="javascript:void(0);" data-toggle="modal" data-target="#DeleteModal">
+                    Delete
+                </a>
+
+            </div>
+        </form>
+        <!-- Modal Logout -->
+        <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabelLogout">Deleting User: @Model.User.Name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                        <a asp-action="Delete" asp-route-Id="@Model.User.UserId" asp-controller="User" class="btn btn-primary">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
