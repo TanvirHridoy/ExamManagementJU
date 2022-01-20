@@ -62,7 +62,7 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Create( UserCreateForm user = null,string message="")
         {
-            if (menu.OPAdd != false) { return RedirectToAction("Index", "User"); }
+            if (menu.OPAdd == false) { return RedirectToAction("Index", "User"); }
             UserCreateModel model = new UserCreateModel();
             model.ListDesignations = await _Db.PrmDesignations.ToListAsync();
             model.ListSection = await _Db.Sections.ToListAsync();

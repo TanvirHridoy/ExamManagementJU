@@ -1,0 +1,269 @@
+﻿@model CertificationMS.ContextModels.formViewModel
+@{
+    ViewData["Title"] = "Home Page ";
+}
+<main id="main">
+
+
+    @*<img src="/Home/RetriveImage/3" alt="" height=100 width=200 />*@
+    <!-- ======= Skills Section ======= -->
+    <section id="skills" class="skills  ">
+        <div class="container border" style="background-color: #F6F9FE; " data-aos="fade-up">
+
+            <div class=" skills-content frm_content ">
+                <div class="text-center mt-4">
+                    <div class="offset-md-1"><h3 style="color: #106EEA;">Requision Form for Accadamic Credential</h3></div>
+                    <div class="offset-md-1"><h6>Transcript & Provisional/Main Certificate Of NUB</h6></div>
+                </div>
+
+
+                <form method="post"
+                      enctype="multipart/form-data"
+                      asp-action="ApplyForCertificate"
+                      asp-controller="Home"
+                      asp-route-Data="@Model.Application">
+
+
+                    <div class="col-3 float-right">
+                        <div class="custom-file mt-5">
+
+                            <input type="file" class="custom-file-input" asp-for="@Model.Application.ExtraOne" name="ImageData" id="ImageData">
+                            <label class="custom-file-label" for="customFile">Choose Photo</label>
+                            <output id="list"></output>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div>
+                        <div class="form-group row border-danger">
+                            <label for="Name" class="col-sm-4 col-form-label">Name Of The Student</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" asp-for="@Model.Application.StudentName" id="Name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="StudentID" style="margin-left:15px;" class="col-sm-2 col-form-label">Id Full Form</label>
+                        <div class="col-sm-5 " style="margin-left:86px;">
+                            <input type="text" class="form-control" asp-for="@Model.Application.StudentId" id="StudentID">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6 row">
+                            <label for="ProgramID" style="margin-left:15px;" class="col-sm-2 col-form-label">Program</label>
+                            <div class="col-sm-9">
+
+                                @*   @Html.DropDownListFor(m => m.DeptName, (SelectList)ViewBag.deplist, "Select", htmlAttributes: new { @class = "form-control" })*@
+
+                                <select style="margin-left:88px;" asp-for="@Model.Application.ProgramId" class="form-control  col-sm-10" id="ProgramID">
+                                    @foreach (var item in Model.programLst)
+                                    {
+                                        <option value="@item.Id">@item.ProgramName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="ml-4">Did You Change Any Campus?</div>
+                                <div class="offset-md-1">
+                                    <div class="form-check form-check-inline yes">
+                                        <input class="form-check-input" type="radio" asp-for="@Model.Application.ChangeNubCampus" name="inlineRadioOptions" id="inlineRadio1" value="true">
+                                        <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline no ">
+                                        <input class="form-check-input" type="radio" checked asp-for="@Model.Application.ChangeNubCampus" name="inlineRadioOptions" id="inlineRadio2" value="false">
+                                        <label class="form-check-label" for="inlineRadio2">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+
+                        <br />
+                        <div class="d-none invigible">
+                            <div>
+                                <div class="row" style="margin-left:1rem;">
+                                    <div>
+                                        <p>(If Yes,Then)</p>
+                                    </div>
+                                    <div class="col">
+                                        <select style="margin-left:78px;" asp-for="@Model.Application.FromNubCampus" class="form-control col-sm-6" id="FromCampusID">
+                                            <option value="null">Select one</option>
+                                            @foreach (var item in Model.CampusLst)
+                                            {
+                                                <option value="@item.Id">@item.CampusName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div>Campus To</div>
+                                    <div class="col">
+                                        <select style="margin-left:78px;" asp-for="@Model.Application.ToNubCampus" class="form-control col-sm-6" id="ToCampusID">
+                                            <option value="null">Select one</option>
+                                            @foreach (var item in Model.CampusLst)
+                                            {
+                                                <option value="@item.Id">@item.CampusName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col-md-6 row">
+                                <div style="margin-left:15px;" class="col-md-5">StudentShip Information</div>
+                                <select class="form-control col-md-6" id="StudentType" required asp-for="@Model.Application.StudentType">
+
+                                    @foreach (var item in Model.StudentTypeLst)
+                                    {
+                                        <option value="@item.Id">@item.Type</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6 row">
+                                <label for="staticEmail" class="col-sm-4 col-form-label">Major Subject</label>
+                                <div class="col-sm-7">
+                                    <select asp-for="@Model.Application.MajorSubject" class="form-control col-sm-6" id="MajorSubject">
+                                        @foreach (var item in Model.deptLst)
+                                        {
+                                            <option value="@item.Id">@item.DeptSname</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <div class="form-group row">
+                                <div class="col-md-3" style="margin-left:1rem;">
+                                    <label for="staticEmail" class="col-form-label">Latest Contact Address</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea type="text" class="form-control" rows="3" placeholder="Please Enter Your Address" asp-for="@Model.Application.Address" id="Address"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6 row">
+                                    <label for="staticEmail" style="margin-left:1rem;" class="col-sm-5 col-form-label">Lestest Phone Number</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" placeholder="Enter Your Phone No" asp-for="@Model.Application.PhoneNo" class="form-control" id="PhoneNo">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 row">
+                                    <label for="email" class="col-sm-4 col-form-label">Email Address</label>
+                                    <div class="col-sm-7">
+                                       <input  type="email" asp-for="@Model.Application.ExtraThree" class="form-control" placeholder="Enter Email Address" id="email"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" " style="background-color: #F6F9FE;">
+                        <div class="card-header">
+                            <h6 class="text-center">NB:Requirements for certificate:All Previous certificate money reciet and photo,provitional certificate is 1000tk(15working days),1500tk(7working days),2000tk(03working day).You Have To surrender Your Id Card</h6>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title text-primary">Before Collecting The Main Certificate</h4>
+
+                            <p class="card-text">1.You Have To Surrender The Provisional Certificate(If Taken Erlier)</p>
+                            <div class="row">
+                                <div style="margin-left:17px;">2.Did You Register yourself for Covocation?</div>
+                                <div class=" offset-md-1">
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" asp-for="@Model.Application.RegisteredConv" type="checkbox" id="ConvRegYes" >
+                                        <label class="form-check-label" for="inlineCheckbox1">Yes</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                <div class="row">
+                                    <label for="Conv" class="col-md-4"> 3.Mention The Convocation Number </label>
+                                    <select style="margin-left:78px;" asp-for="@Model.Application.ConvocationId" disabled required class="form-control col-md-2" id="Conv">
+                                        @foreach (var item in Model.convLst)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </p>
+                            <p class="card-text">
+                                <div class="row">
+                                    <label for="Conv" class="col-md-8">4.If you haven't Registered For Convocation!!!Submit Money Receipt(fee of main certificate)</label>
+                                    <input type="text" class="form-control col-md-3"  asp-for="@Model.Application.ExtraTwo" id="MoneyRecipt" placeholder="Money Receipt No">
+                                </div>
+                                
+                                
+                            </p>
+                            <p class="card-text">5.You Have To Submit the Clearence Of Convocation Costume </p>
+                            <p class="card-text">6.Registration Fee of Convoction will Detarmined by The Authority From Time To Time  </p>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary offset-md-5 mb-5">Submit</button>
+                    <button type="reset" class="btn btn-outline-primary  mb-5">Reset</button>
+                </form>
+            </div>
+        </div>
+    </section><!-- End Skills Section -->
+
+</main>
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $("#ConvRegYes").change(function () {
+            if (this.checked) {
+                $("#MoneyRecipt").prop('disabled', true);
+                $("#Conv").prop('disabled', false);
+
+
+            } else {
+                $("#MoneyRecipt").prop('disabled', false);
+                $("#Conv").prop('disabled', true);
+            }
+        });
+
+      
+
+            $("#inlineRadio1").on("click", function () {
+                    if ($("#inlineRadio1").is(":checked")) {
+                         $(".invigible").removeClass("d-none");
+                    }
+            })
+
+            $("#inlineRadio2").on("click", function () {
+                    if ($("#inlineRadio2").is(":checked")) {
+                         $(".invigible").addClass("d-none");
+                    }
+            })
+
+
+    </script>
+    <script>
+        function handleFileSelect(evt) {
+            var files = evt.target.files; // FileList object
+
+            // files is a FileList of File objects. List some properties.
+            var output = [];
+            for (var i = 0, f; f = files[i]; i++) {
+                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes',
+                    '</li>');
+            }
+            document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+
+        document.getElementById('ImageData').addEventListener('change', handleFileSelect, false);
+    </script>
+}

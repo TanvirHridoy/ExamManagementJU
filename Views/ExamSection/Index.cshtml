@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Exam Section";
+    var Bold = "";
 }
 @section StyleSheet{
     <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -55,11 +56,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
-                        @foreach (var item in Model.Applications)
+
+                        @foreach (var item in Model.Applications.OrderByDescending(e => e.AppStatus == "Pending"))
                         {
-                            
-                            <tr>
+                            if (item.AppStatus == "Pending")
+                            {
+                                Bold = "RowStrong";
+                            }
+                            else { Bold = ""; }
+
+                            <tr class="@Bold">
                                 <td>@item.Id</td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.StudentId)
@@ -99,7 +105,11 @@
     <script>
         $(document).ready(function () {
            // $('#dataTable').DataTable(); // ID From dataTable
-            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+            $('#dataTableHover').DataTable(
+                {
+                    "ordering": false
+                }
+            );
         });
     </script>
 }
