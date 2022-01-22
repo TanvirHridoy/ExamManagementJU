@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "User Group";
+    var Groups = Model.GroupList.Select(e => new { GroupId = e.GroupId, GroupName = e.GroupName, Description = e.Description }).Distinct().ToList();
 }
 <div class="page-body">
     <div class="row">
@@ -36,7 +37,7 @@
                         <th>
                             Group Description
                         </th>
-                        <th>Role Name</th>
+                        @*<th>Role Name</th>*@
                         <th>
                             Edit
                         </th>
@@ -45,7 +46,7 @@
                 <tbody>
                     @{ int i = 1;}
                     @{
-                        foreach (var item in Model.GroupList)
+                        foreach (var item in Groups)
                         {
                             <tr>
                                 <td>
@@ -57,9 +58,9 @@
                                 <td>
                                     @item.Description
                                 </td>
-                                <td>
+                                @*<td>
                                     @item.RoleName
-                                </td>
+                                </td>*@
                                 <td>
                                     <a asp-action="Edit" asp-controller="UserGroup" asp-route-grp_id="@item.GroupId">
                                         @*btnUserGroupEdit*@
