@@ -180,7 +180,7 @@ namespace CertificationMS.Controllers
             tblUser.Name = User.Name;
             tblUser.Photo = User.Photo==null?tblUser.Photo:User.Photo;
             tblUser.SectionId = User.SectionId;
-            tblUser.Status = true;
+            tblUser.Status = User.Status;
             tblUser.UpdatedBy = "";
             tblUser.Phone = User.Phone;
             tblUser.NeverExperied = false;

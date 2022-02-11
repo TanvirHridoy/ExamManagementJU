@@ -96,6 +96,28 @@
                 <span asp-validation-for="User.GroupId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="User.Status" class="control-label">Active Status</label>
+                <select asp-for="User.Status" required class="form-control" id="UserGroup">
+                    @{
+                        if (Model.User.Status == true)
+                        {
+                            <option value="true" selected>Active</option>
+                            <option value="False">InActive</option>
+                        }
+                        else
+                        {
+                            <option value="true" >Active</option>
+                            <option value="False" selected>InActive</option>
+                        }
+                    }
+
+
+
+
+                </select>
+                <span asp-validation-for="User.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="User.Comment" class="control-label"></label>
                 <input asp-for="User.Comment" class="form-control" />
                 <span asp-validation-for="User.Comment" class="text-danger"></span>

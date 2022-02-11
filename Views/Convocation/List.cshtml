@@ -47,7 +47,7 @@
                             <th>Name</th>
                             <th>Year</th>
                             <th>Program Date</th>
-                            <th>Status</th>
+                            @*<th>Status</th>*@
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -66,11 +66,12 @@
                                 @Html.DisplayFor(modelItem => item.Year)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.ProgramDate)
+
+                                @item.ProgramDate.ToShortDateString()
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.Status)
-                            </td>
+                            </td>*@
                             <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
                             <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 

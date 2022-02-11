@@ -57,7 +57,11 @@
                 {
                     var Menus = LoginResp.EmpMenuList.OrderBy(e => e.SerialNo).ToList();
                     var Menugroup = Menus.Where(e => e.ParentMenuId == 0).ToList();
+
                     foreach (var item in Menugroup)
+                    {
+                        var submenus1 = Menus.Where(e => e.ParentMenuId == item.MenuId).ToList();
+                    if (submenus1.Count > 0)
                     {
                         <li class="nav-item">
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#@item.MenuName"
@@ -78,6 +82,8 @@
                                 </div>
                             </div>
                         </li>
+                    }
+                        
                     }
 
                 }

@@ -68,16 +68,17 @@ namespace CertificationMS.Controllers
 
         // GET: DeptSectionController/Create
         [HttpPost]
-        public async Task<ActionResult> Approve(int id)
+        public async Task<ActionResult> Approve(CertApplication Application)
         {
             if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             MailHelper mail = new MailHelper(_config);
-            var application = await _Db.CertApplications.FindAsync(id);
+            var application = await _Db.CertApplications.FindAsync(Application.Id);
             try
             {
                 application.ApprovedByExam = HttpContext.Session.GetUserId("User");
                 application.ApvStatusExam = 2;
                 application.ApvExamDate = DateTime.Now;
+                application.DeliveryDate = Application.DeliveryDate;
                 await _Db.SaveChangesAsync();
                 mail.SendEmail("kmhridoynub@gmail.com", "Delivery Notice", "Please come and Take your Certificate at:", application.StudentId);
                 return RedirectToAction("Index", "ExamSection", new Status { MessageText = "Successfully Approved " + application.StudentName + "'s application" });
