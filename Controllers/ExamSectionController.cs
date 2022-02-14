@@ -17,7 +17,7 @@ namespace CertificationMS.Controllers
         public readonly CertificateMSV2Context _Db;
         public IConfiguration _config;
         private EmpMenus menu = new EmpMenus();
-        public ExamSectionController(CertificateMSV2Context Db, IConfiguration configuration,IHttpContextAccessor HttpContext)
+        public ExamSectionController(CertificateMSV2Context Db, IConfiguration configuration, IHttpContextAccessor HttpContext)
         {
             _Db = Db;
             menu = HttpContext.HttpContext.Session.GetMenu("User", "ExamSection");
@@ -26,8 +26,8 @@ namespace CertificationMS.Controllers
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
-          
-            if (menu==null) { return RedirectToAction("LogOut", "Login"); }
+
+            if (menu == null) { return RedirectToAction("LogOut", "Login"); }
             AccSectionViewModel viewModel = new AccSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
             viewModel.studentTypes = await _Db.StudentTypes.ToListAsync();
@@ -53,8 +53,8 @@ namespace CertificationMS.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-           
-            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
+
+            if (menu.OPEdit == false) { return RedirectToAction("LogOut", "Login"); }
             ApplicationDetailsViewModel viewModel = new ApplicationDetailsViewModel();
             viewModel.Application = await _Db.CertApplications.SingleAsync(e => e.Id == id);
             viewModel.ApvStatusLst = await _Db.ApvStatuses.ToListAsync();
@@ -70,7 +70,7 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Approve(CertApplication Application)
         {
-            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
+            if (menu.OPEdit == false) { return RedirectToAction("LogOut", "Login"); }
             MailHelper mail = new MailHelper(_config);
             var application = await _Db.CertApplications.FindAsync(Application.Id);
             try
@@ -92,8 +92,8 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Reject(int id)
         {
-   
-            if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
+
+            if (menu.OPEdit == false) { return RedirectToAction("LogOut", "Login"); }
             var application = await _Db.CertApplications.FindAsync(id);
             try
             {
