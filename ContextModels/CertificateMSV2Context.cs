@@ -25,6 +25,7 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<PrmDesignation> PrmDesignations { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
+        public virtual DbSet<StudentInfo> StudentInfos { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
         public virtual DbSet<TblGroup> TblGroups { get; set; }
         public virtual DbSet<TblGroupInRole> TblGroupInRoles { get; set; }
@@ -33,8 +34,6 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<TblModule> TblModules { get; set; }
         public virtual DbSet<TblRole> TblRoles { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
-
-     
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,7 +47,11 @@ namespace CertificationMS.ContextModels
                     .HasColumnType("decimal(18, 2)")
                     .HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.Hsc).HasColumnName("HSC");
+
                 entity.Property(e => e.IsDelivered).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Ssc).HasColumnName("SSC");
 
                 entity.Property(e => e.TotalPaid).HasColumnType("decimal(18, 2)");
 
@@ -82,6 +85,18 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.SectionName)
                     .HasMaxLength(200)
                     .HasDefaultValueSql("(' ')");
+            });
+
+            modelBuilder.Entity<StudentInfo>(entity =>
+            {
+                entity.ToTable("StudentInfo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.StudentId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("StudentID");
             });
 
             modelBuilder.Entity<TblGroup>(entity =>

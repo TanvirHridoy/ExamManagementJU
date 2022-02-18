@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -8,10 +9,14 @@ namespace CertificationMS.ContextModels
     public partial class CertApplication
     {
         public int Id { get; set; }
+        [Required]
         public string StudentName { get; set; }
+        [Required]
         public string StudentId { get; set; }
+        [Required]
         public int ProgramId { get; set; }
         public bool ChangeNubCampus { get; set; }
+
         public int? FromNubCampus { get; set; }
         public int? ToNubCampus { get; set; }
         public int StudentType { get; set; }
@@ -42,6 +47,8 @@ namespace CertificationMS.ContextModels
         public string ExtraTwo { get; set; }
         public string ExtraThree { get; set; }
         public string ExtraFour { get; set; }
+        public byte[] Ssc { get; set; }
+        public byte[] Hsc { get; set; }
         public decimal? TotalPayable { get; set; }
         public decimal? FeeForCertificate { get; set; }
         public decimal? TotalPaid { get; set; }

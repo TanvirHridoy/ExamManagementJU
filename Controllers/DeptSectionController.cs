@@ -105,7 +105,7 @@ namespace CertificationMS.Controllers
                     application.ApvStatusDept = 2;
                     application.ApvDeptDate = DateTime.Now;
                     await _Db.SaveChangesAsync();
-                    mail.SendEmail("kmhridoynub@gmail.com","Accounts dept","Certificate Application Came",application.StudentId);
+                    mail.SendEmailToDept("ACC", application.StudentId.ToString());
                     return RedirectToAction("Index", "DeptSection", new {id=application.MajorSubject, message= new Status { MessageText = "Successfully Approved " + application.StudentName + "'s application" } });
                 }
                 catch(Exception ex)
@@ -117,7 +117,7 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<ActionResult> Reject(int id)
         {
-
+            MailHelper mail = new MailHelper(_config);
             if (menu.OPEdit==false) { return RedirectToAction("LogOut", "Login"); }
             var application = await _Db.CertApplications.FindAsync(id);
             try
@@ -126,7 +126,7 @@ namespace CertificationMS.Controllers
                 application.ApvStatusDept = 3;
                 application.ApvDeptDate = DateTime.Now;
                 await _Db.SaveChangesAsync();
-               
+                mail.SendEmailRejection(application.ExtraThree, "Department", application.Id.ToString());
                 return RedirectToAction("Index", "DeptSection",new {id=application.MajorSubject,messsage = new Status { MessageText = "Successfully Rejected " + application.StudentName + "'s application" } });
             }
             catch (Exception ex)

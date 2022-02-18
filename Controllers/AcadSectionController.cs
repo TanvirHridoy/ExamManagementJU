@@ -27,7 +27,6 @@ namespace CertificationMS.Controllers
         // GET: AccountsSectionController
         public async Task<ActionResult> Index(Status message = null)
         {
-          
             if (menu==null) { return RedirectToAction("LogOut", "Login"); }
             AccSectionViewModel viewModel = new AccSectionViewModel();
             viewModel.departments = await _Db.Departments.ToListAsync();
@@ -85,7 +84,7 @@ namespace CertificationMS.Controllers
                     application.ApvStatusAcad = 2;
                     application.ApvAcaddate = DateTime.Now;
                     await _Db.SaveChangesAsync();
-                    mail.SendEmail("kmhridoynub@gmail.com", "Exam Section", "Certificate Application Came", application.StudentId);
+                     mail.SendEmailToDept("EXAM", application.StudentId.ToString());
                     return RedirectToAction("Index", "AcadSection", new Status { MessageText = "Successfully Approved " + application.StudentName + "'s application" });
                 }
                 catch (Exception ex)
@@ -111,7 +110,8 @@ namespace CertificationMS.Controllers
                     application.ApvStatusAcad = 3;
                     application.ApvAcaddate = DateTime.Now;
                     await _Db.SaveChangesAsync();
-
+                    MailHelper mail = new MailHelper(_config);
+                    mail.SendEmailRejection(application.ExtraThree, "Academic", application.Id.ToString());
                     return RedirectToAction("Index", "AcadSection", new Status { MessageText = "Successfully Rejected " + application.StudentName + "'s application" });
                 }
                 catch (Exception ex)

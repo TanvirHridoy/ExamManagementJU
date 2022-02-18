@@ -1,8 +1,10 @@
 ﻿using CertificationMS.ContextModels;
 using CertificationMS.Models;
+using CertificationMS.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,9 +17,11 @@ namespace CertificationMS.Controllers
     public class HomeController : Controller
     {
         public readonly CertificateMSV2Context _Db;
-        public HomeController(CertificateMSV2Context Db)
+        public IConfiguration _config;
+        public HomeController(CertificateMSV2Context Db , IConfiguration configuration)
         {
             _Db = Db;
+            _config = configuration;
         }
 
         public IActionResult Test()
@@ -41,7 +45,7 @@ namespace CertificationMS.Controllers
             TrackingViewModel viewModel = new TrackingViewModel();
             if (cert != null)
             {
-                
+
                 viewModel.TrackId = cert.Id.ToString();
                 viewModel.ApvStatusDept = statuses.Where(f => f.Id == cert.ApvStatusDept).Select(i => i.Name).SingleOrDefault();
                 viewModel.ApvStatusAcad = statuses.Where(f => f.Id == cert.ApvStatusAcad).Select(i => i.Name).SingleOrDefault();
@@ -49,13 +53,13 @@ namespace CertificationMS.Controllers
                 viewModel.ApvStatusLib = statuses.Where(f => f.Id == cert.ApvStatusLib).Select(i => i.Name).SingleOrDefault();
                 viewModel.ApvStatusExam = statuses.Where(f => f.Id == cert.ApvStatusExam).Select(i => i.Name).SingleOrDefault();
                 viewModel.ApplyDate = cert.ApplyDate.ToString("dd-MMM-yyyy");
-                viewModel.ApvAcadDate = cert.ApvAcaddate==null?"---":cert.ApvAcaddate?.ToString("dd-MMM-yyyy");
+                viewModel.ApvAcadDate = cert.ApvAcaddate == null ? "---" : cert.ApvAcaddate?.ToString("dd-MMM-yyyy");
                 viewModel.ApvAccDate = cert.ApvAccDate == null ? "---" : cert.ApvAccDate?.ToString("dd-MMM-yyyy");
                 viewModel.ApvDeptDate = cert.ApvDeptDate == null ? "---" : cert.ApvDeptDate?.ToString("dd-MMM-yyyy");
                 viewModel.ApvExamDate = cert.ApvExamDate == null ? "---" : cert.ApvExamDate?.ToString("dd-MMM-yyyy");
                 viewModel.ApvLibDate = cert.ApvLibDate == null ? "---" : cert.ApvLibDate?.ToString("dd-MMM-yyyy");
                 viewModel.DeliveryDate = cert.DeliveryDate == null ? "---" : cert.DeliveryDate?.ToString("dd-MMM-yyyy");
-              
+
             }
             return Json(viewModel);
         }
@@ -70,13 +74,12 @@ namespace CertificationMS.Controllers
                 viewModel.deptLst = await _Db.Departments.ToListAsync();
                 viewModel.programLst = await _Db.Programs.ToListAsync();
                 viewModel.StudentTypeLst = await _Db.StudentTypes.ToListAsync();
+                viewModel.LstStudents = await _Db.StudentInfos.ToListAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var r = ex.Message;
             }
-           
-            
             return View(viewModel);
         }
 
@@ -91,10 +94,17 @@ namespace CertificationMS.Controllers
             return s;
         }
         [HttpPost]
-        public IActionResult ApplyForCertificate(CertApplication application)
+        public  IActionResult ApplyForCertificate(CertApplication application)
         {
+
+            if (application.StudentId == "0")
+            {
+                return RedirectToAction(nameof(Index));
+            }
             CertApplication app = application;
             var file = Request.Form.Files["ImageData"];
+            var ssc = Request.Form.Files["SSC"];
+            var hsc = Request.Form.Files["HSC"];
             if (file != null)
             {
                 if (file.Length > 0)
@@ -102,14 +112,28 @@ namespace CertificationMS.Controllers
                     app.ExtraOne = ConvertToBytes(file);
                 }
             }
+            if (ssc != null)
+            {
+                if (file.Length > 0)
+                {
+                    app.Ssc = ConvertToBytes(ssc);
+                }
+            }
+            if (hsc != null)
+            {
+                if (file.Length > 0)
+                {
+                    app.Hsc = ConvertToBytes(hsc);
+                }
+            }
 
             app.ApplyDate = DateTime.Now;
-            if(app.FromNubCampus!=null && app.ToNubCampus != null)
+            if (app.FromNubCampus != null && app.ToNubCampus != null)
             {
                 app.ChangeNubCampus = true;
             }
-            
-            
+
+
             app.ApvStatusDept = 1;
             app.ApvStatusAcad = 1;
             app.ApvStatusAcc = 1;
@@ -124,9 +148,30 @@ namespace CertificationMS.Controllers
             {
                 var msg = ex.Message;
             }
-            var TrackingId = _Db.CertApplications.Where(e=>e.StudentId==app.StudentId && e.ProgramId==app.ProgramId && e.StudentName==app.StudentName).OrderBy(e=>e.ApplyDate).LastOrDefault();
+
+            var TrackingId = _Db.CertApplications.Where(e => e.StudentId == app.StudentId && e.ProgramId == app.ProgramId && e.StudentName == app.StudentName).OrderBy(e => e.ApplyDate).LastOrDefault();
+            var deptshortcode =  _Db.Departments.SingleOrDefault(e=>e.Id==TrackingId.MajorSubject).DeptSname;
+            MailHelper mail = new MailHelper(_config);
+            mail.SendEmailToDept(deptshortcode, TrackingId.StudentId.ToString());
             return RedirectToAction("ShowTracking", new Message { TrackingID = TrackingId.Id.ToString() });
         }
+
+        public async Task<ActionResult> GetSSC(int ID)
+        {
+            var cert = await _Db.CertApplications.SingleAsync(e => e.Id == ID);
+            var file = cert.Ssc;
+            byte[] Image = file;
+            return File(Image, "application/pdf");
+        }
+
+        public async Task<ActionResult> GetHSC(int ID)
+        {
+            var cert = await _Db.CertApplications.SingleAsync(e => e.Id == ID);
+            var file = cert.Hsc;
+            byte[] Image = file;
+            return File(Image, "application/pdf");
+        }
+
 
         public async Task<ActionResult> RetriveImage(int ID)
         {

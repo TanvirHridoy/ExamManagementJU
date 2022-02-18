@@ -43,6 +43,18 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-6 row">
+            <label class="col-md-4 ml-1">SSC Certificate:</label>
+            <a href="/Home/GetSSC/@Model.Application.Id" class="col-md-3" target="_blank" style="text-decoration:none"><p>Click Here</p></a>
+
+        </div>
+        <div class="col-md-6 row ml-1">
+            <label class="col-md-6 ml-1 ">HSC/Diploma Certificate:</label>
+            <a href="/Home/GetHSC/@Model.Application.Id" class="col-md-3" target="_blank" style="text-decoration:none"><p>Click Here</p></a>
+        </div>
+
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <label style="color:darkgreen;" for="StudentName" class="col-form-label darkgreenlbl">Student Name:</label>
             <input type="text" disabled class="form-control" asp-for="Application.StudentName" id="StudentName" />

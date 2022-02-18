@@ -93,7 +93,7 @@ namespace CertificationMS.Controllers
                 application.ApvStatusAcc = 2;
                 application.ApvAccDate = DateTime.Now;
                 await _Db.SaveChangesAsync();
-                mail.SendEmail("kmhridoynub@gmail.com", "Library Section", "Certificate Application Came", application.StudentId);
+                mail.SendEmailToDept("LIBRARY", application.StudentId.ToString());
                 return RedirectToAction("Index","AccSection", new Status { MessageText = "Successfully Approved " + application.StudentName + "'s application" });
             }
             catch (Exception ex)
@@ -121,7 +121,8 @@ namespace CertificationMS.Controllers
                 application.ApvStatusAcc = 3;
                 application.ApvAccDate = DateTime.Now;
                 await _Db.SaveChangesAsync();
-
+                MailHelper mail = new MailHelper(_config);
+                mail.SendEmailRejection(application.ExtraThree, "Accounts", application.Id.ToString());
                 return RedirectToAction("Index", "AccSection", new Status { MessageText = "Successfully Rejected " + application.StudentName + "'s application" });
             }
             catch (Exception ex)

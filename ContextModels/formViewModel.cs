@@ -16,7 +16,7 @@ namespace CertificationMS.ContextModels
         public int ProgramID { get; set; }
         public CertApplication Application { get; set; }
 
-
+        public List<StudentInfo> LstStudents = new List<StudentInfo>();
         public List<Department> deptLst = new List<Department>();
         public List<Campus> CampusLst = new List<Campus>();
         public List<Convocation> convLst = new List<Convocation>();

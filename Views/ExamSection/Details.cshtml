@@ -30,7 +30,7 @@
 }
 <form method="post" >
     <div class="container-fluid">
-        @Html.HiddenFor(M=>M.Application.Id)
+        @Html.HiddenFor(M => M.Application.Id)
         <div class="row">
             <div class="col-md-12" style="text-align:center;">
                 <img src="/Home/RetriveImage/@Model.Application.Id" alt="@Model.Application.StudentName" style="height: 125px; width: 100px; text-align:center;">
@@ -41,6 +41,18 @@
                 <p style="color:darkgreen">Applied On: @Model.Application.ApplyDate.ToString("dd-MMM-yyyy") </p>
                 <input asp-for="Application.ApplyDate" hidden />
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 row">
+                <label class="col-md-4 ml-1">SSC Certificate:</label>
+                <a href="/Home/GetSSC/@Model.Application.Id" class="col-md-3" target="_blank" style="text-decoration:none"><p>Click Here</p></a>
+
+            </div>
+            <div class="col-md-6 row ml-1">
+                <label class="col-md-6 ml-1 ">HSC/Diploma Certificate:</label>
+                <a href="/Home/GetHSC/@Model.Application.Id" class="col-md-3" target="_blank" style="text-decoration:none"><p>Click Here</p></a>
+            </div>
+
         </div>
         <div class="row">
             <div class="col-md-6">

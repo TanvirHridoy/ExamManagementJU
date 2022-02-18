@@ -1,6 +1,6 @@
 ﻿@model CertificationMS.ContextModels.formViewModel
 @{
-    ViewData["Title"] = "Home Page ";
+    ViewData["Title"] = "Home";
 }
 <main id="main">
 
@@ -29,7 +29,7 @@
                                 <div class="form-group row border-danger">
                                     <label for="Name" class="col-sm-4 col-form-label">Name Of The Student :</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" asp-for="@Model.Application.StudentName" id="Name">
+                                        <input type="text" class="form-control" required asp-for="@Model.Application.StudentName" id="Name">
                                     </div>
                                 </div>
                             </div>
@@ -37,9 +37,10 @@
                         <div class="col-sm-5">
                             <div class=" float-left">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" asp-for="@Model.Application.ExtraOne" name="ImageData" id="ImageData">
+                                    <input type="file" required class="custom-file-input" asp-for="@Model.Application.ExtraOne" name="ImageData" id="ImageData">
                                     <label class="custom-file-label" for="customFile">Choose Photo</label>
                                     <output id="list"></output>
+                                 
                                 </div>
                             </div>
                         </div>
@@ -50,7 +51,16 @@
                                 <div class="form-group row border-danger">
                                     <label for="StudentID" class="col-sm-4 col-form-label">ID Full Form :</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" asp-for="@Model.Application.StudentId" id="Id">
+                                        <select class="form-control select-single" required asp-for="@Model.Application.StudentId" id="Id">
+                                            <option value="0">Select One</option>
+                                            @{ foreach (var item in Model.LstStudents)
+                                                {
+                                                    <option value="@item.StudentId">@item.StudentId</option>
+                                                }
+
+                                            }
+
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +75,7 @@
                                 <div class="form-group row border-danger">
                                     <label for="ProgramID" class="col-sm-4 col-form-label">Program :</label>
                                     <div class="col-sm-8">
-                                        <select asp-for="@Model.Application.ProgramId" class="form-control  col-sm-12" id="ProgramID">
+                                        <select asp-for="@Model.Application.ProgramId" class="form-control select-single col-sm-12" id="ProgramID">
                                             @foreach (var item in Model.programLst)
                                             {
                                                 <option value="@item.Id">@item.ProgramName</option>
@@ -96,7 +106,7 @@
                             <div class="form-group row border-danger">
                                 <label class="col-sm-4 col-form-label"> (If Yes,Then) :</label>
                                 <div class="col-sm-8">
-                                    <select asp-for="@Model.Application.FromNubCampus" class="form-control col-sm-12" id="FromCampusID">
+                                    <select asp-for="@Model.Application.FromNubCampus" class="form-control select-single col-sm-12" id="FromCampusID">
                                         <option value="null">Select one</option>
                                         @foreach (var item in Model.CampusLst)
                                         {
@@ -110,7 +120,7 @@
                             <div class="form-group row border-danger">
                                 <label class="col-sm-4 col-form-label"> Campus To </label>
                                 <div class="col-sm-8">
-                                    <select asp-for="@Model.Application.ToNubCampus" class="form-control col-sm-10" id="ToCampusID">
+                                    <select asp-for="@Model.Application.ToNubCampus" class="form-control select-single col-sm-10" id="ToCampusID">
                                         <option value="null">Select one</option>
                                         @foreach (var item in Model.CampusLst)
                                         {
@@ -125,9 +135,9 @@
                         <div class="col-sm-7">
                             <div>
                                 <div class="form-group row border-danger">
-                                    <label class="col-sm-4 col-form-label">StudentShip Information</label>
+                                    <label class="col-sm-4 col-form-label">StudentShip Information:</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control col-12" id="StudentType" required asp-for="@Model.Application.StudentType">
+                                        <select class="form-control select-single col-12" id="StudentType" required asp-for="@Model.Application.StudentType">
 
                                             @foreach (var item in Model.StudentTypeLst)
                                             {
@@ -142,7 +152,7 @@
                             <div class="form-group row border-danger">
                                 <label for="staticEmail" class="col-sm-4 col-form-label">Major Subject : </label>
                                 <div class="col-sm-8">
-                                    <select asp-for="@Model.Application.MajorSubject" class="form-control col-sm-10" id="MajorSubject">
+                                    <select asp-for="@Model.Application.MajorSubject" class="form-control select-single col-sm-10" id="MajorSubject">
                                         @foreach (var item in Model.deptLst)
                                         {
                                             <option value="@item.Id">@item.DeptSname</option>
@@ -156,39 +166,54 @@
                     <div class="form-group row">
                         <div class="col-sm-7">
                             <div class="form-group row border-danger">
-                                <label for="staticEmail" class="col-sm-4 col-form-label p-2">Latest Contact Address</label>
-
-
+                                <label for="staticEmail" class="col-sm-4 col-form-label p-2">Latest Contact Address:</label>
                                 <div class="col-md-8">
-                                    <textarea type="text" class="form-control col-12" rows="3" placeholder="Please Enter Your Address" asp-for="@Model.Application.Address" id="Address"></textarea>
+                                    <textarea type="text" class="form-control col-12" rows="3" required placeholder="Please Enter Your Address" asp-for="@Model.Application.Address" id="Address"></textarea>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-5"></div>
+                        <div class="col-sm-5">
+                            <div class="form-group row border-danger">
+                                <label for="email" class="col-sm-4 col-form-label">SSC Certificate:</label>
+                                <div class="col-sm-8">
+                                    <input type="file" class="custom-file-input" required accept="application/pdf"  asp-for="@Model.Application.Ssc" name="SSC" id="SSC">
+                                    <label class="custom-file-label" for="customFile">Choose PDF only</label>
+                                    <output id="ssclist"></output>
+                                </div>
+                            </div>
+                            <div class="form-group row border-danger">
+                                <label for="email" class="col-sm-4 col-form-label">HSC/Diploma Certificate:</label>
+                                <div class="col-sm-8">
+                                    <input type="file" class="custom-file-input" required accept="application/pdf" asp-for="@Model.Application.Hsc" name="HSC" id="HSC">
+                                    <label class="custom-file-label" for="customFile">Choose PDF only</label>
+                                    <output id="hsclist"></output>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-7">
                             <div>
                                 <div class="form-group row border-danger">
-                                    <label for="staticEmail" class="col-sm-4 col-form-label">Lestest Phone Number</label>
+                                    <label for="staticEmail" class="col-sm-4 col-form-label">Lestest Phone Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" placeholder="Enter Your Phone No" asp-for="@Model.Application.PhoneNo" class="form-control" id="PhoneNo">
+                                        <input type="text" max="99999999999" required placeholder="Enter Your Phone No" asp-for="@Model.Application.PhoneNo" class="form-control" id="PhoneNo">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-5">
                             <div class="form-group row border-danger">
-                                <label for="email" class="col-sm-4 col-form-label">Email Address</label>
+                                <label for="email" class="col-sm-4 col-form-label">Email Address:</label>
                                 <div class="col-sm-8">
-                                    <input type="email" asp-for="@Model.Application.ExtraThree" class="form-control" placeholder="Enter Email Address" id="email" />
+                                    <input type="email" required asp-for="@Model.Application.ExtraThree" class="form-control" placeholder="Enter Email Address" id="email" />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class=" " style="background-color: #F6F9FE;">
                         <div class="card-header">
-                            <h6 class="text-center">NB: Requirements for certificate:All Previous certificate money reciet and photo,provitional certificate is 1000tk(15working days),1500tk(7working days),2000tk(03working day).You Have To surrender Your Id Card</h6>
+                            <h6 class="text-center" style="color:darkred">Requirements for certificate: <br /> All Previous certificate money receipt and photo. <br /> provitional certificate is 1000tk(15working days),1500tk(7working days),2000tk(03working day).<br />You Have To surrender Your Id Card</h6>
                         </div>
                         <div class="card-body">
                             <h4 class="card-title text-primary">Before Collecting The Main Certificate</h4>
@@ -208,7 +233,7 @@
                             <p class="card-text">
                                 <div class="row">
                                     <label for="Conv" class="col-md-4"> 3.Mention The Convocation Number </label>
-                                    <select style="margin-left:78px;" asp-for="@Model.Application.ConvocationId" disabled required class="form-control col-md-2" id="Conv">
+                                    <select style="margin-left:78px;" asp-for="@Model.Application.ConvocationId" disabled required class="form-control select-single col-md-2" id="Conv">
                                         @foreach (var item in Model.convLst)
                                         {
                                             <option value="@item.Id">@item.Name</option>
@@ -219,7 +244,7 @@
                             <p class="card-text">
                                 <div class="row">
                                     <label for="Conv" class="col-md-8">4.If you haven't Registered For Convocation!!!Submit Money Receipt(fee of main certificate)</label>
-                                    <input type="text" class="form-control col-md-3" asp-for="@Model.Application.ExtraTwo" id="MoneyRecipt" placeholder="Money Receipt No">
+                                    <input type="text" class="form-control col-md-3" asp-for="@Model.Application.ExtraTwo" id="MoneyRecipt" placeholder="Money Receipt/Bkash TrxID No">
                                 </div>
 
 
@@ -267,6 +292,22 @@
                     }
             })
 
+        $('#PhoneNo').keyup(function (e) {
+            if (/\D/g.test(this.value)) {
+                // Filter non-digits from input value.
+
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+
+        $('#PhoneNo[max]:not([max=""])').on('input', function (ev) {
+            var $this = $(this);
+            var maxlength = $this.attr('max').length;
+            var value = $this.val();
+            if (value && value.length >= maxlength) {
+                $this.val(value.substr(0, maxlength));
+            }
+        });
 
     </script>
     <script>
@@ -276,13 +317,32 @@
             // files is a FileList of File objects. List some properties.
             var output = [];
             for (var i = 0, f; f = files[i]; i++) {
-                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                    f.size, ' bytes',
-                    '</li>');
+                output.push('<li><strong>', escape(f.name), '</strong> </li>');
             }
             document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
         }
+        function handleFileSelectHSC(evt) {
+            var files = evt.target.files; // FileList object
 
+            // files is a FileList of File objects. List some properties.
+            var output = [];
+            for (var i = 0, f; f = files[i]; i++) {
+                output.push('<li><strong>', escape(f.name), '</strong> </li>');
+
+            }
+            document.getElementById('hsclist').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+        function handleFileSelectSSC(evt) {
+            var files = evt.target.files; // FileList object
+            var output = [];
+            for (var i = 0, f; f = files[i]; i++) {
+                output.push('<li><strong>', escape(f.name), '</strong> </li>');
+
+            }
+            document.getElementById('ssclist').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
         document.getElementById('ImageData').addEventListener('change', handleFileSelect, false);
+        document.getElementById('SSC').addEventListener('change', handleFileSelectSSC, false);
+        document.getElementById('HSC').addEventListener('change', handleFileSelectHSC, false);
     </script>
 }

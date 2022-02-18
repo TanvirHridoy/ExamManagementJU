@@ -23,6 +23,11 @@ namespace CertificationMS.Models
         public IEnumerable<Campus> list { get; set; }
         public string message { get; set; }
     }
+    public class StudentViewModel
+    {
+        public IEnumerable<StudentInfo> list { get; set; }
+        public string message { get; set; }
+    }
     public class ApvStatusViewModel
     {
         public IEnumerable<ApvStatus> list { get; set; }
