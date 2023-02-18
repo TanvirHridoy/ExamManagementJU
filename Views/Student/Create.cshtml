@@ -9,7 +9,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Campus</h6>
     </div>
     <div class="card-body">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             @Html.HiddenFor(m=>m.Id)
             <div class="form-group">
                 <label asp-for="StudentId" for="exampleInputEmail1">Student ID</label>

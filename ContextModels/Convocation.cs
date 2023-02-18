@@ -10,7 +10,7 @@ namespace CertificationMS.ContextModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Year { get; set; }
-        public DateTime ProgramDate { get; set; }
+        public DateTime? ProgramDate { get; set; }
         public bool? Status { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using CertificationMS.Models;
 
 #nullable disable
 
@@ -18,6 +19,7 @@ namespace CertificationMS.ContextModels
         }
 
         public virtual DbSet<ApvStatus> ApvStatuses { get; set; }
+        public virtual DbSet<BatchInfo> BatchInfos { get; set; }
         public virtual DbSet<Campus> Campuses { get; set; }
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
@@ -35,9 +37,21 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<TblRole> TblRoles { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<BatchInfo>(entity =>
+            {
+                entity.ToTable("BatchInfo");
+
+                entity.Property(e => e.BatchNo).HasMaxLength(50);
+            });
 
             modelBuilder.Entity<CertApplication>(entity =>
             {
@@ -93,10 +107,24 @@ namespace CertificationMS.ContextModels
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.FileName).HasMaxLength(250);
+
+                entity.Property(e => e.Name).HasMaxLength(250);
+
                 entity.Property(e => e.StudentId)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("StudentID");
+
+                entity.HasOne(d => d.Batch)
+                    .WithMany(p => p.StudentInfos)
+                    .HasForeignKey(d => d.BatchId)
+                    .HasConstraintName("FK_StudentInfo_BatchInfo");
+
+                entity.HasOne(d => d.Program)
+                    .WithMany(p => p.StudentInfos)
+                    .HasForeignKey(d => d.ProgramId)
+                    .HasConstraintName("FK_StudentInfo_Programs");
             });
 
             modelBuilder.Entity<TblGroup>(entity =>
@@ -287,5 +315,7 @@ namespace CertificationMS.ContextModels
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<CertificationMS.Models.StudentVm> StudentVm { get; set; }
     }
 }
