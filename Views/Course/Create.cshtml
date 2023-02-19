@@ -1,0 +1,36 @@
+﻿@model CertificationMS.ContextModels.TblCourse
+
+@{
+    ViewData["Title"] = "Add Teacher";
+}
+
+<div class="card mb-4 col-md-6">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Campus</h6>
+    </div>
+    <div class="card-body">
+        <form asp-action="Create" enctype="multipart/form-data">
+            @Html.HiddenFor(m => m.CourseId)
+            <div class="form-group">
+                <label asp-for="CourseName" for="exampleInputEmail1">Course name</label>
+                <input asp-for="CourseName" required placeholder="Enter Course Name" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="CourseName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseCode" for="exampleInputEmail1">Course Code </label>
+                <input asp-for="CourseCode" required placeholder="Enter Course Code" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="CourseCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" asp-action="Create" value="ADD" class="btn btn-primary" />
+            </div>
+        </form>
+        <div class="card-footer text-muted">
+            <div>
+                <a asp-action="List">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

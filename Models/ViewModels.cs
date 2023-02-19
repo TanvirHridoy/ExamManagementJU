@@ -43,6 +43,7 @@ namespace CertificationMS.Models
         public IEnumerable<StudentType> list { get; set; }
         public string message { get; set; }
     }
+    
     public class DeptSectionViewModel
     {
         public string message { get; set; }
@@ -61,5 +62,20 @@ namespace CertificationMS.Models
         public List<Department> departments = new List<Department>();
         public List<StudentType> studentTypes = new List<StudentType>();
         public List<ContextModels.Program> programs = new List<ContextModels.Program>();
+    }
+    public class TeacherViewModel
+    {
+        public IEnumerable<TblTeacher> list { get; set; }
+        public string message { get; set; }
+    }
+    public class SemisterViewModel
+    {
+        public IEnumerable<TblSemister> list { get; set; }
+        public string message { get; set; }
+    }
+    public class CourseViewModel
+    {
+        public IEnumerable<TblCourse> list { get; set; }
+        public string message { get; set; }
     }
 }

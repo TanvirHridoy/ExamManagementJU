@@ -32,6 +32,8 @@ namespace CertificationMS.Controllers
             var Campuslist = await _Db.StudentInfos.ToListAsync();
             model.list = Campuslist;
             model.message = message;
+
+            int x = (int)Gender.Male;
             return View(model);
         }
 

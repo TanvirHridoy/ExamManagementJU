@@ -1,0 +1,34 @@
+﻿@model CertificationMS.ContextModels.TblSemister
+
+@{
+    ViewData["Title"] = "EditCampus";
+}
+<div class="card mb-4 col-md-6">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Campus</h6>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SemisterId" />
+            <div class="form-group">
+                <label asp-for="SemisterName" for="exampleInputEmail1">Name</label>
+                <input asp-for="SemisterName" required placeholder="Enter Semister Name" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="SemisterName" class="text-danger"></span>
+
+            </div>
+            
+
+            <div class="form-group">
+
+                <input type="submit" asp-action="Edit" value="Update" class="btn btn-primary " />
+            </div>
+        </form>
+        <div class="card-footer text-muted">
+            <div>
+                <a asp-action="List">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

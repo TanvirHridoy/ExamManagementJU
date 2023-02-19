@@ -1,7 +1,7 @@
-﻿@model CertificationMS.Models.StudentViewModel
+﻿@model CertificationMS.Models.CourseViewModel
 
 @{
-    ViewData["Title"] = "Student List";
+    ViewData["Title"] = "Teacher List";
 }
 @if (!String.IsNullOrEmpty(Model.message))
 {
@@ -39,12 +39,14 @@
                     Add New <i class="fas fa-plus"></i>
                 </a>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" id="dataTableHover">
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                         <tr>
                             <th>Sl#</th>
-                            <th>Student ID</th>
+                            <th>Course Name</th>
+                            <th>Course Code</th>
+                           
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -54,15 +56,20 @@
                         @foreach (var item in Model.list)
                         {
                             sl = sl + 1;
-                            <tr>
-                                <td>@sl</td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StudentId)
-                                </td>
-                                <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
-                                <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
+                        <tr>
+                            <td>@sl</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CourseCode)
+                            </td>
 
-                            </tr>
+
+                            <td><a asp-action="Edit" asp-route-id="@item.CourseId" class="btn btn-sm btn-warning">Edit</a></td>
+                            <td><a asp-action="Delete" asp-route-id="@item.CourseId" class="btn btn-sm btn-danger">Delete</a></td>
+
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -79,9 +86,9 @@
 
     @* Page level custom scripts*@
     <script>
-        $(document).ready(function () {
-           // $('#dataTable').DataTable(); // ID From dataTable
-            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
-        });
+            //$(document).ready(function () {
+            //   // $('#dataTable').DataTable(); // ID From dataTable
+            //    $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+            //});
     </script>
 }

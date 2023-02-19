@@ -1,7 +1,7 @@
-﻿@model CertificationMS.Models.StudentViewModel
+﻿@model CertificationMS.Models.SemisterViewModel
 
 @{
-    ViewData["Title"] = "Student List";
+    ViewData["Title"] = "Teacher List";
 }
 @if (!String.IsNullOrEmpty(Model.message))
 {
@@ -39,12 +39,13 @@
                     Add New <i class="fas fa-plus"></i>
                 </a>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" id="dataTableHover">
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                         <tr>
                             <th>Sl#</th>
-                            <th>Student ID</th>
+                            <th>Semister Name</th>
+                           
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -57,10 +58,13 @@
                             <tr>
                                 <td>@sl</td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.StudentId)
+                                    @Html.DisplayFor(modelItem => item.SemisterName)
                                 </td>
-                                <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
-                                <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
+                                
+                               
+
+                                <td><a asp-action="Edit" asp-route-id="@item.SemisterId" class="btn btn-sm btn-warning">Edit</a></td>
+                                <td><a asp-action="Delete" asp-route-id="@item.SemisterId" class="btn btn-sm btn-danger">Delete</a></td>
 
                             </tr>
                         }
@@ -79,9 +83,9 @@
 
     @* Page level custom scripts*@
     <script>
-        $(document).ready(function () {
-           // $('#dataTable').DataTable(); // ID From dataTable
-            $('#dataTableHover').DataTable(); // ID From dataTable with Hover
-        });
+            //$(document).ready(function () {
+            //   // $('#dataTable').DataTable(); // ID From dataTable
+            //    $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+            //});
     </script>
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using CertificationMS.Models;
 
 #nullable disable
 
@@ -29,32 +28,51 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<Section> Sections { get; set; }
         public virtual DbSet<StudentInfo> StudentInfos { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
+        public virtual DbSet<TblCourse> TblCourses { get; set; }
         public virtual DbSet<TblGroup> TblGroups { get; set; }
         public virtual DbSet<TblGroupInRole> TblGroupInRoles { get; set; }
         public virtual DbSet<TblMenu> TblMenus { get; set; }
         public virtual DbSet<TblMenusInRole> TblMenusInRoles { get; set; }
         public virtual DbSet<TblModule> TblModules { get; set; }
         public virtual DbSet<TblRole> TblRoles { get; set; }
+        public virtual DbSet<TblSemister> TblSemisters { get; set; }
+        public virtual DbSet<TblTeacher> TblTeachers { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
+            if (!optionsBuilder.IsConfigured)
+            {
+
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.HasDefaultSchema("gymuser")
+                .HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+
+            modelBuilder.Entity<ApvStatus>(entity =>
+            {
+                entity.ToTable("ApvStatuses", "dbo");
+            });
 
             modelBuilder.Entity<BatchInfo>(entity =>
             {
-                entity.ToTable("BatchInfo");
+                entity.ToTable("BatchInfo", "dbo");
 
                 entity.Property(e => e.BatchNo).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Campus>(entity =>
+            {
+                entity.ToTable("Campuses", "dbo");
+            });
+
             modelBuilder.Entity<CertApplication>(entity =>
             {
+                entity.ToTable("CertApplications", "dbo");
+
                 entity.Property(e => e.DeliveryDate).HasColumnType("datetime");
 
                 entity.Property(e => e.FeeForCertificate)
@@ -74,9 +92,19 @@ namespace CertificationMS.ContextModels
                     .HasDefaultValueSql("((0))");
             });
 
+            modelBuilder.Entity<Convocation>(entity =>
+            {
+                entity.ToTable("Convocations", "dbo");
+            });
+
+            modelBuilder.Entity<Department>(entity =>
+            {
+                entity.ToTable("Departments", "dbo");
+            });
+
             modelBuilder.Entity<PrmDesignation>(entity =>
             {
-                entity.ToTable("PRM_Designation");
+                entity.ToTable("PRM_Designation", "dbo");
 
                 entity.Property(e => e.JobDescription).IsUnicode(false);
 
@@ -94,8 +122,15 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.ShortName).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Program>(entity =>
+            {
+                entity.ToTable("Programs", "dbo");
+            });
+
             modelBuilder.Entity<Section>(entity =>
             {
+                entity.ToTable("Sections", "dbo");
+
                 entity.Property(e => e.SectionName)
                     .HasMaxLength(200)
                     .HasDefaultValueSql("(' ')");
@@ -103,7 +138,7 @@ namespace CertificationMS.ContextModels
 
             modelBuilder.Entity<StudentInfo>(entity =>
             {
-                entity.ToTable("StudentInfo");
+                entity.ToTable("StudentInfo", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -127,9 +162,31 @@ namespace CertificationMS.ContextModels
                     .HasConstraintName("FK_StudentInfo_Programs");
             });
 
+            modelBuilder.Entity<StudentType>(entity =>
+            {
+                entity.ToTable("StudentTypes", "dbo");
+            });
+
+            modelBuilder.Entity<TblCourse>(entity =>
+            {
+                entity.HasKey(e => e.CourseId);
+
+                entity.ToTable("TblCourse", "dbo");
+
+                entity.Property(e => e.CourseCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CourseName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<TblGroup>(entity =>
             {
                 entity.HasKey(e => e.GroupId);
+
+                entity.ToTable("TblGroups", "dbo");
 
                 entity.HasIndex(e => e.GroupName, "IX_TblGroups")
                     .IsUnique();
@@ -148,6 +205,8 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.GroupRoleId);
 
+                entity.ToTable("TblGroupInRoles", "dbo");
+
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.TblGroupInRoles)
                     .HasForeignKey(d => d.GroupId)
@@ -159,6 +218,8 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.MenuId)
                     .HasName("PK_TblMenus_1");
+
+                entity.ToTable("TblMenus", "dbo");
 
                 entity.Property(e => e.MenuCaption)
                     .IsRequired()
@@ -187,6 +248,8 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.MenuRoleId);
 
+                entity.ToTable("TblMenusInRoles", "dbo");
+
                 entity.Property(e => e.Opadd).HasColumnName("OPAdd");
 
                 entity.Property(e => e.Opcancel).HasColumnName("OPCancel");
@@ -214,6 +277,8 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.ModuleId);
 
+                entity.ToTable("TblModules", "dbo");
+
                 entity.HasIndex(e => e.ModuleName, "IX_TblModules")
                     .IsUnique();
 
@@ -235,6 +300,8 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.RoleId);
 
+                entity.ToTable("TblRoles", "dbo");
+
                 entity.HasIndex(e => e.RoleName, "IX_TblRoles")
                     .IsUnique();
 
@@ -251,10 +318,58 @@ namespace CertificationMS.ContextModels
                     .HasConstraintName("FK_TblRoles_TblModules");
             });
 
+            modelBuilder.Entity<TblSemister>(entity =>
+            {
+                entity.HasKey(e => e.SemisterId);
+
+                entity.ToTable("TblSemister", "dbo");
+
+                entity.Property(e => e.SemisterName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TblTeacher>(entity =>
+            {
+                entity.HasKey(e => e.TeacherId);
+
+                entity.ToTable("TblTeacher", "dbo");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.Age)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Degree)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Designation)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MobileNo)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<TblUser>(entity =>
             {
                 entity.HasKey(e => e.UserId)
                     .HasName("PK_TblUserInfo");
+
+                entity.ToTable("TblUsers", "dbo");
 
                 entity.Property(e => e.Comment)
                     .HasMaxLength(3000)
@@ -315,7 +430,5 @@ namespace CertificationMS.ContextModels
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<CertificationMS.Models.StudentVm> StudentVm { get; set; }
     }
 }

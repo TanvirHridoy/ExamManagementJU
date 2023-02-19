@@ -1,0 +1,80 @@
+﻿@model CertificationMS.ContextModels.TblTeacher
+
+@{
+    ViewData["Title"] = "EditCampus";
+}
+<div class="card mb-4 col-md-6">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Edit Campus</h6>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TeacherId" />
+            <div class="form-group">
+                <label asp-for="Name" for="exampleInputEmail1">Name</label>
+                <input asp-for="Name" required placeholder="Enter Teacher Name" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="Name" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Designation" for="exampleInputEmail1">Designation</label>
+                <input asp-for="Designation" required placeholder="Enter Designation" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="Designation" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Degree" for="exampleInputEmail1">Degree</label>
+                <input asp-for="Degree" required placeholder="Enter Degree" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="Degree" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="MobileNo" for="exampleInputEmail1">Mobile No</label>
+                <input asp-for="MobileNo" required placeholder="Enter Teacher Mobile No" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="MobileNo" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" for="exampleInputEmail1">Email</label>
+                <input asp-for="Email" required placeholder="Enter Email" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="Email" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" for="exampleInputEmail1">Age</label>
+                <input asp-for="Age" required placeholder="Enter Age" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="Age" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" for="exampleInputEmail1">Address</label>
+                <input asp-for="Address" required placeholder="Enter Address" class="form-control" aria-describedby="emailHelp">
+
+                <span asp-validation-for="Address" class="text-danger"></span>
+
+            </div>
+            <div>
+                @Html.DropDownList("Gender",
+        Html.GetEnumSelectList<CertificationMS.Models.Gender>(),
+        "Select Gender", new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+
+                <input type="submit" asp-action="Edit" value="Update" class="btn btn-primary " />
+            </div>
+        </form>
+        <div class="card-footer text-muted">
+            <div>
+                <a asp-action="List">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
