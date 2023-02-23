@@ -74,7 +74,7 @@ namespace CertificationMS
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Student}/{action=CreateStudent}/{id?}");
+                    pattern: "{controller=Login}/{action=Login}/{id?}");
             });
         }
     }

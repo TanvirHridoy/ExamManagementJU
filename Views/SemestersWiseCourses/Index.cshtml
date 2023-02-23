@@ -1,0 +1,165 @@
+﻿@model SemestersWiseCoursesVM
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .btn-danger {
+        color: #fff !important;
+        background-color: #fc544b;
+        border-color: #fc544b;
+        -webkit-box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+        box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+        border-radius: 0.25rem;
+    }
+</style>
+<div class="row">
+    @if (Model.message == "Successfully Added Semesters Wise Courses")
+    {
+        <h3 class="text-success"> Successfully Added Semesters Wise Courses </h3>
+    }
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="SemesterId" class="control-label">Semester</label>
+
+            <select asp-for="SemesterId" class="form-control" required>
+                <option value="">-- Select Semester --</option>
+                @foreach (var item in Model.semesterVM)
+                {
+                    <option value="@item.SemisterId">@item.SemisterName</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="TeacherId" class="control-label">Teacher</label>
+            <select asp-for="TeacherId" class="form-control" required>
+                <option value="">-- Select Teacher --</option>
+                @foreach (var item in Model.teacherVM)
+                {
+                    <option value="@item.TeacherId">@item.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="CourseId" class="control-label">Courses</label>
+            <select asp-for="CourseId" class="form-control" required>
+                <option value="">-- Select Courses --</option>
+                @foreach (var item in Model.coursesVMs)
+                {
+                    <option value="@item.CourseId">@item.CourseName</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="addnew()">Add New</button>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <form method="post" id="checklist">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="bg-div">
+                        <th>Sl</th>
+                        <th>Semester Name</th>
+                        <th>Teacher Name</th>
+                        <th>Course Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="datashowlist">
+                </tbody>
+            </table>
+            <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#checklist").hide();
+        });
+        let datalist = [];
+        function addnew() {
+            var countid = datalist.length;
+            if (countid == 0) {
+                countid = 1;
+            } else {
+                countid = parseInt(countid) + 1
+            }
+            var SemesterId = $("#SemesterId").val();
+            var TeacherId = $("#TeacherId").val();
+            var CourseId = $("#CourseId").val();
+            var SemesterName = $("#SemesterId option:selected").text();
+            var TeacherName = $("#TeacherId option:selected").text();
+            var CourseName = $("#CourseId option:selected").text();
+            var res = validation();
+            if (res==11) {
+                var object = { Id: countid, SemesterId: SemesterId, TeacherId: TeacherId, CourseId: CourseId, SemesterName: SemesterName, TeacherName: TeacherName, CourseName: CourseName }
+           
+                datalist.push(object);
+                console.log(datalist);
+
+                $("#SemesterId").val("");
+                $("#TeacherId").val("");
+                $("#CourseId").val("");
+                lodedata();
+            }
+            
+        }
+        function removecell(id, key) {
+            if (confirm("Are you sure to remove this?")) {
+                datalist.splice(datalist.findIndex(x => x.Id == id), 1);
+                $("#" + key).remove();
+                lodedata();
+            }else{
+                lodedata();
+            }
+        }
+
+        function lodedata() {
+            let tag = '';
+            $("#datashowlist").empty();
+            $.each(datalist, function (key, item) {
+                tag += '<tr id="' + key + '">';
+                tag += '<td> ' + (key + 1) + '</td>';
+                tag += '<td><input  type="hidden" id="' + key + item.SemesterId + '" name="MappVm[' + key + '].SemesterId" value="' + item.SemesterId + '"/>' + item.SemesterName + '</td>';
+                tag += '<td><input  type="hidden" id="' + key + item.TeacherId + '" name="MappVm[' + key + '].TeacherId" value="' + item.TeacherId + '"/>' + item.TeacherName + '</td>';
+                tag += '<td><input  type="hidden" id="' + key + item.CourseId + '" name="MappVm[' + key + '].CourseId" value="' + item.CourseId + '"/>' + item.CourseName + '</td>';
+                tag += '<td> <a onclick="removecell(' + item.Id + ',' + key + ')" class=" btn-danger btn-flat btn-sm sm"> <i class="fa fa-trash"></i></a>  </td>';
+                tag += '</tr>';
+            });
+            $('#datashowlist').html(tag);
+            var countid = datalist.length;
+            if (countid==0) {
+                $("#checklist").hide();
+            }else{
+                $("#checklist").show();
+            }
+        }
+
+
+        function validation() {
+            var count=0;
+            var SemesterId = $("#SemesterId").val();
+            var TeacherId = $("#TeacherId").val();
+            var CourseId = $("#CourseId").val();
+            if (SemesterId==0) {
+                alert("Semester No Select");
+                return 1;
+            } if (TeacherId == 0) {
+                alert("Teacher No Select");
+                return 1;
+            } if (CourseId == 0) {
+                alert("Course No Select");
+                return 1;
+            }
+            return 11;
+        }
+
+
+    </script>
+}

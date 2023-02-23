@@ -7,6 +7,11 @@ namespace CertificationMS.ContextModels
 {
     public partial class StudentInfo
     {
+        public StudentInfo()
+        {
+            StudentCourseMappings = new HashSet<StudentCourseMapping>();
+        }
+
         public int Id { get; set; }
         public string StudentId { get; set; }
         public byte[] Photo { get; set; }
@@ -17,5 +22,6 @@ namespace CertificationMS.ContextModels
 
         public virtual BatchInfo Batch { get; set; }
         public virtual Program Program { get; set; }
+        public virtual ICollection<StudentCourseMapping> StudentCourseMappings { get; set; }
     }
 }
