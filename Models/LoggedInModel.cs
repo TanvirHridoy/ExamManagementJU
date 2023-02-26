@@ -39,4 +39,9 @@ namespace CertificationMS.Models
         public bool OPCancel { get; set; }
         public bool OPPrint { get; set; }
     }
+    public class JwtModel
+    {
+        public string EmployeeId { get; set; }
+        public string Password { get; set; }
+    }
 }

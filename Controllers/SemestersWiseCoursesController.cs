@@ -34,6 +34,7 @@ namespace CertificationMS.Controllers
             return View(vM);
 
         }
+
         [HttpPost]
         public async Task<IActionResult> Index(SemestersWiseCoursesVM vM)
         {
