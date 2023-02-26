@@ -33,9 +33,7 @@ namespace CertificationMS.Utility
                 {
                     menus = loggedInModel.EmpMenuList.Where(e => e.MenuName == menuName).SingleOrDefault();
                 }
-            }
-            
-
+            }          
             return menus;
         }
         public static int GetUserId(this ISession session, string Key)

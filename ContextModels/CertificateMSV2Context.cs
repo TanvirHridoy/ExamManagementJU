@@ -26,6 +26,8 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<PrmDesignation> PrmDesignations { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
+        public virtual DbSet<SemesterWiseCourse> SemesterWiseCourses { get; set; }
+        public virtual DbSet<StudentCourseMapping> StudentCourseMappings { get; set; }
         public virtual DbSet<StudentInfo> StudentInfos { get; set; }
         public virtual DbSet<StudentType> StudentTypes { get; set; }
         public virtual DbSet<TblCourse> TblCourses { get; set; }
@@ -44,6 +46,7 @@ namespace CertificationMS.ContextModels
             if (!optionsBuilder.IsConfigured)
             {
 
+                optionsBuilder.UseSqlServer("Server=103.125.254.20,9433;Database=juexamdb;User ID=gymuser;Password=sa@1234;MultipleActiveResultSets=true ");
             }
         }
 
@@ -136,6 +139,56 @@ namespace CertificationMS.ContextModels
                     .HasDefaultValueSql("(' ')");
             });
 
+            modelBuilder.Entity<SemesterWiseCourse>(entity =>
+            {
+                entity.ToTable("SemesterWiseCourse", "dbo");
+
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
+
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.SemesterWiseCourses)
+                    .HasForeignKey(d => d.CourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SemesterWiseCourse_TblCourse");
+
+                entity.HasOne(d => d.Semester)
+                    .WithMany(p => p.SemesterWiseCourses)
+                    .HasForeignKey(d => d.SemesterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SemesterWiseCourse_TblSemister");
+
+                entity.HasOne(d => d.Teacher)
+                    .WithMany(p => p.SemesterWiseCourses)
+                    .HasForeignKey(d => d.TeacherId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SemesterWiseCourse_TblTeacher");
+            });
+
+            modelBuilder.Entity<StudentCourseMapping>(entity =>
+            {
+                entity.ToTable("StudentCourseMapping", "dbo");
+
+                entity.Property(e => e.IsComplete).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.SemesterWiseCourse)
+                    .WithMany(p => p.StudentCourseMappings)
+                    .HasForeignKey(d => d.SemesterWiseCourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentCourseMapping_SemesterWiseCourse1");
+
+                entity.HasOne(d => d.Student)
+                    .WithMany(p => p.StudentCourseMappings)
+                    .HasForeignKey(d => d.StudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentCourseMapping_StudentInfo1");
+            });
+
             modelBuilder.Entity<StudentInfo>(entity =>
             {
                 entity.ToTable("StudentInfo", "dbo");
@@ -180,6 +233,8 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.CourseName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Credit).HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<TblGroup>(entity =>
@@ -324,6 +379,8 @@ namespace CertificationMS.ContextModels
 
                 entity.ToTable("TblSemister", "dbo");
 
+                entity.Property(e => e.IsDone).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.SemisterName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -336,23 +393,23 @@ namespace CertificationMS.ContextModels
                 entity.ToTable("TblTeacher", "dbo");
 
                 entity.Property(e => e.Address)
-                    .HasMaxLength(10)
-                    .IsFixedLength(true);
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Age)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Degree)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Designation)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Email)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
 
                 entity.Property(e => e.MobileNo)
@@ -360,8 +417,10 @@ namespace CertificationMS.ContextModels
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(50)
+                    .HasMaxLength(250)
                     .IsUnicode(false);
+
+                entity.Property(e => e.ShortCode).HasMaxLength(50);
             });
 
             modelBuilder.Entity<TblUser>(entity =>
