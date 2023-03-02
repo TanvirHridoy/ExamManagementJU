@@ -1,7 +1,5 @@
 ﻿@model SemestersWiseCoursesVM
-@{
-    ViewData["Title"] = "Index";
-}
+
 <style>
     .btn-danger {
         color: #fff !important;
@@ -12,53 +10,58 @@
         border-radius: 0.25rem;
     }
 </style>
-<div class="row">
-    @if (Model.message == "Successfully Added Semesters Wise Courses")
-    {
-        <h3 class="text-success"> Successfully Added Semesters Wise Courses </h3>
-    }
-    <div class="col-md-4">
-        <div class="form-group">
-            <label asp-for="SemesterId" class="control-label">Semester</label>
+<div class="card">
+    <div class="card-header ">
 
-            <select asp-for="SemesterId" id="SemId" class="form-control select-single" required>
-                <option value="">-- Select Semester --</option>
-                @foreach (var item in Model.semesterVM)
-                {
-                    <option value="@item.SemisterId">@item.SemisterName</option>
-                }
-            </select>
+    
+    <div class="row">
+        @if (Model.message == "Successfully Added Semesters Wise Courses")
+        {
+            <h3 class="text-success"> Successfully Added Semesters Wise Courses </h3>
+        }
+        <div class="col-md-4 offset-md-3 ">
+            <div class="form-group ">
+                <label asp-for="SemesterId" class="control-label offset-4"><b>Semester</b></label>
+
+                <select asp-for="SemesterId"  id="SemId" class="form-control " required>
+                    <option  value="">-- Select Semester --</option>
+                    @foreach (var item in Model.semesterVM)
+                    {
+                        <option value="@item.SemisterId">@item.SemisterName</option>
+                    }
+                </select>
+            </div>
+
+
         </div>
 
 
     </div>
+    <div class="container-fluid ">
 
+        <form method="post" id="">
+            <table class="table table-bordered" id="semTable">
+                <thead>
+                    <tr class="bg-div">
+                        <th>Sl</th>
+                        <th>Teacher Name</th>
+                        <th>Course Name</th>
+                        <th>No of Seat</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
+        </form>
 
+    </div>
 </div>
-<div class="container-fluid">
-
-    <form method="post" id="">
-        <table class="table table-bordered" id="semTable">
-            <thead>
-                <tr class="bg-div">
-                    <th>Sl</th>
-                    <th>Teacher Name</th>
-                    <th>Course Name</th>
-                    <th>No of Seat</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody >
-               
-            </tbody>
-        </table>
-        <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
-    </form>
 </div>
 
-
-@section Scripts{
-    <script>
+    @section Scripts{
+        <script>
         var teacherList = @Html.Raw(Json.Serialize(Model.teacherVM))
                 var courseList = @Html.Raw(Json.Serialize(Model.coursesVMs))
             $(document).ready(function () {
@@ -94,9 +97,9 @@
         }
         function removeRow(key) {
             if (confirm("Are you sure to remove this?")) {
-               
+
                 $("#" + key).remove();
-            } 
+            }
         }
 
 
@@ -165,7 +168,7 @@
                             <td><button type="button" onclick="removeRow('row_${key+1}')">Remove</button></td>
                         </tr>
                 `;
-                
+
                 tableBody.append(trHtml);
             })
         }
@@ -200,5 +203,5 @@
 
 
 
-    </script>
-}
+        </script>
+    }
