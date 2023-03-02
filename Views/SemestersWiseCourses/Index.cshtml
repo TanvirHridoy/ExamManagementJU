@@ -21,7 +21,7 @@
         <div class="form-group">
             <label asp-for="SemesterId" class="control-label">Semester</label>
 
-            <select asp-for="SemesterId" class="form-control" required>
+            <select asp-for="SemesterId" id="SemId" class="form-control" required>
                 <option value="">-- Select Semester --</option>
                 @foreach (var item in Model.semesterVM)
                 {
@@ -31,7 +31,7 @@
         </div>
         <div class="form-group">
             <label asp-for="TeacherId" class="control-label">Teacher</label>
-            <select asp-for="TeacherId" class="form-control" required>
+            <select asp-for="TeacherId"  class="form-control" required>
                 <option value="">-- Select Teacher --</option>
                 @foreach (var item in Model.teacherVM)
                 {
@@ -159,6 +159,21 @@
             }
             return 11;
         }
+
+
+        $("#SemId").change(function () {
+            var semid = $('#SemId').find(":selected").val();
+            $.ajax({
+                url: "/SemestersWiseCourses/GetSemesterWisedataBySemesterId",
+                method: "Post",
+                data: { semesterId: semid },
+                dataType: "json",
+                success: function (data) {
+                    console.log();
+                }
+
+            });
+        });
 
 
     </script>

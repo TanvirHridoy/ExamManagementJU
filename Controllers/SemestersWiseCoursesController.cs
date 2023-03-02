@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace CertificationMS.Controllers
 {
 
@@ -35,7 +36,7 @@ namespace CertificationMS.Controllers
             return View(vM);
 
         }
-
+        [HttpPost]
         public async Task<JsonResult> GetSemesterWisedataBySemesterId(int semesterId)
         {
             var data = await _Db.SemesterWiseCourses.Include(e => e.Teacher).Include(e => e.Course).Include(e => e.Semester).Where(e => e.SemesterId == semesterId).ToListAsync();
