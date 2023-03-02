@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace CertificationMS.Controllers
 {
+
     public class SemestersWiseCoursesController : Controller
     {
         private readonly CertificateMSV2Context _Db;
@@ -27,12 +28,18 @@ namespace CertificationMS.Controllers
         public IActionResult Index()
         {
 
-            SemestersWiseCoursesVM vM = new SemestersWiseCoursesVM();  
+            SemestersWiseCoursesVM vM = new SemestersWiseCoursesVM();
             vM.coursesVMs = _Db.TblCourses.ToList();
             vM.teacherVM = _Db.TblTeachers.ToList();
             vM.semesterVM = _Db.TblSemisters.ToList();
             return View(vM);
 
+        }
+
+        public async Task<JsonResult> GetSemesterWisedataBySemesterId(int semesterId)
+        {
+            var data = await _Db.SemesterWiseCourses.Include(e => e.Teacher).Include(e => e.Course).Include(e => e.Semester).Where(e => e.SemesterId == semesterId).ToListAsync();
+            return Json(data);
         }
 
         [HttpPost]
@@ -71,6 +78,21 @@ namespace CertificationMS.Controllers
             }
         }
 
+
+        public async Task<ActionResult> SaveSemesterCourse(List<MappVm> model)
+        {
+            var list = model.Select(e => new SemesterWiseCourse
+            {
+                Id = 0,
+                CourseId = e.CourseId,
+                SemesterId = e.SemesterId,
+                Status = true,
+                TeacherId = e.TeacherId
+            }).ToList();
+            await _Db.SemesterWiseCourses.AddRangeAsync(list);
+            await _Db.SaveChangesAsync();
+            return RedirectToAction(nameof(List));
+        }
         public async Task<IActionResult> List(Status message = null)
         {
             SemesterTeacherCoursesListVM vM = new SemesterTeacherCoursesListVM();
@@ -80,12 +102,12 @@ namespace CertificationMS.Controllers
             vM.message = message != null ? message.MessageText : "";
             vM.cc = await _Db.SemesterWiseCourses.Select(e => new SemesterWiseCourse
             {
-                Id = e.Id ,
-                CourseId = e.CourseId , 
-                TeacherId = e.TeacherId ,
-                SemesterId = e.SemesterId ,
+                Id = e.Id,
+                CourseId = e.CourseId,
+                TeacherId = e.TeacherId,
+                SemesterId = e.SemesterId,
             }).ToListAsync();
-            return View(vM);    
+            return View(vM);
         }
         public async Task<IActionResult> Delete(int id)
         {
