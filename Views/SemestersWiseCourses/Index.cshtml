@@ -155,15 +155,17 @@
             tableBody.empty();
             $.each(res, function (key, value) {
                 var teacherDw = MakeTeacherDW(value.teacherId);
+                var courseDw = MakeCourseDW(value.courseId);
                 var trHtml = `
                                 <tr id="row_${key + 1}" >
                             <td>${key+1}</td>
                             <td>${teacherDw}</td>
-                            <td>Course Name</td>
+                            <td>${courseDw}</td>
                             <td><input type="number" name="NoStudent" class="form-control" value="10"/></td>
                             <td><button type="button" onclick="removeRow('row_${key+1}')">Remove</button></td>
                         </tr>
                 `;
+                
                 tableBody.append(trHtml);
             })
         }
@@ -181,5 +183,22 @@
             select += '</select>';
             return select;
         }
+
+        function MakeCourseDW(id) {
+            console.log(courseList);
+            var select = `<select name="CourseId" class="form-control select-single" required>
+                                  <option value="">-- Select Course --</option>
+
+                            `;
+            $.each(courseList, function (key, value) {
+                var selected = value.courseId == id ? 'selected' : '';
+                select += `<option value="${value.courseId}" ${selected}>${value.courseName}- ${value.courseCode} </option>`;
+            });
+            select += '</select>';
+            return select;
+        }
+
+
+
     </script>
 }
