@@ -21,7 +21,7 @@
         <div class="form-group">
             <label asp-for="SemesterId" class="control-label">Semester</label>
 
-            <select asp-for="SemesterId" id="SemId" class="form-control" required>
+            <select asp-for="SemesterId" id="SemId" class="form-control select-single" required>
                 <option value="">-- Select Semester --</option>
                 @foreach (var item in Model.semesterVM)
                 {
@@ -29,59 +29,41 @@
                 }
             </select>
         </div>
-        <div class="form-group">
-            <label asp-for="TeacherId" class="control-label">Teacher</label>
-            <select asp-for="TeacherId"  class="form-control" required>
-                <option value="">-- Select Teacher --</option>
-                @foreach (var item in Model.teacherVM)
-                {
-                    <option value="@item.TeacherId">@item.Name</option>
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label asp-for="CourseId" class="control-label">Courses</label>
-            <select asp-for="CourseId" class="form-control" required>
-                <option value="">-- Select Courses --</option>
-                @foreach (var item in Model.coursesVMs)
-                {
-                    <option value="@item.CourseId">@item.CourseName</option>
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-primary" onclick="addnew()">Add New</button>
-        </div>
+
+
     </div>
 
-    <div class="col-md-8">
-        <form method="post" id="checklist">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr class="bg-div">
-                        <th>Sl</th>
-                        <th>Semester Name</th>
-                        <th>Teacher Name</th>
-                        <th>Course Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="datashowlist">
-                </tbody>
-            </table>
-            <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
-        </form>
-    </div>
+
+</div>
+<div class="container-fluid">
+
+    <form method="post" id="">
+        <table class="table table-bordered" id="semTable">
+            <thead>
+                <tr class="bg-div">
+                    <th>Sl</th>
+                    <th>Teacher Name</th>
+                    <th>Course Name</th>
+                    <th>No of Seat</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody >
+               
+            </tbody>
+        </table>
+        <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
+    </form>
 </div>
 
 
 @section Scripts{
     <script>
-
-        $(document).ready(function () {
-            $("#checklist").hide();
-        });
+        var teacherList = @Html.Raw(Json.Serialize(Model.teacherVM))
+                var courseList = @Html.Raw(Json.Serialize(Model.coursesVMs))
+            $(document).ready(function () {
+                $("#checklist").hide();
+            });
         let datalist = [];
         function addnew() {
             var countid = datalist.length;
@@ -97,9 +79,9 @@
             var TeacherName = $("#TeacherId option:selected").text();
             var CourseName = $("#CourseId option:selected").text();
             var res = validation();
-            if (res==11) {
+            if (res == 11) {
                 var object = { Id: countid, SemesterId: SemesterId, TeacherId: TeacherId, CourseId: CourseId, SemesterName: SemesterName, TeacherName: TeacherName, CourseName: CourseName }
-           
+
                 datalist.push(object);
                 console.log(datalist);
 
@@ -108,17 +90,15 @@
                 $("#CourseId").val("");
                 lodedata();
             }
-            
+
         }
-        function removecell(id, key) {
+        function removeRow(key) {
             if (confirm("Are you sure to remove this?")) {
-                datalist.splice(datalist.findIndex(x => x.Id == id), 1);
+               
                 $("#" + key).remove();
-                lodedata();
-            }else{
-                lodedata();
-            }
+            } 
         }
+
 
         function lodedata() {
             let tag = '';
@@ -134,20 +114,20 @@
             });
             $('#datashowlist').html(tag);
             var countid = datalist.length;
-            if (countid==0) {
+            if (countid == 0) {
                 $("#checklist").hide();
-            }else{
+            } else {
                 $("#checklist").show();
             }
         }
 
 
         function validation() {
-            var count=0;
+            var count = 0;
             var SemesterId = $("#SemesterId").val();
             var TeacherId = $("#TeacherId").val();
             var CourseId = $("#CourseId").val();
-            if (SemesterId==0) {
+            if (SemesterId == 0) {
                 alert("Semester No Select");
                 return 1;
             } if (TeacherId == 0) {
@@ -163,18 +143,43 @@
 
         $("#SemId").change(function () {
             var semid = $('#SemId').find(":selected").val();
-            $.ajax({
-                url: "/SemestersWiseCourses/GetSemesterWisedataBySemesterId",
-                method: "Post",
-                data: { semesterId: semid },
-                dataType: "json",
-                success: function (data) {
-                    console.log();
-                }
 
-            });
+            Common.Ajax('GET', '/SemestersWiseCourses/GetSemesterWisedataBySemesterId?semesterId=' + semid, [], 'json', AjaxLoadSemData);
+
         });
 
+        function AjaxLoadSemData(res) {
+            console.log(res);
+            var dtTable = $("#semTable");
+            var tableBody = dtTable.find('tbody');
+            tableBody.empty();
+            $.each(res, function (key, value) {
+                var teacherDw = MakeTeacherDW(value.teacherId);
+                var trHtml = `
+                                <tr id="row_${key + 1}" >
+                            <td>${key+1}</td>
+                            <td>${teacherDw}</td>
+                            <td>Course Name</td>
+                            <td><input type="number" name="NoStudent" class="form-control" value="10"/></td>
+                            <td><button type="button" onclick="removeRow('row_${key+1}')">Remove</button></td>
+                        </tr>
+                `;
+                tableBody.append(trHtml);
+            })
+        }
 
+        function MakeTeacherDW(id) {
+            console.log(teacherList);
+            var select = `<select name="TeacherId" class="form-control select-single" required>
+                                  <option value="">-- Select Teacher --</option>
+
+                            `;
+            $.each(teacherList, function (key, value) {
+                var selected = value.teacherId == id ? 'selected' : '';
+                select += `<option value="${value.teacherId}" ${selected}>${value.name} - ${value.shortCode} </option>`;
+            });
+            select += '</select>';
+            return select;
+        }
     </script>
 }

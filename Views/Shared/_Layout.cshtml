@@ -3,9 +3,9 @@
 @using CertificationMS.Models
 @using CertificationMS.Utility;
 
-@{ 
+@{
     LoggedInModel? LoginResp = new LoggedInModel();
-    LoginResp=Context.Session.GetObject<LoggedInModel>("User");
+    LoginResp = Context.Session.GetObject<LoggedInModel>("User");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -61,29 +61,29 @@
                     foreach (var item in Menugroup)
                     {
                         var submenus1 = Menus.Where(e => e.ParentMenuId == item.MenuId).ToList();
-                    if (submenus1.Count > 0)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#@item.MenuName"
-                               aria-expanded="true" aria-controls="@item.MenuName">
-                                <i class="@item.MenuIconClass"></i>
-                                <span>@item.MenuCaption</span>
-                            </a>
-                            <div id="@item.MenuName" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-                                <div class="bg-white py-2 collapse-inner rounded">
-                                    <h6 class="collapse-header">@item.MenuCaption</h6>
-                                    @{
-                                        var SubMenus = Menus.Where(e => e.ParentMenuId == item.MenuId).OrderBy(e => e.SerialNo).ToList();
-                                        foreach (var menu in SubMenus)
-                                        {
-                                            <a class="collapse-item" href="@menu.PageUrl">@menu.MenuCaption</a>
+                        if (submenus1.Count > 0)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#@item.MenuName"
+                       aria-expanded="true" aria-controls="@item.MenuName">
+                                    <i class="@item.MenuIconClass"></i>
+                                    <span>@item.MenuCaption</span>
+                                </a>
+                                <div id="@item.MenuName" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                                    <div class="bg-white py-2 collapse-inner rounded">
+                                        <h6 class="collapse-header">@item.MenuCaption</h6>
+                                        @{
+                                            var SubMenus = Menus.Where(e => e.ParentMenuId == item.MenuId).OrderBy(e => e.SerialNo).ToList();
+                                            foreach (var menu in SubMenus)
+                                            {
+                                                <a class="collapse-item" href="@menu.PageUrl">@menu.MenuCaption</a>
+                                            }
                                         }
-                                    }
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    }
-                        
+                            </li>
+                        }
+
                     }
 
                 }
@@ -116,13 +116,13 @@
                                     Profile
                                 </a>
                                 @*<a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>*@
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Activity Log
+                                </a>*@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -197,6 +197,7 @@
     <script src="~/AdminLayout/js/ruang-admin.min.js"></script>
     <script src="~/js/notifyMe.js"></script>
     <script src="~/js/jquery.collapsibleCheckboxTree.js"></script>
+    <script src="~/js/common.js"></script>
     <script>
         $(document).ready(function () {
             $('.select-single').select2();

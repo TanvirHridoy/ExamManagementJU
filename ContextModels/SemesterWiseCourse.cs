@@ -17,6 +17,7 @@ namespace CertificationMS.ContextModels
         public int TeacherId { get; set; }
         public int CourseId { get; set; }
         public bool? Status { get; set; }
+        public int Capacity { get; set; }
 
         public virtual TblCourse Course { get; set; }
         public virtual TblSemister Semester { get; set; }

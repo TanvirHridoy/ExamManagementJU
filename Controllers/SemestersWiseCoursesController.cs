@@ -36,10 +36,20 @@ namespace CertificationMS.Controllers
             return View(vM);
 
         }
-        [HttpPost]
+        [HttpGet]
         public async Task<JsonResult> GetSemesterWisedataBySemesterId(int semesterId)
         {
-            var data = await _Db.SemesterWiseCourses.Include(e => e.Teacher).Include(e => e.Course).Include(e => e.Semester).Where(e => e.SemesterId == semesterId).ToListAsync();
+            var data = await _Db.SemesterWiseCourses.Include(e => e.Teacher).Include(e => e.Course).Include(e => e.Semester).Where(e => e.SemesterId == semesterId).Select(e => new SemWiseDataVM
+            {
+                CourseCode = e.Course.CourseCode,
+                CourseId = e.CourseId,
+                CourseName = e.Course.CourseName,
+                SemesterId = e.SemesterId,
+                SemesterName = e.Semester.SemisterName,
+                TeacherCode = e.Teacher.ShortCode,
+                TeacherId = e.TeacherId,
+                TeacherName = e.Teacher.Name
+            }).ToListAsync();
             return Json(data);
         }
 
