@@ -53,7 +53,7 @@
                 <tbody>
                 </tbody>
             </table>
-            <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
+            <button type="button" id="addrows"  class="btn btn-success "> <i class="fa fa-plus">ADD</i></button>
         </form>
 
     </div>
@@ -200,7 +200,20 @@
             select += '</select>';
             return select;
         }
-
+            $("#addrows").click(function () {
+                $("#semTable").each(function () {
+                    var tds = '<tr>';
+                    jQuery.each($('tr:last td', this), function () {
+                        tds += '<td>' + $(this).html() + '</td>';
+                    });
+                    tds += '</tr>';
+                    if ($('tbody', this).length > 0) {
+                        $('tbody', this).append(tds);
+                    } else {
+                        $(this).append(tds);
+                    }
+                });
+            });
 
 
         </script>
