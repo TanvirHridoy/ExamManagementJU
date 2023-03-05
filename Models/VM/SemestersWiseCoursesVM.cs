@@ -21,6 +21,16 @@ namespace CertificationMS.Models.VM
         public int SemesterId { get; set; }
         public int TeacherId { get; set; }
         public int CourseId { get; set; }
+        public int Capacity { get; set; }
+    }
+
+    public class MappVmPost
+    {
+        public int SemesterId { get; set; }
+        public int[] TeacherId { get; set; }
+        public int[] CourseId { get; set; }
+        public int[] Capacity { get; set; }
+        public int[] Id { get; set; }
     }
 
     public class SemWiseDataVM : MappVm
@@ -30,6 +40,8 @@ namespace CertificationMS.Models.VM
         public string  CourseName { get; set; }
         public string  CourseCode { get; set; }
         public string  TeacherCode { get; set; }
+        public int Id { get; set;}
+
     }
     public class CoursesVM
     {

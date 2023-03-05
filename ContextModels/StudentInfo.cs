@@ -19,6 +19,7 @@ namespace CertificationMS.ContextModels
         public string Name { get; set; }
         public int? ProgramId { get; set; }
         public int? BatchId { get; set; }
+        public int? Status { get; set; }
 
         public virtual BatchInfo Batch { get; set; }
         public virtual Program Program { get; set; }

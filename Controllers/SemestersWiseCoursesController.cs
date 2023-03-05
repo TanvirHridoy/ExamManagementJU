@@ -48,38 +48,58 @@ namespace CertificationMS.Controllers
                 SemesterName = e.Semester.SemisterName,
                 TeacherCode = e.Teacher.ShortCode,
                 TeacherId = e.TeacherId,
-                TeacherName = e.Teacher.Name
+                TeacherName = e.Teacher.Name,
+                Capacity = e.Capacity,
+                Id = e.Id
             }).ToListAsync();
             return Json(data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(SemestersWiseCoursesVM vM)
+        public async Task<IActionResult> Index(MappVmPost vM)
         {
-            if (menu.OPAdd == false) { return RedirectToAction("Logout", "Login"); }
+            //if (menu.OPAdd == false) { return RedirectToAction("Logout", "Login"); }
             try
             {
-                if (vM.MappVm.Count() > 0)
+                var count = vM.Id.Count();
+                if (count > 0)
                 {
                     List<SemesterWiseCourse> models = new List<SemesterWiseCourse>();
-                    foreach (var m in vM.MappVm)
+                    var courses = await _Db.SemesterWiseCourses.Where(e => e.SemesterId == vM.SemesterId).ToListAsync();
+
+                    var removedList = courses.Where(e => vM.Id.Contains(e.Id) == false).ToList();
+                    courses.RemoveAll(e => vM.Id.Contains(e.Id) == false);
+                    _Db.SemesterWiseCourses.RemoveRange(removedList);
+                    await _Db.SaveChangesAsync();
+
+                    for (int i = 0; i < count; i++)
                     {
-                        var res = _Db.SemesterWiseCourses.Where(f => f.SemesterId == m.SemesterId && f.TeacherId == m.TeacherId && f.CourseId == m.CourseId).Count();
-                        if (res == 0)
+                        if (vM.Id[i] == 0)
                         {
                             SemesterWiseCourse model = new SemesterWiseCourse();
-                            model.SemesterId = m.SemesterId;
-                            model.CourseId = m.CourseId;
-                            model.TeacherId = m.TeacherId;
+                            model.SemesterId = vM.SemesterId;
+                            model.CourseId = vM.CourseId[i];
+                            model.TeacherId = vM.TeacherId[i];
+                            model.Capacity = vM.Capacity[i];
+                            model.Id = 0;
                             models.Add(model);
                         }
+                        else
+                        {
+                            var index = courses.FindIndex(e => e.Id == vM.Id[i]);
+                            courses[index].SemesterId = vM.SemesterId;
+                            courses[index].CourseId = vM.CourseId[i];
+                            courses[index].TeacherId = vM.TeacherId[i];
+                            courses[index].Capacity = vM.Capacity[i];
+                        }
                     }
+                    
                     _Db.SemesterWiseCourses.AddRange(models);
                     await _Db.SaveChangesAsync();
                 }
                 return RedirectToAction("List", new { message = "Successfully Added Semesters Wise Courses" });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return RedirectToAction("List", new
                 {

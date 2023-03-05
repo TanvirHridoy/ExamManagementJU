@@ -22,6 +22,7 @@ namespace CertificationMS.ContextModels
         public virtual TblCourse Course { get; set; }
         public virtual TblSemister Semester { get; set; }
         public virtual TblTeacher Teacher { get; set; }
+        public virtual ExamDetail ExamDetail { get; set; }
         public virtual ICollection<StudentCourseMapping> StudentCourseMappings { get; set; }
     }
 }

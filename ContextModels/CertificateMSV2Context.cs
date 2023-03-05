@@ -23,6 +23,9 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<ExamDetail> ExamDetails { get; set; }
+        public virtual DbSet<ExamDuty> ExamDuties { get; set; }
+        public virtual DbSet<ExamMaster> ExamMasters { get; set; }
         public virtual DbSet<PrmDesignation> PrmDesignations { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
@@ -45,6 +48,7 @@ namespace CertificationMS.ContextModels
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=103.125.254.20,9433;Database=juexamdb;User ID=gymuser;Password=sa@1234;MultipleActiveResultSets=true ");
             }
         }
@@ -102,6 +106,61 @@ namespace CertificationMS.ContextModels
             modelBuilder.Entity<Department>(entity =>
             {
                 entity.ToTable("Departments", "dbo");
+            });
+
+            modelBuilder.Entity<ExamDetail>(entity =>
+            {
+                entity.ToTable("ExamDetails", "dbo");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Duration)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasDefaultValueSql("((3))");
+
+                entity.Property(e => e.ExamDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((0))");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.ExamDetail)
+                    .HasForeignKey<ExamDetail>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamDetails_ExamMaster");
+
+                entity.HasOne(d => d.Id1)
+                    .WithOne(p => p.ExamDetail)
+                    .HasForeignKey<ExamDetail>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamDetails_SemesterWiseCourse");
+            });
+
+            modelBuilder.Entity<ExamDuty>(entity =>
+            {
+                entity.ToTable("ExamDuty", "dbo");
+
+                entity.HasOne(d => d.Teacher)
+                    .WithMany(p => p.ExamDuties)
+                    .HasForeignKey(d => d.TeacherId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamDuty_TblTeacher");
+            });
+
+            modelBuilder.Entity<ExamMaster>(entity =>
+            {
+                entity.ToTable("ExamMaster", "dbo");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.ExamName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.ExamMaster)
+                    .HasForeignKey<ExamMaster>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamMaster_TblSemister");
             });
 
             modelBuilder.Entity<PrmDesignation>(entity =>
@@ -197,6 +256,8 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.FileName).HasMaxLength(250);
 
                 entity.Property(e => e.Name).HasMaxLength(250);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.StudentId)
                     .IsRequired()
