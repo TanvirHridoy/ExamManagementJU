@@ -9,7 +9,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace HrmGeneralWeb.Controllers
+namespace CertificationMS.Controllers
 {
     [SessionTimeout]
     public class DesignationController : Controller
