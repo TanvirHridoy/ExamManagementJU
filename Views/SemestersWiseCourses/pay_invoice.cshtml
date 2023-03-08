@@ -1,0 +1,228 @@
+﻿@model RoomBookingViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BogusBoo | Invoice Print</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link href="~/AdminLib/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link href="~/AdminLib/admin/css/adminlte.min.css" rel="stylesheet" />
+</head>
+<style>
+    .small, small {
+        font-size: 61%;
+        font-weight: 600;
+    }
+
+    @@page {
+        size: auto;
+        margin: 0mm;
+    }
+
+    html {
+        background-color: #FFFFFF;
+        margin: 0mm;
+    }
+
+    body {
+        padding: 30px;
+    }
+
+    li {
+        list-style: none;
+        font-weight: 600;
+    }
+
+    h4 {
+        margin-bottom: 3px;
+        font-weight: 900;
+        font-size: 25px;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<body>
+    <div class="wrapper">
+        <!-- Main content -->
+        <section class="invoice">
+            <!-- title row -->
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="page-header">
+                        <i class="fas fa-globe"></i> BogusBoo
+                        <small class="float-right">Date: @DateTime.Now.ToLongDateString() </small>
+                    </h2>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- info row -->
+            <div class="row invoice-info">
+                <div class="col-sm-7 invoice-col">
+                    From
+                    <address>
+                        <strong>BogusBoo</strong><br>
+                        801, Rokeya Sarani, Kazipara, Mirpur, Dhaka-1216<br>
+                        Phone: +8801700729237<br>
+                        Email: kgecom@krishibidgroup.com
+                    </address>
+                </div>
+
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                    <div class="text-right">
+                    @*    <img style="width:180px" src="~/KGFiles/kgecom.png" />*@
+                        <img style="width:180px"  src="~/kgfiles/connectionnext.png" />
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+
+            <div class="pr-4">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="text-left">
+                            <b style="font-size:17px"> Bill To: </b>
+                            <ul>
+
+                                <li> Name: @Model.CustomerName </li>
+                                <li> Mobile: @Model.CustomerPhone </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-right">
+                            <ul>
+                                <li> Address: @Model.CustomerEmailID </li>
+                                <li> Email : @Model.CustomerAddress </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- /.row -->
+            <!-- Table row -->
+            <div class="row mt-4">
+                <div class="col-12 table-responsive">
+                    <div class="row mx-4  mb-2">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-deft">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Room No
+                                        </th>
+                                        <th>Nights</th>
+                                        <th>
+                                            Charge/Night
+                                        </th>
+
+                                        <th> Total Charge</th>
+                                        <th>Amount Recieved</th>
+                                        <th> Pending Due</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td>
+                                                @Model.RoomNo
+                                        </td>
+                                        <td>
+                                                @Model.Nights
+                                        </td>
+                                        <td>
+                                                @Model.ChargePerNight
+                                        </td>
+
+                                        <td>
+                                                @Model.TotalAmount
+                                        </td>
+                                        <td>
+                                                @Model.payment.InAmount
+                                        </td>
+
+                                        <td>
+                                                @Model.PendingDue
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-6">
+                        <p class="lead">Payment Methods:</p>
+                        <div class="row text-center">
+                            <div class="col-1"></div>
+                            <div class="col-5">
+                                <img style="width:100%;margin-top:26px" src="~/KGFiles/bkash.png" />
+                            </div>
+                            <div class="col-5">
+                                <img style="width:100%" src="~/KGFiles/Nagad.png" />
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+
+                        <p class="text-center mt-4"> <b> নগদ এবং বিকাশ ............... </b>  </p>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-6">
+                        <p class="lead">Account :</p>
+                        <div class="table-responsive">
+                            <table class="table">                              
+                                <tr>
+                                    <th style="width:50%">Pending Due:</th>
+                                    <td>@Model.PendingDue</td>
+                                </tr>
+                                
+
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+                <div class="row" style="margin-top:150px">
+                    <div class="col-3"></div>
+                    <div class="col-3"></div>
+                    <div class="col-3"></div>
+                    <div class="col-3">
+                        <b>  Authorized Signature</b>
+                    </div>
+                </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- ./wrapper -->
+    <!-- Page specific script -->
+    <script>
+        window.addEventListener("load", window.print());
+    </script>
+</body>
+</html>
+
+
+
+
