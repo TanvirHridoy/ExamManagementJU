@@ -93,5 +93,11 @@ namespace CertificationMS.Controllers
             await _Db.SaveChangesAsync();
             return RedirectToAction(nameof(List));
         }
+
+        public async Task<IActionResult> admit_print(long id)
+        {
+           
+            return View();
+        }
     }
 }
