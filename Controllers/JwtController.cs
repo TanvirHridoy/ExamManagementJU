@@ -1,11 +1,15 @@
 ﻿using CertificationMS.Models;
 using CertificationMS.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using System;
+using System.Data.SqlClient;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace CertificationMS.Controllers
 {
@@ -13,21 +17,42 @@ namespace CertificationMS.Controllers
     [ApiController]
     public class JwtController : ControllerBase
     {
+        public IConfiguration config { get; set; }
+        public JwtController(IConfiguration config)
+        {
+            this.config = config;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] JwtModel Model)
         {
-            string Username = "hridoy";
-            string Password = "12345678";
+            var message = "";
             if (ModelState.IsValid)
             {
-                if (Model.EmployeeId != Username || Model.Password != Password)
-                {
-                    return BadRequest("Username/Password is incorrect");
-                }
-
+                var hashpass= Hashgenerator.GetPassHash(Model.Password);
                 // var IsSuccess= Hasher.VerifyHashedPassword(user.PasswordHash, model.Password);
                 try
                 {
+
+                    Storeproc storeproc = new Storeproc();
+                    SqlConnection sqlConnection = new SqlConnection(config.GetConnectionString("AppCon"));
+                    SqlParameter[] parameters = new SqlParameter[2];
+                    SqlParameter Empid = new SqlParameter(parameterName: "@EmployeeID", dbType: System.Data.SqlDbType.NVarChar);
+                    Empid.Value = Model.EmployeeId;
+                    SqlParameter Password = new SqlParameter(parameterName: "@Password", dbType: System.Data.SqlDbType.NVarChar);
+                    Password.Value = hashpass;
+                    parameters[0] = Empid;
+                    parameters[1] = Password;
+                    var result = storeproc.GetDataSet(sqlConnection, "[dbo].[GetUserMenus]", parameters);
+
+                    //LoginResp.EmpMenuList = DtToList.ConvertDataTable<EmpMenus>(result.Tables[0]);
+                    var r = DtToList.ConvertDataTable<EmpInfo>(result.Tables[1]);
+                    if (r.Count < 1 || r == null)
+                    {
+                        message = "Invalid Credential";
+                        return BadRequest(message);
+                    }
+                   
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ApiConst.key));
                     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -41,13 +66,14 @@ namespace CertificationMS.Controllers
                            signingCredentials: creds
 
                         );
-                    var result = new LoggedInModel
+                    var jwtresult = new LoggedInModel
                     {
                         Token = new JwtSecurityTokenHandler().WriteToken(token),
                         Expiration = token.ValidTo,
-                        EmpId = Username
+                        EmpId = Model.EmployeeId,
+                        empInfo = r[0]
                     };
-                    return Created("", result);
+                    return Created("", jwtresult);
                 }
                 catch (System.Exception ex)
                 {

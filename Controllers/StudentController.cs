@@ -29,11 +29,10 @@ namespace CertificationMS.Controllers
         {
             if (menu == null) { return RedirectToAction("LogOut", "Login"); }
             StudentViewModel model = new StudentViewModel();
-            var Campuslist = await _Db.StudentInfos.ToListAsync();
+            var Campuslist = await _Db.StudentInfos.Include(e=>e.Batch).Include(e=>e.Program).ToListAsync();
             model.list = Campuslist;
             model.message = message;
 
-            int x = (int)Gender.Male;
             return View(model);
         }
 

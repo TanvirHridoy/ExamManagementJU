@@ -35,7 +35,7 @@
         <div class="card">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Students</h6>
-                <a class="m-0 float-right btn btn-success btn-sm" asp-action="create">
+                <a class="m-0 float-right btn btn-success btn-sm" asp-action="CreateStudent">
                     Add New <i class="fas fa-plus"></i>
                 </a>
             </div>
@@ -45,20 +45,26 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Program</th>
+                            <th>Batch</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @{int sl = 0; }
+                        @{
+                            int sl = 0;
+                        }
                         @foreach (var item in Model.list)
                         {
                             sl = sl + 1;
                             <tr>
                                 <td>@sl</td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StudentId)
-                                </td>
+                                <td> @Html.DisplayFor(modelItem => item.StudentId)</td>
+                                <td> @item.Name</td>
+                                <td> @item.Program?.ProgramName</td>
+                                <td> @item.Batch?.BatchNo</td>
                                 <td><a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a></td>
                                 <td><a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a></td>
 
@@ -80,7 +86,7 @@
     @* Page level custom scripts*@
     <script>
         $(document).ready(function () {
-           // $('#dataTable').DataTable(); // ID From dataTable
+            // $('#dataTable').DataTable(); // ID From dataTable
             $('#dataTableHover').DataTable(); // ID From dataTable with Hover
         });
     </script>
