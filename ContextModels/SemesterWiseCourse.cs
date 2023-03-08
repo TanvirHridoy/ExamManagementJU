@@ -9,6 +9,7 @@ namespace CertificationMS.ContextModels
     {
         public SemesterWiseCourse()
         {
+            ExamDetails = new HashSet<ExamDetail>();
             StudentCourseMappings = new HashSet<StudentCourseMapping>();
         }
 
@@ -22,7 +23,7 @@ namespace CertificationMS.ContextModels
         public virtual TblCourse Course { get; set; }
         public virtual TblSemister Semester { get; set; }
         public virtual TblTeacher Teacher { get; set; }
-        public virtual ExamDetail ExamDetail { get; set; }
+        public virtual ICollection<ExamDetail> ExamDetails { get; set; }
         public virtual ICollection<StudentCourseMapping> StudentCourseMappings { get; set; }
     }
 }

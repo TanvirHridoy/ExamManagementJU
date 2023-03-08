@@ -14,7 +14,7 @@ namespace CertificationMS.ContextModels
         public bool? Status { get; set; }
         public decimal Duration { get; set; }
 
-        public virtual SemesterWiseCourse Id1 { get; set; }
-        public virtual ExamMaster IdNavigation { get; set; }
+        public virtual ExamMaster ExamMaster { get; set; }
+        public virtual SemesterWiseCourse SemesterWiseCourse { get; set; }
     }
 }

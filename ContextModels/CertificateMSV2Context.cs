@@ -43,42 +43,29 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<TblSemister> TblSemisters { get; set; }
         public virtual DbSet<TblTeacher> TblTeachers { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
+        public virtual DbSet<VwTeacherExamDuty> VwTeacherExamDuties { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=103.125.254.20,9433;Database=juexamdb;User ID=gymuser;Password=sa@1234;MultipleActiveResultSets=true ");
+                optionsBuilder.UseSqlServer("Server=HRIDOYPC\\SQL2K19EXP;Database=juexamdb;User ID=sa;Password=1234;MultipleActiveResultSets=true ");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("gymuser")
-                .HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
-
-            modelBuilder.Entity<ApvStatus>(entity =>
-            {
-                entity.ToTable("ApvStatuses", "dbo");
-            });
+            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<BatchInfo>(entity =>
             {
-                entity.ToTable("BatchInfo", "dbo");
+                entity.ToTable("BatchInfo");
 
                 entity.Property(e => e.BatchNo).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Campus>(entity =>
-            {
-                entity.ToTable("Campuses", "dbo");
-            });
-
             modelBuilder.Entity<CertApplication>(entity =>
             {
-                entity.ToTable("CertApplications", "dbo");
-
                 entity.Property(e => e.DeliveryDate).HasColumnType("datetime");
 
                 entity.Property(e => e.FeeForCertificate)
@@ -98,22 +85,8 @@ namespace CertificationMS.ContextModels
                     .HasDefaultValueSql("((0))");
             });
 
-            modelBuilder.Entity<Convocation>(entity =>
-            {
-                entity.ToTable("Convocations", "dbo");
-            });
-
-            modelBuilder.Entity<Department>(entity =>
-            {
-                entity.ToTable("Departments", "dbo");
-            });
-
             modelBuilder.Entity<ExamDetail>(entity =>
             {
-                entity.ToTable("ExamDetails", "dbo");
-
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.Property(e => e.Duration)
                     .HasColumnType("decimal(18, 2)")
                     .HasDefaultValueSql("((3))");
@@ -122,22 +95,22 @@ namespace CertificationMS.ContextModels
 
                 entity.Property(e => e.Status).HasDefaultValueSql("((0))");
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.ExamDetail)
-                    .HasForeignKey<ExamDetail>(d => d.Id)
+                entity.HasOne(d => d.ExamMaster)
+                    .WithMany(p => p.ExamDetails)
+                    .HasForeignKey(d => d.ExamMasterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExamDetails_ExamMaster");
 
-                entity.HasOne(d => d.Id1)
-                    .WithOne(p => p.ExamDetail)
-                    .HasForeignKey<ExamDetail>(d => d.Id)
+                entity.HasOne(d => d.SemesterWiseCourse)
+                    .WithMany(p => p.ExamDetails)
+                    .HasForeignKey(d => d.SemesterWiseCourseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ExamDetails_SemesterWiseCourse");
             });
 
             modelBuilder.Entity<ExamDuty>(entity =>
             {
-                entity.ToTable("ExamDuty", "dbo");
+                entity.ToTable("ExamDuty");
 
                 entity.HasOne(d => d.Teacher)
                     .WithMany(p => p.ExamDuties)
@@ -148,7 +121,7 @@ namespace CertificationMS.ContextModels
 
             modelBuilder.Entity<ExamMaster>(entity =>
             {
-                entity.ToTable("ExamMaster", "dbo");
+                entity.ToTable("ExamMaster");
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
@@ -165,7 +138,7 @@ namespace CertificationMS.ContextModels
 
             modelBuilder.Entity<PrmDesignation>(entity =>
             {
-                entity.ToTable("PRM_Designation", "dbo");
+                entity.ToTable("PRM_Designation");
 
                 entity.Property(e => e.JobDescription).IsUnicode(false);
 
@@ -183,15 +156,8 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.ShortName).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Program>(entity =>
-            {
-                entity.ToTable("Programs", "dbo");
-            });
-
             modelBuilder.Entity<Section>(entity =>
             {
-                entity.ToTable("Sections", "dbo");
-
                 entity.Property(e => e.SectionName)
                     .HasMaxLength(200)
                     .HasDefaultValueSql("(' ')");
@@ -199,7 +165,7 @@ namespace CertificationMS.ContextModels
 
             modelBuilder.Entity<SemesterWiseCourse>(entity =>
             {
-                entity.ToTable("SemesterWiseCourse", "dbo");
+                entity.ToTable("SemesterWiseCourse");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
@@ -228,7 +194,7 @@ namespace CertificationMS.ContextModels
 
             modelBuilder.Entity<StudentCourseMapping>(entity =>
             {
-                entity.ToTable("StudentCourseMapping", "dbo");
+                entity.ToTable("StudentCourseMapping");
 
                 entity.Property(e => e.IsComplete).HasDefaultValueSql("((0))");
 
@@ -249,7 +215,7 @@ namespace CertificationMS.ContextModels
 
             modelBuilder.Entity<StudentInfo>(entity =>
             {
-                entity.ToTable("StudentInfo", "dbo");
+                entity.ToTable("StudentInfo");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -275,16 +241,11 @@ namespace CertificationMS.ContextModels
                     .HasConstraintName("FK_StudentInfo_Programs");
             });
 
-            modelBuilder.Entity<StudentType>(entity =>
-            {
-                entity.ToTable("StudentTypes", "dbo");
-            });
-
             modelBuilder.Entity<TblCourse>(entity =>
             {
                 entity.HasKey(e => e.CourseId);
 
-                entity.ToTable("TblCourse", "dbo");
+                entity.ToTable("TblCourse");
 
                 entity.Property(e => e.CourseCode)
                     .HasMaxLength(50)
@@ -300,8 +261,6 @@ namespace CertificationMS.ContextModels
             modelBuilder.Entity<TblGroup>(entity =>
             {
                 entity.HasKey(e => e.GroupId);
-
-                entity.ToTable("TblGroups", "dbo");
 
                 entity.HasIndex(e => e.GroupName, "IX_TblGroups")
                     .IsUnique();
@@ -320,8 +279,6 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.GroupRoleId);
 
-                entity.ToTable("TblGroupInRoles", "dbo");
-
                 entity.HasOne(d => d.Group)
                     .WithMany(p => p.TblGroupInRoles)
                     .HasForeignKey(d => d.GroupId)
@@ -333,8 +290,6 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.MenuId)
                     .HasName("PK_TblMenus_1");
-
-                entity.ToTable("TblMenus", "dbo");
 
                 entity.Property(e => e.MenuCaption)
                     .IsRequired()
@@ -363,8 +318,6 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.MenuRoleId);
 
-                entity.ToTable("TblMenusInRoles", "dbo");
-
                 entity.Property(e => e.Opadd).HasColumnName("OPAdd");
 
                 entity.Property(e => e.Opcancel).HasColumnName("OPCancel");
@@ -392,8 +345,6 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.ModuleId);
 
-                entity.ToTable("TblModules", "dbo");
-
                 entity.HasIndex(e => e.ModuleName, "IX_TblModules")
                     .IsUnique();
 
@@ -415,8 +366,6 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.RoleId);
 
-                entity.ToTable("TblRoles", "dbo");
-
                 entity.HasIndex(e => e.RoleName, "IX_TblRoles")
                     .IsUnique();
 
@@ -437,7 +386,7 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.SemisterId);
 
-                entity.ToTable("TblSemister", "dbo");
+                entity.ToTable("TblSemister");
 
                 entity.Property(e => e.IsDone).HasDefaultValueSql("((0))");
 
@@ -450,7 +399,7 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.TeacherId);
 
-                entity.ToTable("TblTeacher", "dbo");
+                entity.ToTable("TblTeacher");
 
                 entity.Property(e => e.Address)
                     .HasMaxLength(250)
@@ -487,8 +436,6 @@ namespace CertificationMS.ContextModels
             {
                 entity.HasKey(e => e.UserId)
                     .HasName("PK_TblUserInfo");
-
-                entity.ToTable("TblUsers", "dbo");
 
                 entity.Property(e => e.Comment)
                     .HasMaxLength(3000)
@@ -543,6 +490,41 @@ namespace CertificationMS.ContextModels
                     .WithMany(p => p.TblUsers)
                     .HasForeignKey(d => d.GroupId)
                     .HasConstraintName("FK_TblUsers_TblGroups");
+            });
+
+            modelBuilder.Entity<VwTeacherExamDuty>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwTeacherExamDuty");
+
+                entity.Property(e => e.CourseCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CourseName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Credit).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.ExamDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ExamName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.SemisterName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TeacherName)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TeacherShortCode)
+                    .HasMaxLength(50)
+                    .HasColumnName("teacherShortCode");
             });
 
             OnModelCreatingPartial(modelBuilder);

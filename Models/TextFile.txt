@@ -3,3 +3,5 @@ Scaffold-DbContext "Server=HRIDOYPCWORK\SQL2K19EXP;Database=CertificateMSV2;User
 
 
 Scaffold-DbContext "Server=103.125.254.20,9433;Database=juexamdb;User ID=gymuser;Password=sa@1234;MultipleActiveResultSets=true " Microsoft.EntityFrameworkCore.SqlServer -context CertificateMSV2Context  -OutputDir ContextModels -Force
+
+Scaffold-DbContext "Server=HRIDOYPC\SQL2K19EXP;Database=juexamdb;User ID=sa;Password=1234;MultipleActiveResultSets=true " Microsoft.EntityFrameworkCore.SqlServer -context CertificateMSV2Context  -OutputDir ContextModels -Force

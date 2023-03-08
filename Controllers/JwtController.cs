@@ -46,7 +46,7 @@ namespace CertificationMS.Controllers
                     var result = storeproc.GetDataSet(sqlConnection, "[dbo].[GetUserMenus]", parameters);
 
                     //LoginResp.EmpMenuList = DtToList.ConvertDataTable<EmpMenus>(result.Tables[0]);
-                    var r = DtToList.ConvertDataTable<EmpInfo>(result.Tables[1]);
+                  var r = DtToList.ConvertDataTable<EmpInfo>(result.Tables[1]);
                     if (r.Count < 1 || r == null)
                     {
                         message = "Invalid Credential";

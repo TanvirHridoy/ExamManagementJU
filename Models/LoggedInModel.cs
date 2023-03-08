@@ -21,6 +21,7 @@ namespace CertificationMS.Models
         public string SDesig { get; set; }
         public byte[] Photo { get; set; }
         public int UserId { get; set; }
+        public int? TeacherId { get; set; }
     }
     public class EmpMenus
     {
