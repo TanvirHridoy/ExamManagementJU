@@ -229,9 +229,25 @@ namespace CertificationMS.ContextModels
             {
                 entity.ToTable("StudentCourseMapping", "dbo");
 
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.IsComplete).HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.ResultPublishedOn).HasColumnType("datetime");
+
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.VerificationMethod).HasMaxLength(50);
+
+                entity.Property(e => e.VerifyDateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("verifyDateTime");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.StudentCourseMapping)
+                    .HasForeignKey<StudentCourseMapping>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentCourseMapping_TblTeacher");
 
                 entity.HasOne(d => d.SemesterWiseCourse)
                     .WithMany(p => p.StudentCourseMappings)
@@ -572,6 +588,8 @@ namespace CertificationMS.ContextModels
 
                 entity.Property(e => e.FileName).HasMaxLength(250);
 
+                entity.Property(e => e.Scmid).HasColumnName("SCMId");
+
                 entity.Property(e => e.SemisterName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -582,6 +600,19 @@ namespace CertificationMS.ContextModels
                     .HasColumnName("StudentID");
 
                 entity.Property(e => e.StudentName).HasMaxLength(250);
+
+                entity.Property(e => e.VerificationMethod)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.VerifiedBy)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.VerifyDateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("verifyDateTime");
             });
 
             modelBuilder.Entity<VwTeacherExamDuty>(entity =>

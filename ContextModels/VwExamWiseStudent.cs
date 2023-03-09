@@ -28,5 +28,10 @@ namespace CertificationMS.ContextModels
         public string BatchNo { get; set; }
         public int ProgramId { get; set; }
         public string ProgramName { get; set; }
+        public int Scmid { get; set; }
+        public int Status { get; set; }
+        public string VerifiedBy { get; set; }
+        public string VerificationMethod { get; set; }
+        public DateTime? VerifyDateTime { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using CertificationMS.ContextModels;
+using CertificationMS.Models;
+using CertificationMS.Models.VM;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -41,16 +43,48 @@ namespace CertificationMS.Controllers
         }
 
         // GET api/<TeacherAPIController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{ExamDetailId}")]
+        public async Task<ActionResult> GetStudentListByExamDetailsId(int ExamDetailId)
         {
-            return "value";
+            try
+            {
+                var data = await _Db.VwExamWiseStudents.Where(e => e.ExamDetailId == ExamDetailId).ToListAsync();
+                return Ok(data);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+               
+            }
         }
 
         // POST api/<TeacherAPIController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> UpdateAttebdance([FromBody] ExamAttendanceVM model)
         {
+            try
+            {
+                var SCM = await _Db.StudentCourseMappings.SingleOrDefaultAsync(e => e.Id == model.SCMId);
+                if (SCM != null)
+                {
+                    SCM.Status = model.Status;
+                    SCM.VerificationMethod = model.VerifyMethod == (int)VerificationMethod.Face ? "Face" : "Manual";
+                    SCM.VerifiedBy = model.VerifyBy;
+                    SCM.VerifyDateTime = model.VerifyDate;
+                    await _Db.SaveChangesAsync();
+                    return Ok();
+
+                }
+                else
+                {
+                    return BadRequest("Not Found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
         // PUT api/<TeacherAPIController>/5
