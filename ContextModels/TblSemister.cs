@@ -16,6 +16,7 @@ namespace CertificationMS.ContextModels
         public string SemisterName { get; set; }
         public bool? IsDone { get; set; }
 
+        public virtual ExamMaster ExamMaster { get; set; }
         public virtual ICollection<SemesterWiseCourse> SemesterWiseCourses { get; set; }
     }
 }

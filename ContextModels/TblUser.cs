@@ -30,6 +30,7 @@ namespace CertificationMS.ContextModels
         public int? FailedPasswordAttemptCount { get; set; }
         public string Comment { get; set; }
         public bool? ChangePasswordAtFirstLogin { get; set; }
+        public int? TeacherId { get; set; }
 
         public virtual TblGroup Group { get; set; }
     }

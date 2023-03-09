@@ -1,0 +1,140 @@
+﻿@model SemestersWiseCoursesViewModel
+<style>
+    .btn-danger {
+        color: #fff !important;
+        background-color: #fc544b;
+        border-color: #fc544b;
+        -webkit-box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+        box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+        border-radius: 0.25rem;
+    }
+</style>
+<form method="post">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="StudentId" class="control-label">Semester</label>
+
+                <select asp-for="StudentId" class="form-control" required>
+                    <option value="">-- Select Student --</option>
+                    @foreach (var item in Model.StudentInfoVm)
+                    {
+                        <option value="@item.StudentId">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SemesterId" class="control-label">Semester</label>
+                <select asp-for="SemesterId" class="form-control" required>
+                    <option value="">-- Select Semester --</option>
+                    @foreach (var item in Model.semesterVM)
+                    {
+                        <option value="@item.SemisterId">@item.SemisterName</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <table class="table table-bordered" id="checklist">
+                <thead>
+                    <tr class="bg-div">
+                        <th>Sl</th>
+                        <th>Semester Name</th>
+                        <th>Teacher Name</th>
+                        <th>Course Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="datashowlist">
+                </tbody>
+            </table>
+            <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
+
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#checklist").hide();
+
+
+
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+            // Loop through each checkbox and add an event listener
+            checkboxes.forEach(function (checkbox) {
+                checkbox.addEventListener('change click', function () {
+                    if (this.checked) {
+                        console.log(this.id + ' is checked');
+                        // Set value to 'true' when checkbox is checked
+                        this.value = 'true';
+                    } else {
+                        console.log(this.id + ' is unchecked');
+                        // Set value to 'false' when checkbox is unchecked
+                        this.value = 'false';
+                    }
+                });
+            });
+        });
+
+
+
+
+        $("#SemesterId").on("change", function () {
+            var id = $("#SemesterId").val();
+            $.ajax({
+                url: '/StudentCourseMapping/SemestersWiseCourses?id=' + id + '',
+                type: 'GET',
+                success: function (result) {
+                    if (result) {
+                        console.log(result);
+                        let tag = '';
+                        $("#datashowlist").empty();
+                        $.each(result, function (key, item) {
+                            tag += '<tr id="' + key + '">';
+                            tag += '<td> ' + (key + 1) + '</td>';
+                            tag += '<td><input  type="hidden" id="' + key + item.semesterWiseCourseId + '" name="MappVm[' + key + '].SemesterWiseCourseId" value="' + item.semesterWiseCourseId + '"/>' + item.semesterName + '</td>';
+                            tag += '<td>' + item.teacherName + '</td>';
+                            tag += '<td>' + item.coursesName + '</td>';
+                            tag += '<td><input type="checkbox" onclick="BoxClick(this)"   id="' + key + item.semesterWiseCourseId + '" value="'+item.isCheck+'" name="MappVm[' + key + '].IsCheck"/> </td>';
+                            tag += '</tr>';
+                        });
+                        $('#datashowlist').html(tag);
+                        var countid = result.length;
+                        if (countid == 0) {
+                            $("#checklist").hide();
+                        } else {
+                            $("#checklist").show();
+                        }
+
+
+                    }
+                    else {
+
+                        toastr.error('Sommething went wrong!')
+
+                    }
+                }
+            });
+        })
+
+
+        function BoxClick(element) {
+            if (element.checked) {
+                console.log(element.id + ' is checked');
+                // Set value to 'true' when checkbox is checked
+                element.value = 'true';
+            } else {
+                console.log(element.id + ' is unchecked');
+                // Set value to 'false' when checkbox is unchecked
+                element.value = 'false';
+            }
+        }
+    </script>
+
+    }

@@ -23,6 +23,9 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<CertApplication> CertApplications { get; set; }
         public virtual DbSet<Convocation> Convocations { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<ExamDetail> ExamDetails { get; set; }
+        public virtual DbSet<ExamDuty> ExamDuties { get; set; }
+        public virtual DbSet<ExamMaster> ExamMasters { get; set; }
         public virtual DbSet<PrmDesignation> PrmDesignations { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Section> Sections { get; set; }
@@ -40,6 +43,8 @@ namespace CertificationMS.ContextModels
         public virtual DbSet<TblSemister> TblSemisters { get; set; }
         public virtual DbSet<TblTeacher> TblTeachers { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
+        public virtual DbSet<VwExamWiseStudent> VwExamWiseStudents { get; set; }
+        public virtual DbSet<VwTeacherExamDuty> VwTeacherExamDuties { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -103,6 +108,59 @@ namespace CertificationMS.ContextModels
             modelBuilder.Entity<Department>(entity =>
             {
                 entity.ToTable("Departments", "dbo");
+            });
+
+            modelBuilder.Entity<ExamDetail>(entity =>
+            {
+                entity.ToTable("ExamDetails", "dbo");
+
+                entity.Property(e => e.Duration)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasDefaultValueSql("((3))");
+
+                entity.Property(e => e.ExamDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((0))");
+
+                entity.HasOne(d => d.ExamMaster)
+                    .WithMany(p => p.ExamDetails)
+                    .HasForeignKey(d => d.ExamMasterId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamDetails_ExamMaster");
+
+                entity.HasOne(d => d.SemesterWiseCourse)
+                    .WithMany(p => p.ExamDetails)
+                    .HasForeignKey(d => d.SemesterWiseCourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamDetails_SemesterWiseCourse");
+            });
+
+            modelBuilder.Entity<ExamDuty>(entity =>
+            {
+                entity.ToTable("ExamDuty", "dbo");
+
+                entity.HasOne(d => d.Teacher)
+                    .WithMany(p => p.ExamDuties)
+                    .HasForeignKey(d => d.TeacherId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamDuty_TblTeacher");
+            });
+
+            modelBuilder.Entity<ExamMaster>(entity =>
+            {
+                entity.ToTable("ExamMaster", "dbo");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.ExamName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.ExamMaster)
+                    .HasForeignKey<ExamMaster>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ExamMaster_TblSemister");
             });
 
             modelBuilder.Entity<PrmDesignation>(entity =>
@@ -172,9 +230,25 @@ namespace CertificationMS.ContextModels
             {
                 entity.ToTable("StudentCourseMapping", "dbo");
 
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.Property(e => e.IsComplete).HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.ResultPublishedOn).HasColumnType("datetime");
+
                 entity.Property(e => e.Status).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.VerificationMethod).HasMaxLength(50);
+
+                entity.Property(e => e.VerifyDateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("verifyDateTime");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.StudentCourseMapping)
+                    .HasForeignKey<StudentCourseMapping>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentCourseMapping_TblTeacher");
 
                 entity.HasOne(d => d.SemesterWiseCourse)
                     .WithMany(p => p.StudentCourseMappings)
@@ -198,6 +272,8 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.FileName).HasMaxLength(250);
 
                 entity.Property(e => e.Name).HasMaxLength(250);
+
+                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.StudentId)
                     .IsRequired()
@@ -483,6 +559,98 @@ namespace CertificationMS.ContextModels
                     .WithMany(p => p.TblUsers)
                     .HasForeignKey(d => d.GroupId)
                     .HasConstraintName("FK_TblUsers_TblGroups");
+            });
+
+            modelBuilder.Entity<VwExamWiseStudent>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwExamWiseStudents", "dbo");
+
+                entity.Property(e => e.BatchNo).HasMaxLength(50);
+
+                entity.Property(e => e.CourseCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CourseName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Credit).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Duration).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.ExamDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ExamName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.FileName).HasMaxLength(250);
+
+                entity.Property(e => e.Scmid).HasColumnName("SCMId");
+
+                entity.Property(e => e.SemisterName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StudentId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("StudentID");
+
+                entity.Property(e => e.StudentName).HasMaxLength(250);
+
+                entity.Property(e => e.VerificationMethod)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.VerifiedBy)
+                    .IsRequired()
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.VerifyDateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("verifyDateTime");
+            });
+
+            modelBuilder.Entity<VwTeacherExamDuty>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwTeacherExamDuty", "dbo");
+
+                entity.Property(e => e.CourseCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CourseName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Credit).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Duration).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.ExamDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ExamName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.SemisterName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TeacherName)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TeacherShortCode)
+                    .HasMaxLength(50)
+                    .HasColumnName("teacherShortCode");
             });
 
             OnModelCreatingPartial(modelBuilder);
