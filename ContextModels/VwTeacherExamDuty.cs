@@ -11,6 +11,7 @@ namespace CertificationMS.ContextModels
         public string ExamName { get; set; }
         public DateTime? ExamDate { get; set; }
         public int ExamDetailId { get; set; }
+        public decimal Duration { get; set; }
         public int ExamDutyId { get; set; }
         public int CourseId { get; set; }
         public string CourseName { get; set; }
