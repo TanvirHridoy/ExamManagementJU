@@ -24,6 +24,11 @@ namespace CertificationMS.Models.VM
         public string TeacherName { get; set; }
         public string CoursesName { get; set; }
         public bool? IsCheck { get; set; } = false;
+        public List<SemesterWiseCourseView>  datalist { get; set; }
+        public ExamDetail Exam { get; set; }
+        public StudentInfo Student { get; set; }
+        public TblCourse Course { get; set; }
+        public TblTeacher Teacher { get; set; }
     }
     public class CourseView
     {
