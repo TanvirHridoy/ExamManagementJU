@@ -18,7 +18,6 @@ namespace CertificationMS.ContextModels
         public DateTime? VerifyDateTime { get; set; }
         public DateTime? ResultPublishedOn { get; set; }
 
-        public virtual TblTeacher IdNavigation { get; set; }
         public virtual SemesterWiseCourse SemesterWiseCourse { get; set; }
         public virtual StudentInfo Student { get; set; }
     }

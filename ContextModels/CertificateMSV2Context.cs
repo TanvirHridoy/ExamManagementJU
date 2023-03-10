@@ -50,6 +50,7 @@ namespace CertificationMS.ContextModels
         {
             if (!optionsBuilder.IsConfigured)
             {
+
                 optionsBuilder.UseSqlServer("Server=103.125.254.20,9433;Database=juexamdb;User ID=gymuser;Password=sa@1234;MultipleActiveResultSets=true ");
             }
         }
@@ -229,8 +230,6 @@ namespace CertificationMS.ContextModels
             {
                 entity.ToTable("StudentCourseMapping", "dbo");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.Property(e => e.IsComplete).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.ResultPublishedOn).HasColumnType("datetime");
@@ -242,12 +241,6 @@ namespace CertificationMS.ContextModels
                 entity.Property(e => e.VerifyDateTime)
                     .HasColumnType("datetime")
                     .HasColumnName("verifyDateTime");
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.StudentCourseMapping)
-                    .HasForeignKey<StudentCourseMapping>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StudentCourseMapping_TblTeacher");
 
                 entity.HasOne(d => d.SemesterWiseCourse)
                     .WithMany(p => p.StudentCourseMappings)

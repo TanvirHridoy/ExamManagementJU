@@ -16,17 +16,17 @@
             <div class="form-group">
                 <label asp-for="StudentId" class="control-label">Semester</label>
 
-                <select asp-for="StudentId" class="form-control" required>
+                <select asp-for="StudentId" class="form-control select-single" required>
                     <option value="">-- Select Student --</option>
                     @foreach (var item in Model.StudentInfoVm)
                     {
-                        <option value="@item.Id">@item.Name</option>
+                        <option value="@item.Id">@item.StudentId - @item.Name</option>
                     }
                 </select>
             </div>
             <div class="form-group">
                 <label asp-for="SemesterId" class="control-label">Semester</label>
-                <select asp-for="SemesterId" class="form-control" required>
+                <select asp-for="SemesterId" class="form-control select-single" required>
                     <option value="">-- Select Semester --</option>
                     @foreach (var item in Model.semesterVM)
                     {
@@ -52,9 +52,11 @@
                 <tbody id="datashowlist">
                 </tbody>
             </table>
-            <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success " />
+
 
         </div>
+
+        <input type="submit" value="Confirm Submit" asp-action="Index" class="btn btn-success ml-3" />
     </div>
 </form>
 @section Scripts {
@@ -83,44 +85,60 @@
         });
 
 
+        function LoadData() {
+            var SemesterId = $("#SemesterId").val();
+            var studentId = $("#StudentId").val();
+            if (SemesterId == null || SemesterId == undefined || SemesterId == 0 || studentId == null || studentId == undefined || studentId == 0) {
+                return;
+            }
+            else {
+                //int id, int StudentId
+                $.ajax({
+                    url: '/StudentCourseMapping/SemestersWiseCourses?id=' + SemesterId + '&StudentId=' + studentId,
+                    type: 'GET',
+                    success: function (result) {
+                        if (result) {
+                            console.log(result);
+                            let tag = '';
+                            $("#datashowlist").empty();
+                            $.each(result, function (key, item) {
+                                var checked = item.isCheck == true ? "checked" : "";
+                                tag += '<tr id="' + key + '">';
+                                tag += '<td> ' + (key + 1) + '</td>';
+                                tag += '<td><input  type="hidden" id="' + key + item.semesterWiseCourseId + '" name="MappVm[' + key + '].SemesterWiseCourseId" value="' + item.semesterWiseCourseId + '"/>' + item.semesterName + '</td>';
+                                tag += '<td>' + item.teacherName + '</td>';
+                                tag += '<td>' + item.coursesName + '</td>';
+                                tag += '<td><input type="checkbox" ' + checked + ' onclick="BoxClick(this)"   id="' + key + item.semesterWiseCourseId + '" value="' + item.isCheck + '" name="MappVm[' + key + '].IsCheck"/> </td>';
+                                tag += '</tr>';
+                            });
+                            $('#datashowlist').html(tag);
+                            var countid = result.length;
+                            if (countid == 0) {
+                                $("#checklist").hide();
+                            } else {
+                                $("#checklist").show();
+                            }
 
+
+                        }
+                        else {
+
+                            toastr.error('Sommething went wrong!')
+
+                        }
+                    }
+                });
+            }
+
+        }
 
         $("#SemesterId").on("change", function () {
-            var id = $("#SemesterId").val();
-            $.ajax({
-                url: '/StudentCourseMapping/SemestersWiseCourses?id=' + id + '',
-                type: 'GET',
-                success: function (result) {
-                    if (result) {
-                        console.log(result);
-                        let tag = '';
-                        $("#datashowlist").empty();
-                        $.each(result, function (key, item) {
-                            tag += '<tr id="' + key + '">';
-                            tag += '<td> ' + (key + 1) + '</td>';
-                            tag += '<td><input  type="hidden" id="' + key + item.semesterWiseCourseId + '" name="MappVm[' + key + '].SemesterWiseCourseId" value="' + item.semesterWiseCourseId + '"/>' + item.semesterName + '</td>';
-                            tag += '<td>' + item.teacherName + '</td>';
-                            tag += '<td>' + item.coursesName + '</td>';
-                            tag += '<td><input type="checkbox" onclick="BoxClick(this)"   id="' + key + item.semesterWiseCourseId + '" value="'+item.isCheck+'" name="MappVm[' + key + '].IsCheck"/> </td>';
-                            tag += '</tr>';
-                        });
-                        $('#datashowlist').html(tag);
-                        var countid = result.length;
-                        if (countid == 0) {
-                            $("#checklist").hide();
-                        } else {
-                            $("#checklist").show();
-                        }
+            LoadData();
+        })
 
 
-                    }
-                    else {
-
-                        toastr.error('Sommething went wrong!')
-
-                    }
-                }
-            });
+        $("#StudentId").on("change", function () {
+            LoadData();
         })
 
 

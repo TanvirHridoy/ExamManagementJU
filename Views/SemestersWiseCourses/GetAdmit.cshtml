@@ -1,6 +1,6 @@
 ﻿@model SemestersWiseCoursesViewModel
 @{
-    ViewData["Title"] = "GetAdmit";
+    ViewData["Title"] = "Generate Admit Card";
 }
 
 
@@ -20,11 +20,11 @@
             <div class="form-group">
                 <label asp-for="StudentId" class="control-label">Student</label>
 
-                <select asp-for="StudentId" class="form-control" required>
+                <select asp-for="StudentId" class="form-control select-single" required>
                     <option value="">-- Select Student --</option>
                     @foreach (var item in Model.StudentInfoVm)
                     {
-                        <option value="@item.Id">@item.Name</option>
+                        <option value="@item.Id">@item.StudentId - @item.Name</option>
                     }
                 </select>
             </div>
@@ -33,7 +33,7 @@
         <div class="col-md-5">
             <div class="form-group">
                 <label asp-for="SemesterId" class="control-label">Semester</label>
-                <select asp-for="SemesterId" class="form-control" required>
+                <select asp-for="SemesterId" class="form-control select-single" required>
                     <option value="">-- Select Semester --</option>
                     @foreach (var item in Model.semesterVM)
                     {
@@ -42,7 +42,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-2 mt-3">
+        <div class="col-md-2 mt-4">
             <input type="submit" value="Show Admit" asp-action="admit_print" asp-controller="SemestersWiseCourses" class="btn btn-success " />
         </div>
 

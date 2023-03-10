@@ -25,7 +25,6 @@ namespace CertificationMS.ContextModels
         public string Email { get; set; }
         public int? GenderId { get; set; }
 
-        public virtual StudentCourseMapping StudentCourseMapping { get; set; }
         public virtual ICollection<ExamDuty> ExamDuties { get; set; }
         public virtual ICollection<SemesterWiseCourse> SemesterWiseCourses { get; set; }
     }

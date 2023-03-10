@@ -4,9 +4,11 @@ using CertificationMS.Models.VM;
 using CertificationMS.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CertificationMS.Controllers
 {
@@ -29,20 +31,20 @@ namespace CertificationMS.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult SemestersWiseCourses(int id)
+        public async Task<ActionResult> SemestersWiseCourses(int id, int StudentId)
         {
 
             List<SemesterWiseCourseView> model = new List<SemesterWiseCourseView>();
-
-            var list = _Db.SemesterWiseCourses.Where(s => s.SemesterId == id).ToList();
+            var sdata = await _Db.StudentCourseMappings.Include(e => e.SemesterWiseCourse).Where(e => e.StudentId == StudentId && e.SemesterWiseCourse.SemesterId == id).ToListAsync();
+            var list =await _Db.SemesterWiseCourses.Where(s => s.SemesterId == id).ToListAsync();
             foreach (var semester in list)
             {
                 SemesterWiseCourseView data = new SemesterWiseCourseView();
-                data.SemesterWiseCourseId = semester.SemesterId;
+                data.SemesterWiseCourseId = semester.Id;
                 data.SemesterName = _Db.TblSemisters.FirstOrDefault(d => d.SemisterId == semester.SemesterId).SemisterName;
                 data.TeacherName = _Db.TblTeachers.FirstOrDefault(d => d.TeacherId == semester.TeacherId).Name;
                 data.CoursesName = _Db.TblCourses.FirstOrDefault(d => d.CourseId == semester.CourseId).CourseName;
-                var res = _Db.StudentCourseMappings.FirstOrDefault(g => g.SemesterWiseCourseId == semester.Id);
+                var res = sdata.FirstOrDefault(e=>e.SemesterWiseCourseId==semester.Id);
                 if (res != null)
                 {
                     data.IsCheck = true;
@@ -55,34 +57,51 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(SemestersWiseCoursesViewModel vM)
         {
-            List<StudentCourseMapping> models = new List<StudentCourseMapping>();
-            if (vM.MappVm.Count() > 0)
+            try
             {
-                foreach (var item in vM.MappVm)
+                if (vM.MappVm.Count() > 0)
                 {
-                    if (item.IsCheck==true)
+                    foreach (var item in vM.MappVm)
                     {
-                        List<StudentCourseMapping> res = _Db.StudentCourseMappings.Where(d => d.StudentId == vM.StudentId && d.SemesterWiseCourseId == item.SemesterWiseCourseId).ToList();
-                        if (res.Count()>0)
+                        if (item.IsCheck == true)
                         {
-                            _Db.StudentCourseMappings.RemoveRange(res);
-                            _Db.SaveChanges();
+                            var res = await _Db.StudentCourseMappings.AsNoTracking().Where(d => d.StudentId == vM.StudentId && d.SemesterWiseCourseId == item.SemesterWiseCourseId).SingleOrDefaultAsync();
+                            if (res == null)
+                            {
+                                StudentCourseMapping mapping = new StudentCourseMapping();
+                                mapping.StudentId = vM.StudentId;
+                                mapping.SemesterWiseCourseId = item.SemesterWiseCourseId;
+                                mapping.Status = 1;
+                                mapping.IsComplete = false;
+                                mapping.Id = 0;
+                                await _Db.StudentCourseMappings.AddAsync(mapping);
+                                await _Db.SaveChangesAsync();
+
+                            }
                         }
-                        StudentCourseMapping mapping = new StudentCourseMapping();
-                        mapping.StudentId = vM.StudentId;
-                        mapping.SemesterWiseCourseId = item.SemesterWiseCourseId;
-                        mapping.Status = 1;
-                        mapping.IsComplete = false;
-                        models.Add(mapping);
+                        else
+                        {
+                            var res = await _Db.StudentCourseMappings.Where(d => d.StudentId == vM.StudentId && d.SemesterWiseCourseId == item.SemesterWiseCourseId).SingleOrDefaultAsync();
+                            if (res != null)
+                            {
+                                _Db.StudentCourseMappings.Remove(res);
+                                await _Db.SaveChangesAsync();
+                            }
+                        }
+
                     }
 
-                }
-                _Db.StudentCourseMappings.AddRange(models);
-                _Db.SaveChanges();
 
+                }
             }
-            
-            return View();
+            catch (System.Exception ex)
+            {
+
+                var msg = ex.Message;
+            }
+           
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

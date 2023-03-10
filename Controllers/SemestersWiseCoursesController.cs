@@ -93,7 +93,7 @@ namespace CertificationMS.Controllers
                             courses[index].Capacity = vM.Capacity[i];
                         }
                     }
-                    
+
                     _Db.SemesterWiseCourses.AddRange(models);
                     await _Db.SaveChangesAsync();
                 }
@@ -147,7 +147,7 @@ namespace CertificationMS.Controllers
             await _Db.SaveChangesAsync();
             return RedirectToAction(nameof(List));
         }
-        public async Task<IActionResult> GetAdmit(long id)
+        public async Task<IActionResult> GetAdmit()
         {
 
             SemestersWiseCoursesViewModel model = new SemestersWiseCoursesViewModel();
@@ -158,22 +158,36 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<IActionResult> admit_print(SemestersWiseCoursesViewModel model)
         {
-            var list = _Db.StudentCourseMappings.Where(s =>s.StudentId==model.StudentId).ToList();
+            var list2 = await _Db.StudentCourseMappings
+                .Join(_Db.SemesterWiseCourses, scm => scm.SemesterWiseCourseId, sc => sc.Id, (scm, sc) => new { scm, sc })
+                .Join(_Db.TblTeachers, sct => sct.sc.TeacherId, t => t.TeacherId, (sct, t) => new { sct.scm, sct.sc, t })
+                .Join(_Db.TblCourses, sctt => sctt.sc.CourseId, c => c.CourseId, (sctt, c) => new { sctt.scm, sctt.sc, sctt.t, c })
+                .Join(_Db.ExamDetails, scttc => scttc.sc.Id, ed => ed.SemesterWiseCourseId, (scttc, ed) => new { scttc.scm, scttc.sc, scttc.t, scttc.c, ed })
+                .Where(e=>e.scm.StudentId==model.StudentId)
+                .Select(x => new SemesterWiseCourseView
+                {
+                     Course=x.c,
+                     Teacher=x.t,
+                     Exam=x.ed,
+                     ExamDate=x.ed.ExamDate
+                }).ToListAsync();
+
+            //var list = _Db.StudentCourseMappings.Include(e => e.SemesterWiseCourse).ThenInclude(e => e.Course).Include(e => e.SemesterWiseCourse.Teacher).Include(e => e.SemesterWiseCourse.ExamDetails).Where(s => s.StudentId == model.StudentId && s.SemesterWiseCourse.ExamDetails != null).ToList();
             SemesterWiseCourseView datamodel = new SemesterWiseCourseView();
             datamodel.SemesterName = _Db.TblSemisters.FirstOrDefault(d => d.SemisterId == model.SemesterId).SemisterName;
-            datamodel.Student = _Db.StudentInfos.FirstOrDefault(d => d.Id == model.StudentId);
+            datamodel.Student = _Db.StudentInfos.Include(e => e.Batch).FirstOrDefault(d => d.Id == model.StudentId);
             List<SemesterWiseCourseView> model2 = new List<SemesterWiseCourseView>();
-            foreach (var semester in list)
-            {
-                SemesterWiseCourseView data = new SemesterWiseCourseView();
-                var result = _Db.SemesterWiseCourses.FirstOrDefault(s => s.Id == semester.SemesterWiseCourseId);
-                data.Teacher = _Db.TblTeachers.FirstOrDefault(d => d.TeacherId == result.TeacherId);
-                data.Course = _Db.TblCourses.FirstOrDefault(d => d.CourseId == result.CourseId);
-                data.Exam = _Db.ExamDetails.FirstOrDefault(f => f.SemesterWiseCourseId == result.Id);
-                data.ExamDate = data.Exam.ExamDate;
-                model2.Add(data);
-            }
-            datamodel.datalist = model2;
+            //foreach (var semester in list)
+            //{
+            //    SemesterWiseCourseView data = new SemesterWiseCourseView();
+            //    //var result = _Db.SemesterWiseCourses.FirstOrDefault(s => s.Id == semester.SemesterWiseCourseId);
+            //    data.Teacher = semester.SemesterWiseCourse.Teacher;
+            //    data.Course = semester.SemesterWiseCourse.Course;
+            //    data.Exam = _Db.ExamDetails.FirstOrDefault(f => f.SemesterWiseCourseId == semester.SemesterWiseCourseId);
+            //    data.ExamDate = data.Exam.ExamDate;
+            //    model2.Add(data);
+            //}
+            datamodel.datalist = list2;
             return View(datamodel);
         }
     }
