@@ -1,0 +1,51 @@
+﻿@model SemestersWiseCoursesViewModel
+@{
+    ViewData["Title"] = "GetAdmit";
+}
+
+
+<style>
+    .btn-danger {
+        color: #fff !important;
+        background-color: #fc544b;
+        border-color: #fc544b;
+        -webkit-box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+        box-shadow: 0 .125rem .25rem 0 rgba(58,59,69,.2) !important;
+        border-radius: 0.25rem;
+    }
+</style>
+<form asp-action="admit_print" asp-controller="SemestersWiseCourses" method="post">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="form-group">
+                <label asp-for="StudentId" class="control-label">Student</label>
+
+                <select asp-for="StudentId" class="form-control" required>
+                    <option value="">-- Select Student --</option>
+                    @foreach (var item in Model.StudentInfoVm)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            </div>
+
+        <div class="col-md-5">
+            <div class="form-group">
+                <label asp-for="SemesterId" class="control-label">Semester</label>
+                <select asp-for="SemesterId" class="form-control" required>
+                    <option value="">-- Select Semester --</option>
+                    @foreach (var item in Model.semesterVM)
+                    {
+                        <option value="@item.SemisterId">@item.SemisterName</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2 mt-3">
+            <input type="submit" value="Show Admit" asp-action="admit_print" asp-controller="SemestersWiseCourses" class="btn btn-success " />
+        </div>
+
+    </div>
+</form>
+

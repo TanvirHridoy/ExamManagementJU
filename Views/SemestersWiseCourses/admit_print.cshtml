@@ -1,4 +1,4 @@
-﻿
+﻿@model SemesterWiseCourseView
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,37 +96,36 @@
                 <p style="font-weight:600;font-size:25px">PMSCS PROGRAM </p>
                 <p style="font-weight:500;font-size:20px">Department of Computer science & Engineering </p>
                 <p style="font-weight:500;font-size:20px">Jahangirnagar University, sayar, Dhaka-1342, Bangladesh. </p>
-                <p style ="font-weight:600;font-size:25px">SEMISTER FINAL EXAMINATION SPRING/SUMMER/FALL-20 --- </p>
+                <p style="font-weight:600;font-size:25px;text-transform: uppercase;">SEMISTER FINAL EXAMINATION @Model.SemesterName </p>
                 <p style="font-weight:800;font-size:45px;margin-bottom:10px;margin-top:10px">ADMIT CARD </p>
            </div>  
             <!-- info row -->
             <div class="row invoice-info">
-                <div class="col-sm-2 invoice-col">
-                    <b>Student,s name:</b><br />
-                    <b> (In Block letter)</b>
+                <div class="col-sm-2 invoice-col" style="margin-top:10px">
+                    <b>Student,s name:</b>
                 </div>
                 <div class="col-sm-5 invoice-col">
-                    <input class="form-control" />
+                    <input value="@Model.Student.Name" class="form-control" />
                 </div>       
                 <div class="col-sm-1 invoice-col" style="margin-top:10px">
                     <b>Batch:</b>
                 </div>
                 <div class="col-sm-4 invoice-col">
-                    <input class="form-control" />
+                    <input value="@Model.Student.Batch" class="form-control" />
                 </div>    
             </div>
             <div class="row invoice-info" style="margin-top:15px">
                 <div class="col-sm-2 invoice-col" style="margin-top:10px">
-                    <b>Class ID: Semester:</b>
+                    <b>Class ID:</b>
                 </div>
                 <div class="col-sm-4 invoice-col">
-                    <input class="form-control" />
+                    <input value="@Model.Student.StudentId" class="form-control" />
                 </div>
                 <div class="col-sm-2 invoice-col" style="margin-top:10px">
                     <b>Registered Courses:</b>
                 </div>
                 <div class="col-sm-4 invoice-col">
-                    <input class="form-control" />
+                    <input value="@Model.SemesterName" class="form-control" />
                 </div>
             </div>
                 <div class="row">
@@ -135,53 +134,30 @@
 
                     <div class="table-responsive" style="margin-top:15px">
                         <table class="table table-sm table-bordered">
-                            <tr>
-                                <td> PMSCS-600 </td>
-                                <td> A PMsCs-612 </td>
-                                <td> PMSCS-654 </td>
-                                <td>  PMSCS-665  </td>
-                                <td> PMSCS-676</td>
-                            </tr>   
-                            <tr>
-                                <td> PMSCS-600 </td>
-                                <td> A PMsCs-612 </td>
-                                <td> PMSCS-654 </td>
-                                <td>  PMSCS-665  </td>
-                                <td> PMSCS-676</td>
-                            </tr>
-                            <tr>
-                                <td> PMSCS-600 </td>
-                                <td> A PMsCs-612 </td>
-                                <td> PMSCS-654 </td>
-                                <td>  PMSCS-665  </td>
-                                <td> PMSCS-676</td>
-                            </tr>
-                            <tr>
-                                <td> PMSCS-600 </td>
-                                <td> A PMsCs-612 </td>
-                                <td> PMSCS-654 </td>
-                                <td>  PMSCS-665  </td>
-                                <td> PMSCS-676</td>
-                            </tr>
-                            <tr>
-                                <td> PMSCS-600 </td>
-                                <td> A PMsCs-612 </td>
-                                <td> PMSCS-654 </td>
-                                <td>  PMSCS-665  </td>
-                                <td> PMSCS-676</td>
-                            </tr>
-                            <tr>
-                                <td> PMSCS-600 </td>
-                                <td> A PMsCs-612 </td>
-                                <td> PMSCS-654 </td>
-                                <td>  PMSCS-665  </td>
-                                <td> PMSCS-676</td>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th> Course Code </th>
+                                    <th>Course Name</th>
+                                    <th>Exam Date</th>                                 
+                                    <th>Exam Time</th>                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var item in Model.datalist.OrderBy(d=>d.ExamDate)){
+                                    <tr>
+                                        <td> @item.Course.CourseCode </td>
+                                        <td> @item.Course.CourseName </td>
+                                        <td>@item.Exam.ExamDate.Value.ToShortDateString() </td>
+                                        <td>@item.Exam.ExamDate.Value.ToShortTimeString() </td>
+                                    </tr>
+                                }
+
+                            </tbody>
                         </table>
                     </div>
                     </div>
    
-                    <div class="col-5" style="text-align:center;margin-top:200px">
+                    <div class="col-5" style="text-align:center;margin-top:150px">
                         <b>  Authorized Signature</b>
                     </div>
                 </div>

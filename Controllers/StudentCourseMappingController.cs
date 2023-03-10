@@ -31,6 +31,7 @@ namespace CertificationMS.Controllers
         [HttpGet]
         public IActionResult SemestersWiseCourses(int id)
         {
+
             List<SemesterWiseCourseView> model = new List<SemesterWiseCourseView>();
 
             var list = _Db.SemesterWiseCourses.Where(s => s.SemesterId == id).ToList();

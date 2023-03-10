@@ -147,11 +147,34 @@ namespace CertificationMS.Controllers
             await _Db.SaveChangesAsync();
             return RedirectToAction(nameof(List));
         }
-
-        public async Task<IActionResult> admit_print(long id)
+        public async Task<IActionResult> GetAdmit(long id)
         {
-           
-            return View();
+
+            SemestersWiseCoursesViewModel model = new SemestersWiseCoursesViewModel();
+            model.semesterVM = _Db.TblSemisters.ToList();
+            model.StudentInfoVm = _Db.StudentInfos.ToList();
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> admit_print(SemestersWiseCoursesViewModel model)
+        {
+            var list = _Db.StudentCourseMappings.Where(s =>s.StudentId==model.StudentId).ToList();
+            SemesterWiseCourseView datamodel = new SemesterWiseCourseView();
+            datamodel.SemesterName = _Db.TblSemisters.FirstOrDefault(d => d.SemisterId == model.SemesterId).SemisterName;
+            datamodel.Student = _Db.StudentInfos.FirstOrDefault(d => d.Id == model.StudentId);
+            List<SemesterWiseCourseView> model2 = new List<SemesterWiseCourseView>();
+            foreach (var semester in list)
+            {
+                SemesterWiseCourseView data = new SemesterWiseCourseView();
+                var result = _Db.SemesterWiseCourses.FirstOrDefault(s => s.Id == semester.SemesterWiseCourseId);
+                data.Teacher = _Db.TblTeachers.FirstOrDefault(d => d.TeacherId == result.TeacherId);
+                data.Course = _Db.TblCourses.FirstOrDefault(d => d.CourseId == result.CourseId);
+                data.Exam = _Db.ExamDetails.FirstOrDefault(f => f.SemesterWiseCourseId == result.Id);
+                data.ExamDate = data.Exam.ExamDate;
+                model2.Add(data);
+            }
+            datamodel.datalist = model2;
+            return View(datamodel);
         }
     }
 }
