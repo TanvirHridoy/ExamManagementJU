@@ -104,7 +104,7 @@ namespace CertificationMS.Controllers
         [HttpPost]
         public async Task<IActionResult> admit_print(SemestersWiseCoursesViewModel model)
         {
-            var list = _Db.SemesterWiseCourses.Where(s => s.SemesterId == model.SemesterId&&s.SemesterId==model.StudentId).ToList();
+            var list = _Db.StudentCourseMappings.Where(s =>s.StudentId==model.StudentId).ToList();
             SemesterWiseCourseView datamodel = new SemesterWiseCourseView();
             datamodel.SemesterName = _Db.TblSemisters.FirstOrDefault(d => d.SemisterId == model.SemesterId).SemisterName;
             datamodel.Student = _Db.StudentInfos.FirstOrDefault(d => d.Id == model.StudentId);
@@ -112,10 +112,11 @@ namespace CertificationMS.Controllers
             foreach (var semester in list)
             {
                 SemesterWiseCourseView data = new SemesterWiseCourseView();
-                data.Teacher = _Db.TblTeachers.FirstOrDefault(d => d.TeacherId == semester.TeacherId);
-                data.Course = _Db.TblCourses.FirstOrDefault(d => d.CourseId == semester.CourseId);
-                data.Exam = _Db.ExamDetails.FirstOrDefault(f => f.SemesterWiseCourseId == semester.Id);
-    
+                var result = _Db.SemesterWiseCourses.FirstOrDefault(s => s.Id == semester.SemesterWiseCourseId);
+                data.Teacher = _Db.TblTeachers.FirstOrDefault(d => d.TeacherId == result.TeacherId);
+                data.Course = _Db.TblCourses.FirstOrDefault(d => d.CourseId == result.CourseId);
+                data.Exam = _Db.ExamDetails.FirstOrDefault(f => f.SemesterWiseCourseId == result.Id);
+                data.ExamDate = data.Exam.ExamDate;
                 model2.Add(data);
             }
             datamodel.datalist = model2;

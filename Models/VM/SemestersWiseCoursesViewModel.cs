@@ -1,4 +1,5 @@
 ﻿using CertificationMS.ContextModels;
+using System;
 using System.Collections.Generic;
 
 namespace CertificationMS.Models.VM
@@ -24,6 +25,7 @@ namespace CertificationMS.Models.VM
         public string TeacherName { get; set; }
         public string CoursesName { get; set; }
         public bool? IsCheck { get; set; } = false;
+        public DateTime? ExamDate { get; set; }
         public List<SemesterWiseCourseView>  datalist { get; set; }
         public ExamDetail Exam { get; set; }
         public StudentInfo Student { get; set; }
