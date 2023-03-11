@@ -78,4 +78,16 @@ namespace CertificationMS.Models
         public IEnumerable<TblCourse> list { get; set; }
         public string message { get; set; }
     }
+    public class ExamMasterVM
+    {
+        public IEnumerable<ExamMaster> list { get; set; }
+        public string message { get; set; }
+    }
+
+    public class ExamMasterCreateVM
+    {
+        public ExamMaster Exam { get; set; }
+        public List<TblSemister> SemesterList { get; set; }
+        public string message { get; set; }
+    }
 }

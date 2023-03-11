@@ -150,16 +150,13 @@ namespace CertificationMS.ContextModels
             {
                 entity.ToTable("ExamMaster", "dbo");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.Property(e => e.ExamName)
                     .IsRequired()
                     .HasMaxLength(250);
 
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.ExamMaster)
-                    .HasForeignKey<ExamMaster>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                entity.HasOne(d => d.Semester)
+                    .WithMany(p => p.ExamMasters)
+                    .HasForeignKey(d => d.SemesterId)
                     .HasConstraintName("FK_ExamMaster_TblSemister");
             });
 

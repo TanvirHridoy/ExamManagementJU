@@ -17,7 +17,7 @@ namespace CertificationMS.ContextModels
         public int? SemesterId { get; set; }
         public bool IsComplete { get; set; }
 
-        public virtual TblSemister IdNavigation { get; set; }
+        public virtual TblSemister Semester { get; set; }
         public virtual ICollection<ExamDetail> ExamDetails { get; set; }
     }
 }
