@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Utility
+namespace EMSJu.Utility
 {
     public class Status
     {

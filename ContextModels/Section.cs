@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace CertificationMS.ContextModels
+namespace EMSJu.ContextModels
 {
     public partial class Section
     {

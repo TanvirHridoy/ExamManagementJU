@@ -1,6 +1,6 @@
-﻿using CertificationMS.ContextModels;
-using CertificationMS.Models;
-using CertificationMS.Models.VM;
+﻿using EMSJu.ContextModels;
+using EMSJu.Models;
+using EMSJu.Models.VM;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace CertificationMS.Controllers
+namespace EMSJu.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

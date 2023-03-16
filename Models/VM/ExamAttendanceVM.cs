@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Models.VM
+namespace EMSJu.Models.VM
 {
     public class ExamAttendanceVM
     {

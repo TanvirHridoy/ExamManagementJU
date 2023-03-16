@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace CertificationMS.Utility
+namespace EMSJu.Utility
 {
     public static class ListToXml
     {

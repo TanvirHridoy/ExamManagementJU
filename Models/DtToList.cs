@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Models
+namespace EMSJu.Models
 {
     public static class DtToList
     {

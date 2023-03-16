@@ -1,6 +1,6 @@
 using System;
 
-namespace CertificationMS.Models
+namespace EMSJu.Models
 {
     public class ErrorViewModel
     {

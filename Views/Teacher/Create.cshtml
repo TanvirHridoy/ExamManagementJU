@@ -1,4 +1,4 @@
-﻿@model CertificationMS.ContextModels.TblTeacher
+﻿@model EMSJu.ContextModels.TblTeacher
 
 @{
     ViewData["Title"] = "Add Teacher";
@@ -62,7 +62,7 @@
             </div>
             <div>
             @Html.DropDownList("Gender",
-    Html.GetEnumSelectList<CertificationMS.Models.Gender>(),
+    Html.GetEnumSelectList<EMSJu.Models.Gender>(),
     "Select Gender", new { @class = "form-control" })
                 </div>
 

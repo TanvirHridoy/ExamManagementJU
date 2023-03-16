@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace CertificationMS.ContextModels
+namespace EMSJu.ContextModels
 {
     public partial class CertificateMSV2Context : DbContext
     {

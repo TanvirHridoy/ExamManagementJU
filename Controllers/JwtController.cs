@@ -1,5 +1,5 @@
-﻿using CertificationMS.Models;
-using CertificationMS.Utility;
+﻿using EMSJu.Models;
+using EMSJu.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
-namespace CertificationMS.Controllers
+namespace EMSJu.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,7 +1,7 @@
-﻿using CertificationMS.ContextModels;
+﻿using EMSJu.ContextModels;
 using System.Collections.Generic;
 
-namespace CertificationMS.Models
+namespace EMSJu.Models
 {
     public class ApplicationDetailsViewModel
     {

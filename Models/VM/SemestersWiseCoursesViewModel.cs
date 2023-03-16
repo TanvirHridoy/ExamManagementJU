@@ -1,8 +1,8 @@
-﻿using CertificationMS.ContextModels;
+﻿using EMSJu.ContextModels;
 using System;
 using System.Collections.Generic;
 
-namespace CertificationMS.Models.VM
+namespace EMSJu.Models.VM
 {
     public class SemestersWiseCoursesViewModel
     {

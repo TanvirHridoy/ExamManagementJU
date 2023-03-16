@@ -1,5 +1,5 @@
-using CertificationMS.ContextModels;
-using CertificationMS.Utility;
+using EMSJu.ContextModels;
+using EMSJu.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -13,7 +13,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 
-namespace CertificationMS
+namespace EMSJu
 {
     public class Startup
     {

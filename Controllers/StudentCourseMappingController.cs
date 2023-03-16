@@ -1,7 +1,7 @@
-﻿using CertificationMS.ContextModels;
-using CertificationMS.Models;
-using CertificationMS.Models.VM;
-using CertificationMS.Utility;
+﻿using EMSJu.ContextModels;
+using EMSJu.Models;
+using EMSJu.Models.VM;
+using EMSJu.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CertificationMS.Controllers
+namespace EMSJu.Controllers
 {
     public class StudentCourseMappingController : Controller
     {

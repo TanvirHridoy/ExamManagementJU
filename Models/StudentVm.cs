@@ -1,10 +1,10 @@
-﻿using CertificationMS.ContextModels;
+﻿using EMSJu.ContextModels;
 using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Asn1.X509;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CertificationMS.Models
+namespace EMSJu.Models
 {
     public class StudentVm
     {
@@ -21,8 +21,8 @@ namespace CertificationMS.Models
 
     public class StudentCreateVm
     {
-        public List<CertificationMS.ContextModels.Program> Programs { get; set; }
-        public List<CertificationMS.ContextModels.BatchInfo> BatchInfos { get; set; }
+        public List<EMSJu.ContextModels.Program> Programs { get; set; }
+        public List<EMSJu.ContextModels.BatchInfo> BatchInfos { get; set; }
         public StudentVm Student { get; set; }
 
     }

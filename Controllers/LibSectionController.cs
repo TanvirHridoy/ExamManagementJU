@@ -1,6 +1,6 @@
-﻿using CertificationMS.ContextModels;
-using CertificationMS.Models;
-using CertificationMS.Utility;
+﻿using EMSJu.ContextModels;
+using EMSJu.Models;
+using EMSJu.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Controllers
+namespace EMSJu.Controllers
 {
     [SessionTimeout]
     public class LibSectionController : Controller

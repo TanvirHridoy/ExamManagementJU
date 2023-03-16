@@ -1,5 +1,5 @@
-﻿using CertificationMS.Models;
-using CertificationMS.Utility;
+﻿using EMSJu.Models;
+using EMSJu.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Controllers
+namespace EMSJu.Controllers
 {
     [SessionTimeout]
     public class UserRoleController : Controller

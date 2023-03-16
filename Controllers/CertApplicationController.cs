@@ -1,8 +1,8 @@
-﻿using CertificationMS.ContextModels;
+﻿using EMSJu.ContextModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Controllers
+namespace EMSJu.Controllers
 {
     public class CertApplicationController : Controller
     {

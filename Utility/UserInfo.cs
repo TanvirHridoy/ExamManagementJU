@@ -1,10 +1,10 @@
-﻿using CertificationMS.ContextModels;
+﻿using EMSJu.ContextModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Utility
+namespace EMSJu.Utility
 {
     public static class UserInfo
     {

@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Net.Mail;
 
-namespace CertificationMS.Utility
+namespace EMSJu.Utility
 {
     public class MailHelper
     {

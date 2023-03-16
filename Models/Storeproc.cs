@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Models
+namespace EMSJu.Models
 {
     public class Storeproc
     {

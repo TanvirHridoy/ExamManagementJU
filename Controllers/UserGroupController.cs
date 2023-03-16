@@ -1,5 +1,5 @@
-﻿using CertificationMS.Models;
-using CertificationMS.Utility;
+﻿using EMSJu.Models;
+using EMSJu.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +12,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Controllers
+namespace EMSJu.Controllers
 {
     [SessionTimeout]
     public class UserGroupController : Controller

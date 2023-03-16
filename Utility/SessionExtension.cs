@@ -1,4 +1,4 @@
-﻿using CertificationMS.Models;
+﻿using EMSJu.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CertificationMS.Utility
+namespace EMSJu.Utility
 {
     public static class SessionExtension
     {
