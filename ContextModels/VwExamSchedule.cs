@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace EMSJu.ContextModels
 {
-    public partial class VwExamDetail
+    public partial class VwExamSchedule
     {
         public int Scmid { get; set; }
         public string CourseName { get; set; }
@@ -15,5 +15,7 @@ namespace EMSJu.ContextModels
         public DateTime? ExamDate { get; set; }
         public decimal Duration { get; set; }
         public bool? Status { get; set; }
+        public string TeacherName { get; set; }
+        public string TeacherShortCode { get; set; }
     }
 }
