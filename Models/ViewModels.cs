@@ -84,6 +84,11 @@ namespace EMSJu.Models
         public string message { get; set; }
     }
 
+
+    public class SemisterVm
+    {
+        public List<TblSemister> semisters { get; set; }
+    }
     public class ExamMasterCreateVM
     {
         public ExamMaster Exam { get; set; }
