@@ -84,7 +84,7 @@ namespace EMSJu.Controllers
             }
             catch (Exception ex)
             {
-
+                return RedirectToAction("List", new { message = "Failed To Update" });
             }
 
             return RedirectToAction("List", new { message = "Updated SuccessFully" });

@@ -22,6 +22,13 @@ namespace EMSJu.Models.VM
         public int[] Id { get; set; }
         public int ExamId { get; set; }
     }
+
+    public class ExamDutyVM
+    {
+        public int ExamDetailId { get; set; }
+        public int[] DutyId { get; set; }
+        public int[] TeacherId { get; set; }
+    }
     public class SemestersWiseCoursesVM
     {
         public int Id { get; set; }

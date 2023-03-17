@@ -227,7 +227,6 @@
 
         function AjaxLoadSemData(res) {
             console.table(res);
-            return;
             var dtTable = $("#semTable");
             var tableBody = dtTable.find('tbody');
             tableBody.empty();
@@ -237,11 +236,8 @@
                 var trHtml = `<tr>
                                   <td><span class="serialNo">${key + 1}</span> </td>
                                   <td>
-                                       <input hidden="hidden" name="DutyId" value="${value.scmid}"/>
-
-                                                                                                    ${value.courseName} - ${value.courseCode}</td>
-                                                                                                    <td><input type="datetime-local" class="form-control" name="ExamDate" required value="${value.examDate}"/></td>
-                                                                                                    <td><input type="text" name="Duration" class="form-control" value="${value.duration}"/></td>
+                                               <input hidden="hidden" name="DutyId" value="${value.dutyId}"/> ${teacherDw}</td>
+                                                                                                    
                                                                                                     <td><button class="border-0" type="button"  onclick="removeRow(this)"><i class="fa fa-trash text-danger fa-2x"></i></button></td>
                                                                                         </tr>
                                                                                 `;
@@ -284,7 +280,7 @@
             //var courseDw = MakeCourseDW(0);
             var trHtml = `<tr>
                                                                                                     <td><span class="serialNo">0</span> </td>
-                                                                                                            <td><input hidden="hidden" name="Id" value="0"/> ${teacherDw}</td>
+                                                                                                            <td><input hidden="hidden" name="DutyId" value="0"/> ${teacherDw}</td>
                                                                                                             <td><button class="border-0" type="button"  onclick="removeRow(this)"><i class="fa fa-trash text-danger fa-2x"></i></button></td>
                                                                                                 </tr>
                                                                                         `;
