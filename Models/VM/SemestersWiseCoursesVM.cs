@@ -1,8 +1,25 @@
 ﻿using EMSJu.ContextModels;
+using System;
 using System.Collections.Generic;
 
 namespace EMSJu.Models.VM
 {
+
+    public class ExamDetailsVM
+    {
+        public List<ExamMaster> ExamMasterList { get; set; }
+        public string message { get; set; }
+        public int ExamId { get; set; }
+    }
+
+    public class ExamDetailsPostVM
+    {
+        public decimal[] Duration { get; set; }
+        public DateTime?[] CourseId { get; set; }
+        public int[] SCMId { get; set; }
+        public int[] Id { get; set; }
+        public int ExamId { get; set; }
+    }
     public class SemestersWiseCoursesVM
     {
         public int Id { get; set; }

@@ -1,4 +1,4 @@
-﻿@model SemestersWiseCoursesVM
+﻿@model ExamDetailsVM
 
 <style>
     .btn-danger {
@@ -12,22 +12,22 @@
 </style>
 <div class="card">
     <div class="card-header ">
-        <form method="post" id="">
+        <form method="post" asp-action="UpdateData">
 
             <div class="row">
-                @if (Model.message == "Successfully Added Semesters Wise Courses")
+                @if (Model.message == "Updated SuccessFully")
                 {
-                    <h3 class="text-success"> Successfully Added Semesters Wise Courses </h3>
+                    <h3 class="text-success"> @Model.message </h3>
                 }
                 <div class="col-md-4 offset-md-3 ">
                     <div class="form-group ">
-                        <label asp-for="SemesterId" class="control-label offset-4"><b>Semester</b></label>
+                        <label asp-for="ExamId" class="control-label offset-4"><b>Exam Name:</b></label>
 
-                        <select asp-for="SemesterId" id="SemId" class="form-control " required>
+                        <select asp-for="ExamId" id="SemId" class="form-control " required>
                             <option value="">-- Select Semester --</option>
-                            @foreach (var item in Model.semesterVM)
+                            @foreach (var item in Model.ExamMasterList)
                             {
-                                <option value="@item.SemisterId">@item.SemisterName</option>
+                                <option value="@item.Id">@item.ExamName </option>
                             }
                         </select>
                     </div>
@@ -44,19 +44,20 @@
                     <thead>
                         <tr class="bg-div">
                             <th>Sl</th>
-                            <th>Teacher Name</th>
                             <th>Course Name</th>
-                            <th>No of Seat</th>
-                            <th>Action</th>
+                            <th>Exam Date Time</th>
+                            <th>Duration</th>
+                            <th>Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
+
                     </tbody>
                 </table>
                 <br />
                 <br />
-                <button type="button" id="addrows" class="btn btn-success "> <i class="fa fa-plus">ADD</i></button>
-                <button type="submit" class="btn btn-success "> <i class="fa fa-plus">Save</i></button>
+                <button type="submit" class="btn btn-success "> <i class="fa fa-plus">Update</i></button>
 
 
             </div>
@@ -66,8 +67,8 @@
 
 @section Scripts{
     <script>
-        var teacherList = @Html.Raw(Json.Serialize(Model.teacherVM))
-                                                var courseList = @Html.Raw(Json.Serialize(Model.coursesVMs))
+      var teacherList ;
+      var courseList ;
             $(document).ready(function () {
                 $("#checklist").hide();
             });
@@ -153,9 +154,9 @@
 
 
         $("#SemId").change(function () {
-            var semid = $('#SemId').find(":selected").val();
+            var ExamId = $('#SemId').find(":selected").val();
 
-            Common.Ajax('GET', '/SemestersWiseCourses/GetSemesterWisedataBySemesterId?semesterId=' + semid, [], 'json', AjaxLoadSemData);
+            Common.Ajax('GET', '/ExamDetails/GetExamWisedataByExamId?ExamId=' + ExamId, [], 'json', AjaxLoadSemData);
 
         });
 
@@ -173,21 +174,25 @@
         }
 
         function AjaxLoadSemData(res) {
-            console.log(res);
+            console.table(res);
             var dtTable = $("#semTable");
             var tableBody = dtTable.find('tbody');
             tableBody.empty();
             $.each(res, function (key, value) {
-                var teacherDw = MakeTeacherDW(value.teacherId);
-                var courseDw = MakeCourseDW(value.courseId);
+                //var teacherDw = MakeTeacherDW(value.teacherId);
+                //var courseDw = MakeCourseDW(value.courseId);
                 var trHtml = `<tr>
-                                                            <td><span class="serialNo">${key + 1}</span> </td>
-                                                            <td><input hidden="hidden" name="Id" value="${value.id}"/> ${teacherDw}</td>
-                                                            <td>${courseDw}</td>
-                                                                    <td><input type="number" name="Capacity" class="form-control" value="${value.capacity}"/></td>
-                                                                    <td><button class="border-0" type="button"  onclick="removeRow(this)"><i class="fa fa-trash text-danger fa-2x"></i></button></td>
-                                                        </tr>
-                                                `;
+                                                                    <td><span class="serialNo">${key + 1}</span> </td>
+                              <td>
+                              <input hidden="hidden" name="Id" value="${value.examDetailsId}"/>
+                                      <input hidden="hidden" name="SCMId" value="${value.scmid}"/>
+                                                                          
+                                                                            ${value.courseName} - ${value.courseCode}</td>
+                                                                            <td><input type="datetime-local" class="form-control" name="ExamDate" required value="${value.examDate}"/></td>
+                                                                            <td><input type="text" name="Duration" class="form-control" value="${value.duration}"/></td>
+                                                                            <td><button class="border-0" type="button"  onclick="removeRow(this)"><i class="fa fa-trash text-danger fa-2x"></i></button></td>
+                                                                </tr>
+                                                        `;
 
                 tableBody.append(trHtml);
             })
@@ -197,9 +202,9 @@
         function MakeTeacherDW(id) {
             console.log(teacherList);
             var select = `<select name="TeacherId" class="form-control select-single" required>
-                                                                  <option value="">-- Select Teacher --</option>
+                                                                          <option value="">-- Select Teacher --</option>
 
-                                                            `;
+                                                                    `;
             $.each(teacherList, function (key, value) {
                 var selected = value.teacherId == id ? 'selected' : '';
                 select += `<option value="${value.teacherId}" ${selected}>${value.name} - ${value.shortCode} </option>`;
@@ -211,9 +216,9 @@
         function MakeCourseDW(id) {
             console.log(courseList);
             var select = `<select name="CourseId" class="form-control select-single" required>
-                                                                  <option value="">-- Select Course --</option>
+                                                                          <option value="">-- Select Course --</option>
 
-                                                            `;
+                                                                    `;
             $.each(courseList, function (key, value) {
                 var selected = value.courseId == id ? 'selected' : '';
                 select += `<option value="${value.courseId}" ${selected}>${value.courseName}- ${value.courseCode} </option>`;
@@ -226,13 +231,13 @@
             var teacherDw = MakeTeacherDW(0);
             var courseDw = MakeCourseDW(0);
             var trHtml = `<tr>
-                                                                    <td><span class="serialNo">0</span> </td>
-                                                                            <td><input hidden="hidden" name="Id" value="0"/> ${teacherDw}</td>
-                                                                    <td>${courseDw}</td>
-                                                                            <td><input type="number" name="Capacity" class="form-control" value="0"/></td>
-                                                                            <td><button class="border-0" type="button"  onclick="removeRow(this)"><i class="fa fa-trash text-danger fa-2x"></i></button></td>
-                                                                </tr>
-                                                        `;
+                                                                            <td><span class="serialNo">0</span> </td>
+                                                                                    <td><input hidden="hidden" name="Id" value="0"/> ${teacherDw}</td>
+                                                                            <td>${courseDw}</td>
+                                                                                    <td><input type="number" name="Capacity" class="form-control" value="0"/></td>
+                                                                                    <td><button class="border-0" type="button"  onclick="removeRow(this)"><i class="fa fa-trash text-danger fa-2x"></i></button></td>
+                                                                        </tr>
+                                                                `;
             $("#semTable tbody").append(trHtml);
             addSerialNumbers();
         });
