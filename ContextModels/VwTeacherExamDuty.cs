@@ -7,6 +7,7 @@ namespace EMSJu.ContextModels
 {
     public partial class VwTeacherExamDuty
     {
+        public int DutyId { get; set; }
         public int ExamMasterId { get; set; }
         public string ExamName { get; set; }
         public DateTime? ExamDate { get; set; }
