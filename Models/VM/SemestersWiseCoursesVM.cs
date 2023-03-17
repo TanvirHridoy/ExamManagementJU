@@ -8,8 +8,10 @@ namespace EMSJu.Models.VM
     public class ExamDetailsVM
     {
         public List<ExamMaster> ExamMasterList { get; set; }
+        public List<TblTeacher> TeacherList { get; set; }
         public string message { get; set; }
         public int ExamId { get; set; }
+        public int ExamDetailId { get; set; }
     }
 
     public class ExamDetailsPostVM
