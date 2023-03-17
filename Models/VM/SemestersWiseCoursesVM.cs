@@ -15,7 +15,7 @@ namespace EMSJu.Models.VM
     public class ExamDetailsPostVM
     {
         public decimal[] Duration { get; set; }
-        public DateTime?[] CourseId { get; set; }
+        public DateTime?[] ExamDate { get; set; }
         public int[] SCMId { get; set; }
         public int[] Id { get; set; }
         public int ExamId { get; set; }
