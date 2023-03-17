@@ -3,6 +3,7 @@ using EMSJu.Models;
 using EMSJu.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,11 +41,25 @@ namespace EMSJu.Controllers
             return Json(data);
         }
         [HttpGet]
-       public JsonResult GetStudent(int id)
+       public async  Task<JsonResult> GetStudent(int id)
         {
-            var res = _Db.VwExamWiseStudents.Where(x => x.CourseId == id).ToList();
+            var res =await _Db.VwExamWiseStudents.Where(x => x.CourseId == id).ToListAsync();
             return Json(res);
         }
+        public async  Task< IActionResult> ExamDutiesTeacher()
+        {
+            exammastervm examMaster = new exammastervm();
+            examMaster.ExamMasters = await _Db.ExamMasters.ToListAsync();
+           
+            return View(examMaster);
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetExamDetails(int id)
+        {
+            var res = await _Db.VwExamSchedules.Where(x => x.ExamMasterId == id).ToListAsync();
+            return Json(res);
+        }
+
 
 
     }
