@@ -44,6 +44,7 @@ namespace EMSJu.ContextModels
         public virtual DbSet<TblTeacher> TblTeachers { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
         public virtual DbSet<VwAttendance> VwAttendances { get; set; }
+        public virtual DbSet<VwExamDetail> VwExamDetails { get; set; }
         public virtual DbSet<VwExamWiseStudent> VwExamWiseStudents { get; set; }
         public virtual DbSet<VwTeacherExamDuty> VwTeacherExamDuties { get; set; }
 
@@ -51,6 +52,7 @@ namespace EMSJu.ContextModels
         {
             if (!optionsBuilder.IsConfigured)
             {
+
                 optionsBuilder.UseSqlServer("Server=103.125.254.20,9433;Database=juexamdb;User ID=gymuser;Password=sa@1234;MultipleActiveResultSets=true ");
             }
         }
@@ -573,6 +575,27 @@ namespace EMSJu.ContextModels
                 entity.Property(e => e.TeacherName)
                     .HasMaxLength(250)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VwExamDetail>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vwExamDetails", "dbo");
+
+                entity.Property(e => e.CourseCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CourseName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Duration).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.ExamDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Scmid).HasColumnName("SCMId");
             });
 
             modelBuilder.Entity<VwExamWiseStudent>(entity =>
