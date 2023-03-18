@@ -1,0 +1,214 @@
+﻿<style id="table_style" type="text/css">
+    body {
+        font-family: Arial;
+        font-size: 10pt;
+    }
+
+    .hed {
+        text-align: center;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    table {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+    }
+
+        table th {
+            background-color: #F7F7F7;
+            color: #333;
+            font-weight: bold;
+        }
+
+        table th, table td {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+</style>
+
+@model EMSJu.Models.exammastervm
+
+
+<div class="text-right">
+    <input type="button" onclick="PrintTable();" value="Print" />
+</div>
+
+<div class="row mt-4">
+    <div class="col-4">
+        <select id="ExamValue" class="form-control">
+            <option value="0">---Select Exam Name --- </option>
+            @foreach (var item in Model.ExamMasters)
+            {
+                <option value="@item.Id">@item.ExamName</option>
+            }
+
+        </select>
+    </div>
+
+</div>
+<div class="card-body px-2 py-2 d-none" id="tbl" style="min-height: 431px">
+
+    <table class="table table-bordered " id="EduInfo">
+        <thead>
+            <tr class="text-center">
+                <th scope="col" class="border" style="width:5%">Serial</th>
+                <th scope="col" style="width:5%">Course Name-Course Code</th>
+                <th scope="col" style="width:5%">Exam Date</th>
+                <th scope="col" style="width:5%">Duration</th>
+                <th scope="col" style="width:5%">Duty Teacher</th>
+              
+
+            </tr>
+        </thead>
+        <tbody class="text-right">
+        </tbody>
+    </table>
+
+</div>
+
+
+
+
+ @section scripts {
+
+<script>
+    $("#ExamValue").change(function () {
+        var ExamD = $("#ExamValue").val();
+        $('#EduInfo tbody').empty();
+        $("#tbl").removeClass("d-none");
+        $.ajax({
+            url: "/Report/GetExamDetails",
+            method: "Get",
+            data: { Id: ExamD },
+            dataType: "json",
+
+            success: function (response) {
+                console.log(response);
+                $("#EduInfo").show();
+                var z = 1;
+                let rows = "";
+
+
+                const groupedData = response.reduce((acc, cur) => {
+                    const key = cur.scmId + '-' + cur.courseName + '-' + cur.examDate;
+                    if (!acc[key]) {
+                        acc[key] = {
+                            scmId: cur.scmId,
+                            courseName: cur.courseName,
+                            courseCode: cur.courseCode,
+                            examMasterId: cur.examMasterId,
+                            examDetailsId: cur.examDetailsId,
+                            examDate: cur.examDate,
+                            duration: cur.duration,
+                            status: cur.status,
+                            teachers: [],
+                            teacherShortCode: []
+                        };
+                    }
+                    acc[key].teachers.push(cur.teacherName);
+                    acc[key].teacherShortCode.push(cur.teacherShortCode);
+                    return acc;
+                }, {});
+
+                const result = Object.values(groupedData);
+
+                console.log(result);
+                $.each(result, function (key, item) {
+
+                    var rowSpan = item.teachers.length;
+                    rows += "<tr>";
+                   rows += "<td class='border' rowspan='" + rowSpan + "'>" + key+1 + "</td>";
+                    rows += "<td rowspan='" + rowSpan + "'>" + item.courseName + "-" + item.courseCode + "</td>";
+                    rows += "<td rowspan='" + rowSpan + "'>" + formatDate(item.examDate) + "</td>";
+                    rows += "<td rowspan='" + rowSpan + "'>" + item.duration + "</td>";
+                    for (var i = 0; i < rowSpan; i++) {
+                        if (i != 0) {
+                            rows +="<tr>"
+                        }
+                        rows += "<td >" + item.teachers[i] +" "+ item.teacherShortCode[i]+ "</td>";
+                        rows += "</tr>"
+                    }
+
+
+
+                });
+                //for (var key in response) {
+                //    var data = response[key];
+                //    var rowSpan = data.length;
+
+                //    rows += "<tr>";
+                //    rows += "<td class='border' rowspan='" + rowSpan + "'>" + z + "</td>";
+                //    rows += "<td rowspan='" + rowSpan + "'>" + data[0].courseName + "-" + data[0].courseCode + "</td>";
+                //    rows += "<td rowspan='" + rowSpan + "'>" + formatDate(data[0].examDate) + "</td>";
+                //    rows += "<td rowspan='" + rowSpan + "'>" + data[0].duration + "</td>";
+
+                //    for (var i = 0; i < data.length; i++) {
+                //        if (i > 0) {
+                //            rows += "<tr>";
+                //        }
+                //        rows += "<td>" + data[i].teacherName + "</td>";
+                //        rows += "<td>" + data[i].teacherShortCode + "</td>";
+                //        rows += "</tr>";
+                //    }
+
+                //    rows += "</tr>";
+                //    z++;
+                //}
+
+
+                //for (var i = 0; i < response.length; i++) {
+
+                //    var custome = formatDate(response[i].examDate);
+                   
+                //    rows += "<tr><td class='border'>" + z + "</td><td>" + response[i].courseName + "-" + response[i].courseCode + "</td><td>" + custome + "</td><td>" + response[i].duration + "</td><td>" + response[i].teacherName + "" + response[i].teacherShortCode + "</td></tr>";
+                //    z++;
+                //}
+
+                $("#EduInfo tbody").append(rows);
+            }
+        });
+    });
+
+
+
+
+   
+
+
+
+    function PrintTable() {
+        var printWindow = window.open('', '', 'height=1200,width=1200');
+        printWindow.document.write('<html><head><title>Exam Duty Report</title>');
+
+        //Print the Table CSS.
+        var table_style = document.getElementById("table_style").innerHTML;
+        printWindow.document.write('<style type = "text/css">');
+        printWindow.document.write(table_style);
+        printWindow.document.write('</style>');
+        printWindow.document.write('</head>');
+
+        //Print the DIV contents i.e. the HTML Table.
+        printWindow.document.write('<body>');
+        var divContents = document.getElementById("tbl").innerHTML;
+        printWindow.document.write(divContents);
+        printWindow.document.write('</body>');
+
+        printWindow.document.write('</html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+</script>
+    }

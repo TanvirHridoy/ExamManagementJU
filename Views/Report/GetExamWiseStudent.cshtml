@@ -1,8 +1,35 @@
-﻿@model EMSJu.Models.SemisterVm
+﻿<style id="table_style" type="text/css">
+    body {
+        font-family: Arial;
+        font-size: 10pt;
+    }
+    .hed{
+        text-align:center;
+        margin:0px;
+        padding:0px;
+    }
+    table {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+    }
+
+        table th {
+            background-color: #F7F7F7;
+            color: #333;
+            font-weight: bold;
+        }
+
+        table th, table td {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+</style>
+
+@model EMSJu.Models.SemisterVm
 
 
     <div class="text-right">
-        <input type='button' id='print' class='btn btn-primary' value='Print' onclick='printDiv();'>
+        <input type="button" onclick="PrintTable();" value="Print" />
     </div>
     
     <div class="row mt-4">
@@ -28,26 +55,31 @@
 
 
 
-    <div id="DivIdToPrint" style="margin-top:100px;">
+    <div id="dvContents" class="text-center"  style="margin-top:100px;">
+        <div class="hed">
+            <h4 id="exmName"></h4>
+            <h5 id="CorseName"></h5>
+            <h5 id="Corsecode"></h5>
+            <h5 id="crdit"></h5>
+            <h5 id="duration"></h5>
+            <h5 id="prname"></h5>
+        </div>
         
         <div class="card-body px-2 py-2 d-none" id="tbl" style="min-height: 431px">
-            <div class="text-center">
-                <h4>Exam Wise Student Attendance</h4>
-            </div>
-            <table class="table table-bordered " id="EduInfo">
+           
+            <table class="table table-bordered "  id="EduInfo">
                 <thead>
                     <tr class="text-center">
-                        <th scope="col" style="width:5%">Serial</th>
+                        <th scope="col" class="border" style="width:5%">Serial</th>
                         <th scope="col" style="width:5%">Student Name</th>
+                        <th scope="col" style="width:5%">Student Id</th>
                         <th scope="col" style="width:5%">Batch Bo</th>
-                        <th scope="col" style="width:5%">Exam Name</th>
-                        <th scope="col" style="width:5%">Course Name</th>
-                        <th scope="col" style="width:5%">Course Code</th>
-                        <th scope="col" style="width:5%">Credit</th>
-                        <th scope="col" style="width:5%">Duration</th>
+
                         <th scope="col" style="width:5%">Exam Date</th>
-                        <th scope="col" style="width:5%">Verify</th>
-                        <th scope="col" style="width:5%">Programe Name</th>
+                        <th scope="col" style="width:5%">Verify By</th>
+                        <th scope="col" style="width:5%">Verification Method</th>
+                        <th scope="col" style="width:5%">Verification Date</th>
+                        
                     </tr>
                 </thead>
                 <tbody class="text-right">
@@ -86,6 +118,7 @@
 
             $("#QSearch").on("change", function () {
                 /*    e.preventDefault();*/
+                $("#exmName").empty();
                 $("#tbl").removeClass("d-none");
                 var id = $("#QSearch").val();
                 $('#EduInfo tbody').empty();
@@ -97,11 +130,24 @@
 
                     success: function (response) {
                         console.log(response);
+                        
                         $("#EduInfo").show();
                         var z = 1;
                         let rows = "";
+                        if (response.length > 0) {
+                            $("#exmName").append("Exam Name: "+ response[0].examName);
+                            $("#CorseName").append("Course Name: " + response[0].courseName);
+                            $("#Corsecode").append("Course Code: " + response[0].courseCode);
+                            $("#crdit").append("Credit: " + response[0].credit);
+                            $("#duration").append("Duration: " + response[0].duration);
+                            $("#prname").append("Programe Name: " + response[0].programName);
+                        } 
+                        
                         for (var i = 0; i < response.length; i++) {
-                            rows += "<tr><td>" + z + "</td><td>" + response[i].studentName + "</td><td>" + response[i].batchNo + "</td><td>" + response[i].examName + "</td><td>" + response[i].courseName + "</td><td>" + response[i].courseCode + "</td><td>" + response[i].credit + "</td><td>" + response[i].duration + "</td><td>" + response[i].examDate + "</td><td>" + response[i].verifiedBy + "</td><td>" + response[i].programName + "</td></tr>";
+
+                            var custome = formatDate(response[i].examDate);
+                            var custome1 = formatDate(response[i].verifyDateTime);
+                            rows += "<tr><td class='border'>" + z + "</td><td>" + response[i].studentName + "</td><td>" + response[i].studentId + "</td><td>" + response[i].batchNo + "</td><td>" + custome + "</td><td>" + response[i].verifiedBy + "</td><td>" + response[i].verificationMethod + "</td><td>" + custome1 + "</td></tr>";
                             z++;
                         }
 
@@ -117,24 +163,38 @@
 
 
 
-            function printDiv() {
-                $("#print").addClass("d-none");
-                var divToPrint = document.getElementById('DivIdToPrint');
+            function PrintTable() {
+                var printWindow = window.open('', '', 'height=1200,width=1200');
+                printWindow.document.write('<html><head><title>Exam Wise Students</title>');
 
-                var newWin = window.open('', 'Print-Window');
+                //Print the Table CSS.
+                var table_style = document.getElementById("table_style").innerHTML;
+                printWindow.document.write('<style type = "text/css">');
+                printWindow.document.write(table_style);
+                printWindow.document.write('</style>');
+                printWindow.document.write('</head>');
 
-                newWin.document.open();
+                //Print the DIV contents i.e. the HTML Table.
+                printWindow.document.write('<body>');
+                var divContents = document.getElementById("dvContents").innerHTML;
+                printWindow.document.write(divContents);
+                printWindow.document.write('</body>');
 
-                newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
-
-                newWin.document.close();
-                $("#print").removeClass("d-none");
-                setTimeout(function () { newWin.close(); }, 10);
-
+                printWindow.document.write('</html>');
+                printWindow.document.close();
+                printWindow.print();
             }
 
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
 
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
 
-
+                return [year, month, day].join('-');
+            }
         </script>
     }

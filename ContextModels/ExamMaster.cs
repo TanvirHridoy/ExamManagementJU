@@ -19,5 +19,6 @@ namespace EMSJu.ContextModels
 
         public virtual TblSemister Semester { get; set; }
         public virtual ICollection<ExamDetail> ExamDetails { get; set; }
+        
     }
 }
